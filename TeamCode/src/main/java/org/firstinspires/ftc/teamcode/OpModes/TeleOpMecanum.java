@@ -33,8 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.Hardware.HardwareTestPlatform;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 /**
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
@@ -56,7 +55,16 @@ public class TeleOpMecanum extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class
      */
-    private final static HardwareTestPlatform robot = new HardwareTestPlatform();
+    private final static HardwareProfile robot = new HardwareProfile();
+    private double v1 = 0;
+    private double v2 = 0;
+    private double v3 = 0;
+    private double v4 = 0;
+    private double r = 0;
+    private double fwdControl =0;
+    private double strafeControl = 0;
+    private double robotAngle =0;
+    private double rightX = 0;
 
     @Override
     public void runOpMode() {
@@ -79,118 +87,33 @@ public class TeleOpMecanum extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            //Get the values from the gamepads
-            double armPower = 0;
+            /**
+             * Driving algorithm
+             * Note: this algorithm assumes that all values are zero when controls are not touched
+             */
+            //Calculate the power needed for each motor
+            fwdControl = -1 * gamepad1.left_stick_y;
+            strafeControl = gamepad1.left_stick_x;
+            robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
+            rightX = gamepad1.right_stick_x;
+            r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
+            v1 = r * Math.cos(robotAngle) + rightX;
+            v2 = r * Math.sin(robotAngle) - rightX;
+            v3 = r * Math.sin(robotAngle) + rightX;
+            v4 = r * Math.cos(robotAngle) - rightX;
 
-//            double r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
-            double fwdControl = -1 * gamepad1.left_stick_y;
-            double strafeControl = gamepad1.left_stick_x;
-/*            double robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-            double rightX = gamepad1.right_stick_x;
-            final double v1 = r * Math.cos(robotAngle) + rightX;
-            final double v2 = r * Math.sin(robotAngle) - rightX;
-            final double v3 = r * Math.sin(robotAngle) + rightX;
-            final double v4 = r * Math.cos(robotAngle) - rightX;
-*/
+            robot.motorLF.setPower(v1);
+            robot.motorRF.setPower(v2);
+            robot.motorLR.setPower(v3);
+            robot.motorRR.setPower(v4);
 
+
+            /**
+             * Algorithm for controlling the lifting mechanism
+             */
+            
 
             idle();
-
-            if (gamepad2.right_trigger != 0) {
-                shoot();
-            }
-
-
-            if((gamepad2.left_trigger != 0) || (gamepad1.left_trigger!=0)){
-                robot.motorFeeder.setPower(-.4);
-                robot.servoInTake.setPosition(.3);
-            } else {
-//                robot.motorFeeder.setPower(0);
-                robot.servoInTake.setPosition(1);
-            }
-
-            if(gamepad2.left_bumper == true){
-                robot.servoBallBumper.setPosition(.9);
-            } else {
-                robot.servoBallBumper.setPosition(0.2);
-            }
-
-            if(gamepad2.b == true){         //      <= may want to remove
-                // do nothing
-            } else {
-                // do nothing
-            }
-
-            if(gamepad2.right_bumper == true){
-                robot.servoFeeder.setPosition(0.2);
-            } else {
-                robot.servoFeeder.setPosition(0.5);
-            }
-
-            // Disable the shooter
-            if(gamepad1.a == true) {
-                robot.motorShooter.setPower(1);
-                while(robot.touchSensor.isPressed() == true){
-                    // sit and wait
-                }
-                robot.motorShooter.setPower(0);
-            }
-
-            //Calculate the power needed for each motor
-            if ((gamepad1.right_stick_y !=0) || (gamepad1.right_stick_x !=0)){
-                robot.motorLF.setPower((-1* gamepad1.right_stick_y) + gamepad1.right_stick_x);
-                robot.motorRF.setPower((-1 * gamepad1.right_stick_y) - gamepad1.right_stick_x);
-                robot.motorLR.setPower((-1 * gamepad1.right_stick_y) + gamepad1.right_stick_x);
-                robot.motorRR.setPower((-1 *gamepad1.right_stick_y) - gamepad1.right_stick_x);
-
-            } else if ((gamepad1.left_stick_x !=0) || (gamepad1.left_stick_y !=0)){
-                robot.motorLF.setPower(fwdControl * 0.82 + strafeControl);
-                robot.motorRF.setPower(fwdControl - strafeControl * 0.82);
-                robot.motorLR.setPower(fwdControl - strafeControl * 0.82);
-                robot.motorRR.setPower(fwdControl * 0.82 + strafeControl);
-
-            } else if (gamepad1.dpad_right == true) {
-                robot.motorLF.setPower(1);
-                robot.motorRF.setPower(-1);
-                robot.motorLR.setPower(-1);
-                robot.motorRR.setPower(1);
-
-            } else if (gamepad1.dpad_left == true){
-                robot.motorLF.setPower(-1);
-                robot.motorRF.setPower(1);
-                robot.motorLR.setPower(1);
-                robot.motorRR.setPower(-1);
-
-            } else if (gamepad1.dpad_up == true ) {
-                robot.motorLF.setPower(-1);
-                robot.motorRF.setPower(-1);
-                robot.motorLR.setPower(-1);
-                robot.motorRR.setPower(-1);
-
-            } else if (gamepad1.dpad_down == true) {
-                robot.motorLF.setPower(1);
-                robot.motorRF.setPower(1);
-                robot.motorLR.setPower(1);
-                robot.motorRR.setPower(1);
-
-            } else {                //  if none of the joy stick are being manipulated, shut the motors off
-                robot.motorLF.setPower(0);
-                robot.motorRF.setPower(0);
-                robot.motorLR.setPower(0);
-                robot.motorRR.setPower(0);
-
-            }
-
-            if (gamepad2.y == true) {
-                robot.servoFeeder.setPosition(0);
-            }
-
-            if (gamepad2.x == true) {
-                robot.motorFeeder.setPower(0);
-            }  else if (gamepad2.a == true) {
-                robot.motorFeeder.setPower(.4);
-            }
-
 /*            telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
             telemetry.addData("left_stick_y", String.valueOf(gamepad1.left_stick_y));
             telemetry.addData("right_stick_x", String.valueOf(gamepad1.right_stick_x));
@@ -200,7 +123,6 @@ public class TeleOpMecanum extends LinearOpMode {
             telemetry.addData("RR", String.valueOf(v4));
             telemetry.update();
 */
-
         }
 
     }
@@ -215,46 +137,6 @@ public class TeleOpMecanum extends LinearOpMode {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-    }
-
-    private void shootAndFeed(){
-
-        robot.motorShooter.setPower(1);
-        while(robot.touchSensor.isPressed() == true){
-            // sit and wait
-        }
-        robot.motorShooter.setPower(.35);
-        while (robot.touchSensor.isPressed() == false){
-            // sit and wait
-        }
-
-        //stop when shooter arm is reset
-        robot.motorShooter.setPower(0);
-
-        // Feed next Ball
-        robot.servoFeeder.setPosition(.2);
-        sleep(00);
-        robot.servoFeeder.setPosition(.5);
-        sleep(50);
-
-    }
-
-    private void shoot(){
-        robot.motorShooter.setPower(.25);
-        robot.motorLF.setPower(0);
-        robot.motorRF.setPower(0);
-        robot.motorLR.setPower(0);
-        robot.motorRR.setPower(0);
-
-        while(robot.touchSensor.isPressed() == true){
-            // sit and wait
-        }
-        while (robot.touchSensor.isPressed() == false){
-            // sit and wait
-        }
-
-        //stop when shooter arm is reset
-        robot.motorShooter.setPower(0);
     }
 
 }

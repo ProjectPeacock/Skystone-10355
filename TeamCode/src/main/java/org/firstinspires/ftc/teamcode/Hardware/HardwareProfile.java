@@ -13,17 +13,18 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
+//import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 /**
  * This is the hardware definition for the Hardware test/reference platform.  This class should be
- * instantiated in your opmode to allow access to the hardware.
+ * instantiated in the opmode to allow access to the hardware.
  * <p>
  * Example:
  * <p>
- * private HardwareTestPlatform robot = new HardwareTestPlatform();
+ * private HardwareProfile robot = new HardwareProfile();
  */
 
-public class HardwareTestPlatform {
+public class HardwareProfile {
     //Wheel Setup
     public final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
     public final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
@@ -57,7 +58,7 @@ public class HardwareTestPlatform {
     I2cDeviceSynch rangeRightReader;
 
     /* Constructor */
-    public HardwareTestPlatform() {
+    public HardwareProfile() {
 
     }
 

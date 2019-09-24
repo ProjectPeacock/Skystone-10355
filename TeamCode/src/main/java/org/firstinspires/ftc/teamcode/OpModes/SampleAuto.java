@@ -75,9 +75,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareTestPlatform;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.VuforiaLib;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import java.util.List;
 
@@ -92,7 +92,7 @@ public class SampleAuto extends LinearOpMode {
      * Instantiate all objects needed in this class
      */
 
-    private final static HardwareTestPlatform robot = new HardwareTestPlatform();
+    private final static HardwareProfile robot = new HardwareProfile();
     double radians = 0;
     private VuforiaLib myVuforia = new VuforiaLib();
     private ElapsedTime runtime = new ElapsedTime();
