@@ -2,8 +2,10 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -13,7 +15,6 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
-//import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 /**
  * This is the hardware definition for the Hardware test/reference platform.  This class should be
@@ -33,29 +34,41 @@ public class HardwareProfile {
             ((WHEEL_DIAMETER_INCHES * 25.41) * Math.PI);
 
     /* Public OpMode members. */
-    public DcMotor motorLF = null;              //Declare the motor
-    public DcMotor motorRF = null;              //Declare the motor
-    public DcMotor motorLR = null;              //Declare the motor
-    public DcMotor motorRR = null;              //Declare the motor
-    public DcMotor motorFeeder = null;          //Declare the motor
-    public DcMotor motorShooter = null;         //Declare the motor
-    public OpticalDistanceSensor ods;           //Declare the sensor
+    public DcMotor motorLF = null;              //Left Front drive motor
+    public DcMotor motorRF = null;              //Right Front drive motor
+    public DcMotor motorLR = null;              //Left Rear drive motor
+    public DcMotor motorRR = null;              //Right Rear drive motor
+    public DcMotor motorLift = null;            //Lift motor
+    public DcMotor motorIntake = null;          //Intake motor
+    public DcMotor motorLinear = null;          //Linear Actuator motor - controls angle of lifting system
+    public DcMotor motor4Bar = null;            //motor to control 4-bar system
+    public OpticalDistanceSensor ods;           //Declare the optical distance sensor
     public ColorSensor colorSensorRight;        //Declare the Color Sensor
     public ColorSensor colorSensorLeft;         //Declare the Color Sensor
-    public TouchSensor touchSensor;             //Declare the Touch Sensor
+    public TouchSensor touchLiftUp;             //Declare the Lift Up Touch Sensor - indicates when lift is all the way up
+    public TouchSensor touchLiftDown;           //Declare the Lift Down Touch Sensor - indicates when lift is all the way down
+    public TouchSensor touchLiftForward;        //Declare the Lift Forward Touch Sensor - indicates when lift is all the way forward
+    public TouchSensor touchLiftBack;           //Declare the Lift Back Touch Sensor - indicates when lift is all the way back
     public GyroSensor sensorGyro;               //Declare the GyroNew sensor
     public ModernRoboticsI2cGyro mrGyro;        //Declare the MR GyroNew
-    public Range rangeSensorLeft;               //Declare the left range sensor
-    public Range rangeSensorRight;              //Declare the right range sensor
-    public Servo servoInTake;                   //Declare the servo
-    public Servo servoBallBumper;                      //Declare the servo
-    public Servo servoFeeder;                      //Declare the servo
+    public ModernRoboticsI2cRangeSensor rangeSensorLeft;               //Declare the left range sensor
+    public ModernRoboticsI2cRangeSensor rangeSensorRight;              //Declare the right range sensor
+    public ModernRoboticsI2cRangeSensor rangeSensorFront;              //Declare the front range sensor
+    public ModernRoboticsI2cRangeSensor rangeSensorRear;               //Declare the rear range sensor
+    public Servo servoLeftGrab;                 //Declare the left grabbing servo
+    public Servo servoRightGrab;                //Declare the right grabbing servo
+    public Servo servoClawClose;                //Declare the claw opening/closing servo
+    public Servo servoClawRotate;               //Declare the claw rotation servo
 
     /* I2C Range Sensor members*/
     I2cDevice rangeLeft;
     I2cDevice rangeRight;
+    I2cDevice rangeFront;
+    I2cDevice rangeBack;
     I2cDeviceSynch rangeLeftReader;
     I2cDeviceSynch rangeRightReader;
+    I2cDeviceSynch rangeFrontReader;
+    I2cDeviceSynch rangeBackReader;
 
     /* Constructor */
     public HardwareProfile() {
@@ -73,119 +86,104 @@ public class HardwareProfile {
         HardwareMap hwMap;
         hwMap = ahwMap;
 
-        if (platform.equals("mecanum")) {
-            //Define the sensors
-            ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
-            I2cAddr i2CAddressColorRight = I2cAddr.create8bit(0x3c);
-            I2cAddr i2CAddressColorLeft = I2cAddr.create8bit(0x4c);
-            I2cAddr i2CAddressRangeRight = I2cAddr.create8bit(0x28);
-            I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x2a);
+        //Define the I2C sensors
+        ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
+//        I2cAddr i2CAddressColorRight = I2cAddr.create8bit(0x3c);
+//        I2cAddr i2CAddressColorLeft = I2cAddr.create8bit(0x4c);
+        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
+        rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
+        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
 
-            colorSensorRight = hwMap.colorSensor.get("colorR"); //Map the sensor to the hardware
-            colorSensorLeft = hwMap.colorSensor.get("colorL"); //Map the sensor to the hardware
-            colorSensorRight.setI2cAddress(i2CAddressColorRight);
-            colorSensorLeft.setI2cAddress(i2CAddressColorLeft);
-            colorSensorRight.enableLed(false);
-            colorSensorLeft.enableLed(false);
+        I2cAddr i2CAddressRangeRight = I2cAddr.create8bit(0x28);
+        rangeSensorRight = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRight");
+        rangeSensorRight.setI2cAddress(i2CAddressRangeRight);
 
-            sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
-            mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
+        I2cAddr i2CAddressRangeFront = I2cAddr.create8bit(0x28);
+        rangeSensorFront = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorFront");
+        rangeSensorFront.setI2cAddress(i2CAddressRangeFront);
 
-            touchSensor = hwMap.touchSensor.get("ts");
-
-            servoInTake = hwMap.servo.get("intake");
-            servoFeeder = hwMap.servo.get("armfeeder");
-            servoBallBumper = hwMap.servo.get("ballbumper");
-
-            // Define and Initialize Motors
-            motorLF = hwMap.dcMotor.get("lf");
-            motorRF = hwMap.dcMotor.get("rf");
-            motorLR = hwMap.dcMotor.get("lr");
-            motorRR = hwMap.dcMotor.get("rr");
-            motorFeeder = hwMap.dcMotor.get("feeder");
-            motorShooter = hwMap.dcMotor.get("shooter");
+        I2cAddr i2CAddressRangeRear = I2cAddr.create8bit(0x28);
+        rangeSensorRear = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRear");
+        rangeSensorRear.setI2cAddress(i2CAddressRangeRear);
 
 
-            motorLF.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            motorRF.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-            motorLR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            motorRR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+//        colorSensorRight = hwMap.colorSensor.get("colorR"); //Map the sensor to the hardware
+//        colorSensorLeft = hwMap.colorSensor.get("colorL"); //Map the sensor to the hardware
+//        colorSensorRight.setI2cAddress(i2CAddressColorRight);
+//        colorSensorLeft.setI2cAddress(i2CAddressColorLeft);
+//        colorSensorRight.enableLed(false);
+//        colorSensorLeft.enableLed(false);
 
+        sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
+        mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
-            // Set all motors to zero power
-            motorLF.setPower(0);
-            motorRF.setPower(0);
-            motorLR.setPower(0);
-            motorRR.setPower(0);
-            motorShooter.setPower(0);
+        /**
+         * Initialize the touch sensors responsible for limiting the motion of the lifting system
+        **/
+        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
 
-            // Set all drive motors to run without encoders.
-            motorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        /**
+         *    Define and Initialize drive Motors
+         *    Set motor direction for each motor placement
+         *    Configure the motors to run with encoders
+         *    Set the power to the motor to be 0
+        **/
 
-            // Set all drive motors to run without encoders.
-            // May want to use RUN_USING_ENCODERS if encoders are installed.
+        motorLF = hwMap.dcMotor.get("motorLF");
+        motorLF.setDirection(DcMotor.Direction.FORWARD);
+        motorLF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLF.setPower(0);
 
-            motorLF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorLR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRF = hwMap.dcMotor.get("motorRF");
+        motorRF.setDirection(DcMotor.Direction.REVERSE);        // motors placed at the rear of the robot need to be set to run in reverse
+        motorRF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRF.setPower(0);
 
-        }
+        motorLR = hwMap.dcMotor.get("motorLR");
+        motorLR.setDirection(DcMotor.Direction.FORWARD);
+        motorLR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLR.setPower(0);
 
-        if (platform.equals("comp")) {
-            //Define the sensors
-            ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
-            colorSensorRight = hwMap.colorSensor.get("colorR"); //Map the sensor to the hardware
-            touchSensor = hwMap.touchSensor.get("ts");     //Map the sensor to the hardware
-            sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
-            mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
-            servoInTake = hwMap.servo.get("intake");
-            servoFeeder = hwMap.servo.get("armfeeder");
-            servoBallBumper = hwMap.servo.get("ballbumper");
+        motorRR = hwMap.dcMotor.get("motorRR");
+        motorRR.setDirection(DcMotor.Direction.REVERSE);        // motors placed at the rear of the robot need to be set to run in reverse
+        motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRR.setPower(0);
 
+        /**
+         *    Define and Initialize accessory motors
+         *    Set motor direction for each motor placement (assume forward until position is finalized)
+         *    Configure the motors to run with encoders as needed
+         *    Set the power to the motor to be 0
+        **/
+        motorLift = hwMap.dcMotor.get("motorLift");
+        motorLift.setDirection(DcMotor.Direction.FORWARD);
+        motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLift.setPower(0);
 
-            // Define and Initialize Motors
-            motorLR = hwMap.dcMotor.get("lr");
-            motorRR = hwMap.dcMotor.get("rr");
-            motorFeeder = hwMap.dcMotor.get("feeder");
-            motorShooter = hwMap.dcMotor.get("shooter");
+        motorIntake = hwMap.dcMotor.get("motorIntake");
+        motorIntake.setDirection(DcMotor.Direction.FORWARD);
+        motorIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorIntake.setPower(0);
 
-            motorLR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            motorRR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        motorLinear = hwMap.dcMotor.get("motorLinear");
+        motorLinear.setDirection(DcMotor.Direction.FORWARD);
+        motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLinear.setPower(0);
 
-            // Set all motors to zero power
-            motorLR.setPower(0);
-            motorRR.setPower(0);
-            motorFeeder.setPower(0);
+        motor4Bar = hwMap.dcMotor.get("motor4Bar");
+        motor4Bar.setDirection(DcMotor.Direction.FORWARD);
+        motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor4Bar.setPower(0);
 
-            //Define the sensors
-            ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
-            //colorSensor = hwMap.colorSensor.get("color1"); //Map the sensor to the hardware
-            touchSensor = hwMap.touchSensor.get("ts");     //Map the sensor to the hardware
-            sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
-            mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
-
-            // Define and Initialize Motors
-            motorLR = hwMap.dcMotor.get("lr");
-            motorRR = hwMap.dcMotor.get("rr");
-            motorLR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            motorRR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-            motorLR = hwMap.dcMotor.get("feeder");
-
-            // Set all motors to zero power
-
-            motorLR.setPower(0);
-            motorRR.setPower(0);
-
-            motorFeeder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            // Set all motors to run without encoders.
-            // May want to use RUN_USING_ENCODERS if encoders are installed.
-
-            motorLR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        /**
+         * Initialize the servo motors
+         */
+        servoLeftGrab = hwMap.servo.get("servoLeftGrab");
+        servoRightGrab = hwMap.servo.get("servoRightGrab");
+        servoClawClose = hwMap.servo.get("servoClawClose");
+        servoClawRotate = hwMap.servo.get("servoClawRotate");
     }
 }

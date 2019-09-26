@@ -111,7 +111,7 @@ public class TeleOpMecanum extends LinearOpMode {
             /**
              * Algorithm for controlling the lifting mechanism
              */
-            
+
 
             idle();
 /*            telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));

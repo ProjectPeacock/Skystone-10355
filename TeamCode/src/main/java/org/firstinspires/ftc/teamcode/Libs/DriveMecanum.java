@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class DriveMecanum {
     private double myTargetPosition;
     private double LF, RF, LR, RR;
     private List<VuforiaTrackable> myTrackables;
-    private HardwareTestPlatform robot = null;
+    private HardwareProfile robot = null;
     private LinearOpMode opMode = null;
     private ElapsedTime runtime = new ElapsedTime();
     private VuforiaLib myVuforia = null;
@@ -26,7 +27,7 @@ public class DriveMecanum {
     private double robotBearing;    //Bearing to, i.e. the bearing you need to stear toward
 
 
-    public DriveMecanum(HardwareTestPlatform myRobot, LinearOpMode myOpMode, VuforiaLib thisVuforia,
+    public DriveMecanum(HardwareProfile myRobot, LinearOpMode myOpMode, VuforiaLib thisVuforia,
                         List<VuforiaTrackable> trackableList) {
         robot = myRobot;
         opMode = myOpMode;
@@ -427,6 +428,161 @@ public class DriveMecanum {
     }
 
 
+    /**
+     * Robot will drive in the heading provided by the function call.  The sensor identified should
+     * be the sensor on the side of the robot that the robot is heading to.  The robot will stop
+     * when the robot is within the distance provided in the parameters.
+     * @param sensor
+     * @param power
+     * @param heading
+     * @param distance
+     */
+
+    public void translateRange(String sensor, double power, double heading, double distance) {
+        double changeSpeed = 0;
+        double initZ = robot.mrGyro.getIntegratedZValue();
+        double currentZint;
+        double currentRange = 0;
+        boolean active = true;
+
+        if (sensor == "front"){
+            currentRange = robot.rangeSensorFront.rawUltrasonic();
+        } else if(sensor == "rear"){
+            currentRange = robot.rangeSensorRear.rawUltrasonic();
+        } else if(sensor == "left") {
+            currentRange = robot.rangeSensorLeft.rawUltrasonic();
+        } else if (sensor == "right"){
+            currentRange = robot.rangeSensorRight.rawUltrasonic();
+        } else active = false;      // a proper range sensor was not identified. Exit routine.
+
+        heading = heading * (Math.PI / 180);
+
+        while (opMode.opModeIsActive() && active) {
+
+            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
+            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
+            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
+            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+
+            if (LF > 1 || LF < -1) {
+                LF = 0;
+            }
+
+            if (RF > 1 || RF < -1) {
+                RF = 0;
+            }
+
+            if (LR > 1 || LR < -1) {
+                LR = 0;
+            }
+
+            if (RR > 1 || RR < -1) {
+                RR = 0;
+            }
+
+            currentZint = robot.mrGyro.getIntegratedZValue();
+
+            if (currentZint != initZ) {  //Robot has drifted off course
+                double zCorrection = Math.abs(initZ - currentZint);
+
+                if (heading > 180 && heading < 359.99999) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading > 0 && heading < 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 0) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+                }
+            }
+            robot.motorLF.setPower(LF);
+            robot.motorRF.setPower(RF);
+            robot.motorLR.setPower(LR);
+            robot.motorRR.setPower(RR);
+
+            myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
+
+            if (sensor == "front"){
+                currentRange = robot.rangeSensorFront.rawUltrasonic();
+            } else if(sensor == "rear"){
+                currentRange = robot.rangeSensorRear.rawUltrasonic();
+            } else if(sensor == "left") {
+                currentRange = robot.rangeSensorLeft.rawUltrasonic();
+            } else if (sensor == "right"){
+                currentRange = robot.rangeSensorRight.rawUltrasonic();
+            } else active = false;      // a proper range sensor was not identified. Exit routine.
+
+            // check to see if the distance traveled is less than the range specification
+            if (currentRange < distance){
+                active = false;
+            }
+            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("LF", String.valueOf(LF));
+            opMode.telemetry.addData("RF", String.valueOf(RF));
+            opMode.telemetry.addData("LR", String.valueOf(LR));
+            opMode.telemetry.addData("RR", String.valueOf(RR));
+            opMode.telemetry.update();
+
+            opMode.idle();
+        }
+        motorsHalt();
+
+    }
+
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,
                                  double timeOut, double y) {
 
@@ -488,7 +644,7 @@ public class DriveMecanum {
 
     }
 
-    private void motorsHalt() {
+    public void motorsHalt() {
         robot.motorLF.setPower(0);
         robot.motorRF.setPower(0);
         robot.motorLR.setPower(0);
