@@ -68,7 +68,6 @@ public class TeleOpMecanum extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         begin();                    // initialize the robot's hardware
 
         /* Initialize the hardware variables.
@@ -82,40 +81,133 @@ public class TeleOpMecanum extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        telemetry.addData("COMP OpModeMecanum Active", "");    //
-        telemetry.update();
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-
-            /**
-             * Driving algorithm
-             * Note: this algorithm assumes that all values are zero when controls are not touched
-             */
-            //Calculate the power needed for each motor
-            fwdControl = -1 * gamepad1.left_stick_y;
-            strafeControl = gamepad1.left_stick_x;
-            robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-            rightX = gamepad1.right_stick_x;
-            r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
-            v1 = r * Math.cos(robotAngle) + rightX;
-            v2 = r * Math.sin(robotAngle) - rightX;
-            v3 = r * Math.sin(robotAngle) + rightX;
-            v4 = r * Math.cos(robotAngle) - rightX;
-
-            /**
-             * Erick updated code!
-             */
-
-            robot.motorLF.setPower(v1);
-            robot.motorRF.setPower(v2);
-            robot.motorLR.setPower(v3);
-            robot.motorRR.setPower(v4);
+            telemetry.addData("COMP OpModeMecanum Active", "");    //
+            telemetry.update();
+            // run until the end of the match (driver presses STOP)
+         while (opModeIsActive()) {
 
 
-            /**
-             * Algorithm for controlling the lifting mechanism
-             */
 
+
+            if (gamepad1.left_stick_y == -1 && gamepad1.right_stick_x == 0) {//Drive Forwards (FAST)
+                robot.motorLF.setPower(-0.6);
+                robot.motorLR.setPower(-0.6);
+                robot.motorRF.setPower(-0.6);
+                robot.motorRR.setPower(-0.6);
+            }//Drive Forwards (FAST)//
+
+            else if (gamepad1.left_stick_y <= -0.3 && gamepad1.right_stick_x == 0){
+                robot.motorLF.setPower(-0.2);
+                robot.motorLR.setPower(-0.2);
+                robot.motorRF.setPower(-0.2);
+                robot.motorRR.setPower(-0.2);
+            }//Drive Forwards (SLOW)//
+
+            else if (gamepad1.left_stick_y == 1 && gamepad1.right_stick_x == 0) { //Drive backwards (FAST)
+                robot.motorLF.setPower(0.6);
+                robot.motorRF.setPower(0.6);
+                robot.motorLR.setPower(0.6);
+                robot.motorRR.setPower(0.6);
+            } //Drive Backwards (FAST)//
+
+            else if (gamepad1.left_stick_y >= 0.3 && gamepad1.right_stick_x == 0){//Drive Backwards (SLOW)
+                robot.motorLF.setPower(0.2);
+                robot.motorLR.setPower(0.2);
+                robot.motorRF.setPower(0.2);
+                robot.motorRR.setPower(0.2);
+            }//Drive Backwards (SLOW)//
+
+            else if (gamepad1.left_stick_y >= 0.3 && gamepad1.right_stick_x <= -0.3) { //Drift right (REVERSE)
+                robot.motorLF.setPower(-0.6);
+                robot.motorLR.setPower(-1);
+                robot.motorRR.setPower(-0.5);
+                robot.motorRF.setPower(-0.5);
+            } //Drift right (REVERSE)
+
+            else if (gamepad1.left_stick_y <= 0.3 && gamepad1.right_stick_x <= -0.3) { //Drift right (FORWARDS)
+                robot.motorLF.setPower(1);
+                robot.motorLR.setPower(0.6);
+                robot.motorRR.setPower(0.5);
+                robot.motorRF.setPower(0.5);
+            } //Drift right(FORWARDS)
+
+            else if (gamepad1.left_stick_y >= 0.3 && gamepad1.right_stick_x >= 0.3) { //Drift left (REVERSE)
+                robot.motorLF.setPower(-0.5);
+                robot.motorLR.setPower(-0.5);
+                robot.motorRR.setPower(-1);
+                robot.motorRF.setPower(-0.6);
+            } //Drift left (REVERSE)
+
+            else if (gamepad1.left_stick_y <= -0.3 && gamepad1.right_stick_x >= 0.3) { //Drift left (FORWARDS)
+                robot.motorLF.setPower(0.5);
+                robot.motorLR.setPower(0.5);
+                robot.motorRR.setPower(0.6);
+                robot.motorRF.setPower(1);
+            }//Drift left (FORWARDS)
+
+            else if (gamepad1.right_stick_x <= -0.3 && gamepad1.left_stick_y == 0){ //Turn Right
+                robot.motorRF.setPower(1);
+                robot.motorRR.setPower(1);
+                robot.motorLF.setPower(-1);
+                robot.motorLR.setPower(-1);
+              } //Turn Right//
+
+            else if (gamepad1.right_stick_x >= 0.3 && gamepad1.left_stick_y == 0){
+                robot.motorRF.setPower(-1);
+                robot.motorRR.setPower(-1);
+                robot.motorLF.setPower(1);
+                robot.motorLR.setPower(1);
+            }//Turn left
+
+            else if (gamepad1.left_stick_x <= -0.3 && gamepad1.right_stick_x == 0){ //Strafe right
+                robot.motorRF.setPower(-1);
+                robot.motorRR.setPower(1);
+                robot.motorLF.setPower(0.7);
+                robot.motorLR.setPower(-0.7);
+            }//Strafe right//
+
+            else if (gamepad1.left_stick_x >= 0.3 && gamepad1.right_stick_x == 0){ //Strafe left
+                robot.motorRF.setPower(0.7);
+                robot.motorRR.setPower(-0.7);
+                robot.motorLF.setPower(-1);
+                robot.motorLR.setPower(1);
+            }//Strafe left//
+
+            else if (gamepad1.left_stick_y >= -0.3 && gamepad1.right_stick_y <= -0.3) { //Drive forwards full speed
+                robot.motorLF.setPower(1);
+                robot.motorLR.setPower(1);
+                robot.motorRR.setPower(1);
+                robot.motorRF.setPower(1);
+
+            }//Drive forwards full speed
+
+            else if (gamepad1.left_stick_y <= -0.3 && gamepad1.right_stick_y >= -0.3) { //Drive backwards full speed
+                robot.motorLF.setPower(-1);
+                robot.motorLR.setPower(-1);
+                robot.motorRR.setPower(-1);
+                robot.motorRF.setPower(-1);
+
+            }//Drive backwards full speed
+
+            else {
+                robot.motorLF.setPower(0);
+                robot.motorLR.setPower(0);
+                robot.motorRF.setPower(0);
+                robot.motorRR.setPower(0);
+            }//Full Stop//
+
+            //ATTACHMENTS
+
+             if (gamepad1.right_trigger > (0)) {//4-Bar Lift
+                 robot.motorLift.setPower(-gamepad1.right_trigger);
+             }//4-Bar Lift
+
+             else if (gamepad1.left_trigger > (0)) {//4-Bar Lower
+                 robot.motor4Bar.setPower(gamepad1.left_trigger);
+             }//4-Bar Lower
+                else {
+                 robot.motor4Bar.setPower(0);
+             }//Full Stop
 
             idle();
 /*            telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));

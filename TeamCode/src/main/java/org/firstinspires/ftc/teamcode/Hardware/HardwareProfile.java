@@ -87,24 +87,24 @@ public class HardwareProfile {
         hwMap = ahwMap;
 
         //Define the I2C sensors
-        ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
+//        ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
 //        I2cAddr i2CAddressColorRight = I2cAddr.create8bit(0x3c);
 //        I2cAddr i2CAddressColorLeft = I2cAddr.create8bit(0x4c);
-        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
-        rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
-        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
+//        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
+ //       rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
+//        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
+//
+//        I2cAddr i2CAddressRangeRight = I2cAddr.create8bit(0x28)
+//        rangeSensorRight = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRight");
+//        rangeSensorRight.setI2cAddress(i2CAddressRangeRight);
 
-        I2cAddr i2CAddressRangeRight = I2cAddr.create8bit(0x28);
-        rangeSensorRight = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRight");
-        rangeSensorRight.setI2cAddress(i2CAddressRangeRight);
+//        I2cAddr i2CAddressRangeFront = I2cAddr.create8bit(0x28);
+//        rangeSensorFront = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorFront");
+//        rangeSensorFront.setI2cAddress(i2CAddressRangeFront);
 
-        I2cAddr i2CAddressRangeFront = I2cAddr.create8bit(0x28);
-        rangeSensorFront = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorFront");
-        rangeSensorFront.setI2cAddress(i2CAddressRangeFront);
-
-        I2cAddr i2CAddressRangeRear = I2cAddr.create8bit(0x28);
-        rangeSensorRear = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRear");
-        rangeSensorRear.setI2cAddress(i2CAddressRangeRear);
+//        I2cAddr i2CAddressRangeRear = I2cAddr.create8bit(0x28);
+//        rangeSensorRear = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRear");
+//        rangeSensorRear.setI2cAddress(i2CAddressRangeRear);
 
 
 //        colorSensorRight = hwMap.colorSensor.get("colorR"); //Map the sensor to the hardware
@@ -114,16 +114,16 @@ public class HardwareProfile {
 //        colorSensorRight.enableLed(false);
 //        colorSensorLeft.enableLed(false);
 
-        sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
-        mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
+//        sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
+//        mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
         /**
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
         **/
-        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
-        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
-        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
-        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+//        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+//        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+//        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+//        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
 
         /**
          *    Define and Initialize drive Motors
@@ -173,7 +173,7 @@ public class HardwareProfile {
         motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLinear.setPower(0);
 
-        motor4Bar = hwMap.dcMotor.get("motor4Bar");
+       motor4Bar = hwMap.dcMotor.get("motor4Bar");
         motor4Bar.setDirection(DcMotor.Direction.FORWARD);
         motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor4Bar.setPower(0);
@@ -181,9 +181,9 @@ public class HardwareProfile {
         /**
          * Initialize the servo motors
          */
-        servoLeftGrab = hwMap.servo.get("servoLeftGrab");
-        servoRightGrab = hwMap.servo.get("servoRightGrab");
-        servoClawClose = hwMap.servo.get("servoClawClose");
-        servoClawRotate = hwMap.servo.get("servoClawRotate");
+ //       servoLeftGrab = hwMap.servo.get("servoLeftGrab");
+ //       servoRightGrab = hwMap.servo.get("servoRightGrab");
+ //       servoClawClose = hwMap.servo.get("servoClawClose");
+ //       servoClawRotate = hwMap.servo.get("servoClawRotate");
     }
 }
