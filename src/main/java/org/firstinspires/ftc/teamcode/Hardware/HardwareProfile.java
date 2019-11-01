@@ -163,20 +163,20 @@ public class HardwareProfile {
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLift.setPower(0);
 
-        motorIntake = hwMap.dcMotor.get("motorIntake");
-        motorIntake.setDirection(DcMotor.Direction.FORWARD);
-        motorIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorIntake.setPower(0);
+//        motorIntake = hwMap.dcMotor.get("motorIntake");
+//        motorIntake.setDirection(DcMotor.Direction.FORWARD);
+//        motorIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+///        motorIntake.setPower(0);
+//
+//        motorLinear = hwMap.dcMotor.get("motorLinear")
+//        motorLinear.setDirection(DcMotor.Direction.FORWARD);
+//        motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motorLinear.setPower(0);
 
-        motorLinear = hwMap.dcMotor.get("motorLinear");
-        motorLinear.setDirection(DcMotor.Direction.FORWARD);
-        motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLinear.setPower(0);
-
-       motor4Bar = hwMap.dcMotor.get("motor4Bar");
-        motor4Bar.setDirection(DcMotor.Direction.FORWARD);
-        motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor4Bar.setPower(0);
+//       motor4Bar = hwMap.dcMotor.get("motor4Bar");
+//        motor4Bar.setDirection(DcMotor.Direction.FORWARD);
+//        motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        motor4Bar.setPower(0);
 
         /**
          * Initialize the servo motors
