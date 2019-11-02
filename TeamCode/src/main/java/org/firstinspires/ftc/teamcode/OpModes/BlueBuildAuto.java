@@ -41,19 +41,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.VuforiaLib;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import java.util.List;
 
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red 1 - Found, Stones, Park", group = "COMP")
+@Autonomous(name = "Blue BuildZone", group = "COMP")
 
-public class SampleAuto extends LinearOpMode {
+public class BlueBuildAuto extends LinearOpMode {
 
     /**
      * Instantiate all objects needed in this class
@@ -97,7 +97,7 @@ public class SampleAuto extends LinearOpMode {
     private DataLogger Dl;                          //Datalogger object
     private double motorCorrectCoefficient = .05;    //Amount to divide the zInt drift by
     private String button;                          //Which button to push
-    private String alliance = "red";                //Your current alliance
+    private String alliance = "blue";                //Your current alliance
     private String courseCorrect = "";
     private State state = State.FIRST_STATE;    //Machine State
     private boolean initialize = false;
@@ -118,17 +118,17 @@ public class SampleAuto extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
-        robot.servoRightGrab.setPosition(.5);
-        robot.servoLeftGrab.setPosition(.5);
-        robot.servoClawClose.setPosition(.5);
-        robot.servoClawRotate.setPosition(.5);
+        robot.servoRightGrab.setPosition(0);
+        //robot.servoLeftGrab.setPosition(.5);
+        //robot.servoClawClose.setPosition(.5);
+        //robot.servoClawRotate.setPosition(.5);
 
 
         /**
          * Set the initial position for the Lift mechanism
          */
 
-        robot.motorLinear.setPower(-0.3);
+/*        robot.motorLinear.setPower(-0.3);
         robot.motorLift.setPower(-0.3);
         while (!initialize) {
             // wait for the touch sensor to be pressed
@@ -147,7 +147,7 @@ public class SampleAuto extends LinearOpMode {
 
         /**
          * Calibrate the gyro
-         */
+         *
         robot.sensorGyro.calibrate();
         while (robot.sensorGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -156,7 +156,7 @@ public class SampleAuto extends LinearOpMode {
 
         /**
          * Initialize Vuforia and retrieve the list of trackable objects.
-         */
+         *
         telemetry.addData("Waiting on Vuforia", "");
         telemetry.update();
 
@@ -175,14 +175,20 @@ public class SampleAuto extends LinearOpMode {
             switch (state) {
                 case FIRST_STATE:
                     /**
-                     * Provide a description of what this state does
-                     * Code goes here
+                     *Drive forwards, lower servo,
+                     * drive back, to the left,
+                     * push base into the corner, and park
                      */
 
-                    drive.translate(1,20, 1);
+                    drive.translate(1,90, 2);
                     drive.motorsHalt();
+                    robot.servoRightGrab.setPosition(0.5);
+                    drive.translate(-1,110,2); //if 110 heading doesn't work try 20
+                    robot.servoRightGrab.setPosition(0);
+                    drive.translate(0.5,90,0.5);
+                    drive.translate(-1,90,1);
 
-                    state = State.SECOND_STATE;
+                    state = State.HALT;
                     //Exit the state
                     break;
 

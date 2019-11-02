@@ -50,7 +50,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp", group = "Comp")
 
 public class TeleOp extends LinearOpMode {
     /**
