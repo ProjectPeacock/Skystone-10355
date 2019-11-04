@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import java.util.List;
 
 /**
- * Created by caseyzandbergen on 12/7/16.
+ * FTC Team 10355 driveMecanum Class for 2019-2020 Skystone season.
  */
 
 public class DriveMecanum {
@@ -20,14 +19,14 @@ public class DriveMecanum {
     private HardwareProfile robot = null;
     private LinearOpMode opMode = null;
     private ElapsedTime runtime = new ElapsedTime();
-    private VuforiaLib myVuforia = null;
+    private skystoneVuforia myVuforia = null;
     private List<Double> vuforiaTracking;
     private double robotX;          // The robot's X position from VuforiaLib
     private double robotY;  // The robot's Y position from VuforiaLib
     private double robotBearing;    //Bearing to, i.e. the bearing you need to stear toward
 
 
-    public DriveMecanum(HardwareProfile myRobot, LinearOpMode myOpMode, VuforiaLib thisVuforia,
+    public DriveMecanum(HardwareProfile myRobot, LinearOpMode myOpMode, skystoneVuforia thisVuforia,
                         List<VuforiaTrackable> trackableList) {
         robot = myRobot;
         opMode = myOpMode;
@@ -580,7 +579,6 @@ public class DriveMecanum {
             opMode.idle();
         }
         motorsHalt();
-
     }
 
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,

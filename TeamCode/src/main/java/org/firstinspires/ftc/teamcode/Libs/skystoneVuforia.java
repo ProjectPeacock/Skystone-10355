@@ -22,7 +22,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-public class VuforiaLib {
+public class skystoneVuforia {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -80,7 +80,6 @@ public class VuforiaLib {
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 //        VuforiaTrackables skystoneTrackables = this.vuforia.loadTrackablesFromAsset("FTC_2019-20");
-
 
         VuforiaTrackable stoneTarget = skystoneTrackables.get(0);
         stoneTarget.setName("Stone Target");
@@ -218,10 +217,6 @@ public class VuforiaLib {
             phoneXRotate = 90 ;
         }
 
-
-
-
-
         OpenGLMatrix legosTargetLocationOnField = OpenGLMatrix
                 /* Then we translate the target off to the RED WALL. Our translation here
                 is a negative translation in X.*/
@@ -268,11 +263,20 @@ public class VuforiaLib {
 
     public List<Double> getLocation(List<VuforiaTrackable> allTrackables) {
         double robotX = 0;          // The robot's X position from VuforiaLib
-        double robotY = -2000;      // The robot's Y position from VuforiaLib
-        double robotBearing = 0;    // Bearing to, i.e. the bearing you need to steer toward
+        double robotY = -2000;  // The robot's Y position from VuforiaLib
+        double robotBearing = 0;    //Bearing to, i.e. the bearing you need to stear toward
         double robotRoll = 0;       // Indicates the robots roll position with respect to the image
         String targetName = "";
         double visibleTarget = 99;       // identifies which target is the visible target
+
+        // the the current vuforia image
+        for (VuforiaTrackable trackable : allTrackables) {
+            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+            if (robotLocationTransform != null) {
+                lastLocation = robotLocationTransform;
+            }
+        }
+
 
         // check all the trackable targets to see which one (if any) is visible.
         for (VuforiaTrackable trackable : allTrackables) {
@@ -330,31 +334,25 @@ public class VuforiaLib {
             }
         }
 
-
-        // the the current vuforia image
-        for (VuforiaTrackable trackable : allTrackables) {
-            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-            if (robotLocationTransform != null) {
-                lastLocation = robotLocationTransform;
-            }
-        }
         if (lastLocation != null) {
             //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
 
             // Then you can extract the positions and angles using the getTranslation and getOrientation methods.
             VectorF trans = lastLocation.getTranslation();
-            Orientation rot = Orientation.getOrientation(lastLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+//            Orientation rot = Orientation.getOrientation(lastLocation, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            robotRoll = rotation.firstAngle;
             // Robot position is defined by the standard Matrix translation (x and y)
             robotX = trans.get(0);
             robotY = trans.get(1);
             // Robot bearing (in Cartesian system) position is defined by the standard Matrix z rotation
-            robotBearing = rot.thirdAngle;
+            robotBearing = rotation.thirdAngle;
             if (robotBearing < 0) {
                 robotBearing = 360 + robotBearing;
             }
 
         }
-        List<Double> list = Arrays.asList(robotX, robotY, robotBearing, visibleTarget);
+        List<Double> list = Arrays.asList(robotX, robotY, robotBearing, robotRoll, visibleTarget);
         return list;
     }
 

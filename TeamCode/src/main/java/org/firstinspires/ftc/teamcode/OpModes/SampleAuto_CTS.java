@@ -40,29 +40,34 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
-import org.firstinspires.ftc.teamcode.Libs.VuforiaLib;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
+import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile_CTS;
 
 import java.util.List;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red 1 - Found, Stones, Park", group = "COMP")
-
-public class SampleAuto extends LinearOpMode {
+@Autonomous(name = "Sample Autonomous", group = "COMP")
+//@Disabled
+public class SampleAuto_CTS extends LinearOpMode {
 
     /**
      * Instantiate all objects needed in this class
      */
 
-    private final static HardwareProfile robot = new HardwareProfile();
+    private final static HardwareProfile_CTS robot = new HardwareProfile_CTS();
     private LinearOpMode opMode = this;                     //Opmode
     double radians = 0;
-    private VuforiaLib myVuforia = new VuforiaLib();
+    private skystoneVuforia myVuforia = new skystoneVuforia();
     private ElapsedTime runtime = new ElapsedTime();
     /**
      * Define global variables
@@ -88,6 +93,8 @@ public class SampleAuto extends LinearOpMode {
     private double robotX;              // The robot's X position from VuforiaLib
     private double robotY;              // The robot's Y position from VuforiaLib
     private double robotBearing;        //Bearing to, i.e. the bearing you need to steer toward
+    private double robotRoll;
+    private double visibleTarget;
     private double LF, RF, LR, RR;      //Motor power setting
     private double myCurrentMotorPosition;  //Current encoder position
     private double myTargetPosition;        //Target encoder position
@@ -99,8 +106,67 @@ public class SampleAuto extends LinearOpMode {
     private String button;                          //Which button to push
     private String alliance = "red";                //Your current alliance
     private String courseCorrect = "";
-    private State state = State.FIRST_STATE;    //Machine State
+    private State state = State.VUFORIA_TEST;    //Machine State
     private boolean initialize = false;
+
+
+   /**
+     * Setting up Vuforia to operate with the autonomous opMode.
+     */
+    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+
+
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
+
+    /*
+     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+     * web site at https://developer.vuforia.com/license-manager.
+     *
+     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+     * random data. As an example, here is a example of a fragment of a valid key:
+     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+     * Once you've obtained a license key, copy the string from the Vuforia web site
+     * and paste it in to your code on the next line, between the double quotes.
+     */
+    private static final String VUFORIA_KEY =
+            "AQnFmuP/////AAABmQCm3/d2XkmSr01g6YE3lFSJSgwnTpe+36Ubl1lNvf5SfnVBBt2kW6Jl/wXN//IX3CfcSOldD2PTFY56tUPu0R45yCVtA3+y33VKlzKXMR1nFbYjOvD6BiG2fmDIx8ViGKvq0tr1NZQo8XpeTVL8N79dxMSHzUHBoehIzrtniGKoeaYcr4H6oGAxOXp0GLebanWq61B6VWxKp4etuwzS9OX86R+PMVAXHBTJLWpOm2WeTIeCopZ46wfpzVZDeI6BEXHN84QzFGM8g4lmTxwBizXxUE08tlOjTl+V/+EkkDsMHys+x9f/hyXCetITnAmRiiueOFzYhx5XBItX9msyLLU/TinrMIPICW7U5IAU8kdh";
+
+    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
+    // We will define some constants and conversions here
+    private static final float mmPerInch            = 25.4f;
+    private static final float mmTargetHeight       = (6) * mmPerInch;          // the height of the center of the target image above the floor
+
+    // Constant for Stone Target
+    private static final float stoneZ               = 2.00f * mmPerInch;
+
+    // Constants for the center support targets
+    private static final float bridgeZ              = 6.42f * mmPerInch;
+    private static final float bridgeY              = 23 * mmPerInch;
+    private static final float bridgeX              = 5.18f * mmPerInch;
+    private static final float bridgeRotY           = 59;                                 // Units are degrees
+    private static final float bridgeRotZ           = 180;
+
+    // Constants for perimeter targets
+    private static final float halfField            = 72 * mmPerInch;
+    private static final float quadField            = 36 * mmPerInch;
+
+    // Class Members
+    private OpenGLMatrix lastLocation               = null;
+    private VuforiaLocalizer vuforia                = null;
+
+    /**
+     * This is the webcam we are to use. As with other hardware devices such as motors and
+     * servos, this device is identified using the robot configuration tool in the FTC application.
+     */
+//    WebcamName webcamName = null;
+
+    private boolean targetVisible = false;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
 
 
     public void runOpMode() {
@@ -111,6 +177,15 @@ public class SampleAuto extends LinearOpMode {
         robot.init(hardwareMap);
 
         /**
+         * Initialize Vuforia and retrieve the list of trackable objects.
+         */
+        telemetry.addData("Waiting on Vuforia", "");
+        telemetry.update();
+
+        VuforiaTrackables skystoneTrackables = vuforia.loadTrackablesFromAsset("FTC_2019-20");
+        myTrackables = myVuforia.vuforiaInit(skystoneTrackables);
+
+        /**
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
@@ -118,16 +193,18 @@ public class SampleAuto extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
+        /**
         robot.servoRightGrab.setPosition(.5);
         robot.servoLeftGrab.setPosition(.5);
         robot.servoClawClose.setPosition(.5);
         robot.servoClawRotate.setPosition(.5);
-
+         **/
 
         /**
          * Set the initial position for the Lift mechanism
          */
 
+        /**
         robot.motorLinear.setPower(-0.3);
         robot.motorLift.setPower(-0.3);
         while (!initialize) {
@@ -139,6 +216,7 @@ public class SampleAuto extends LinearOpMode {
                 robot.motorLinear.setPower(0);
             }
         }
+         **/
 
         /**
          *  Create the DataLogger object.
@@ -148,19 +226,16 @@ public class SampleAuto extends LinearOpMode {
         /**
          * Calibrate the gyro
          */
+
+        /**
         robot.sensorGyro.calibrate();
         while (robot.sensorGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
 
-        /**
-         * Initialize Vuforia and retrieve the list of trackable objects.
-         */
-        telemetry.addData("Waiting on Vuforia", "");
-        telemetry.update();
-
-        myTrackables = myVuforia.vuforiaInit();
+         **/
+//        skystoneTrackables.activate();
 
         telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
@@ -173,26 +248,62 @@ public class SampleAuto extends LinearOpMode {
 
         while (opModeIsActive()) {
             switch (state) {
-                case FIRST_STATE:
+                case FOUNDATION:
                     /**
                      * Provide a description of what this state does
                      * Code goes here
                      */
 
-                    drive.translate(1,20, 1);
+                    drive.translate(.5,20, 1);
                     drive.motorsHalt();
+
+//                    robot.servoRightGrab.setPosition(0.5);
+//                    robot.servoLeftGrab.setPosition(0.5);
+
+                    drive.translate(-1,180,.5);
+                    drive.motorsHalt();
+                    robot.motorRF.setPower(-0.5);
+                    robot.motorRR.setPower(-0.5);
+                    sleep(400);
+                    drive.motorsHalt();
+
+                    drive.translate(1, 0, .3);
+                    drive.motorsHalt();
+
+//                    robot.servoRightGrab.setPosition(0);
+//                    robot.servoLeftGrab.setPosition(0);
 
                     state = State.SECOND_STATE;
                     //Exit the state
                     break;
 
-                case SECOND_STATE:
+                case VUFORIA_TEST:
                     /**
-                     * Provide a description of what this state does
-                     * Code goes here
+                     * This state is intended to test the Vuforia code and provide results to the
+                     * Driver Station screen
                      */
+                    /**
+                    if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                        telemetry.addData("Visible Target", skystoneTrackables.getName());
+                        targetVisible = true;
 
-                    state = State.THIRD_STATE;
+                        // getUpdatedRobotLocation() will return null if no new information is available since
+                        // the last time that call was made, or if the trackable is not currently visible.
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+                    }
+
+                     **/
+
+                    telemetry.addData("visible Target = ", visibleTarget);
+                    telemetry.addData("X Coords = ", robotX);
+                    telemetry.addData("Y Coords = ", robotY);
+                    telemetry.addData("Robot Bearing = ", robotBearing);
+                    telemetry.addData("Robot Roll = ", robotRoll);
+                    telemetry.update();
+//                        state = State.HALT;
                     break;
 
                 case THIRD_STATE:
@@ -264,6 +375,7 @@ public class SampleAuto extends LinearOpMode {
         telemetry.addData("Target X", String.valueOf(x));
         telemetry.addData("Target Y", String.valueOf(y));
         telemetry.addData("robotBearing", String.valueOf((int) robotBearing));
+        telemetry.addData("robotRoll", String.valueOf((int) robotBearing));
         telemetry.addData("Current Z Int", String.valueOf(currentZint));
         telemetry.addData("Z Correction", String.valueOf(zCorrection));
         telemetry.addData("touchSensor", String.valueOf(robot.touchLiftForward.getValue()));
@@ -289,12 +401,14 @@ public class SampleAuto extends LinearOpMode {
      * Catchall to get data from all sensor systems.  Updates global variables
      */
     private void getSensorData() {
-        ods = robot.ods.getLightDetected();
-        currentZint = robot.mrGyro.getIntegratedZValue();
+//        ods = robot.ods.getLightDetected();
+//        currentZint = robot.mrGyro.getIntegratedZValue();
         vuforiaTracking = myVuforia.getLocation(myTrackables);
         robotX = vuforiaTracking.get(0);
         robotY = vuforiaTracking.get(1);
         robotBearing = vuforiaTracking.get(2);
+        robotRoll = vuforiaTracking.get(3);
+        visibleTarget = vuforiaTracking.get(4);
     }
 
     /**
@@ -305,32 +419,34 @@ public class SampleAuto extends LinearOpMode {
     private void createDl() {
 
         Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("Procedure");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("robotX");
-        Dl.addField("robotY");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("robotBearing");
-        Dl.addField("initZ");
-        Dl.addField("currentZ");
-        Dl.addField("zCorrection");
-        Dl.addField("touchSensor");
-        Dl.addField("ODS");
-        Dl.addField("colorRightRed");
-        Dl.addField("colorRightBlue");
-        Dl.addField("colorLeftRed");
-        Dl.addField("colorLeftBlue");
-        Dl.addField("LFTargetPos");
-        Dl.addField("LFMotorPos");
-        Dl.addField("LF");
-        Dl.addField("RF");
-        Dl.addField("LR");
-        Dl.addField("RR");
+        Dl.addField("runTime ");
+        Dl.addField("Alliance ");
+        Dl.addField("State ");
+        Dl.addField("Procedure ");
+        Dl.addField("courseCorrect ");
+        Dl.addField("heading ");
+        Dl.addField("robotX ");
+        Dl.addField("robotY ");
+        Dl.addField("robotRoll ");
+        Dl.addField("X ");
+        Dl.addField("Y ");
+        Dl.addField("robotBearing ");
+        Dl.addField("visibleTarge ");
+        Dl.addField("initZ ");
+        Dl.addField("currentZ ");
+        Dl.addField("zCorrection ");
+        Dl.addField("touchSensor ");
+        Dl.addField("ODS ");
+        Dl.addField("colorRightRed ");
+        Dl.addField("colorRightBlue ");
+        Dl.addField("colorLeftRed ");
+        Dl.addField("colorLeftBlue ");
+        Dl.addField("LFTargetPos ");
+        Dl.addField("LFMotorPos ");
+        Dl.addField("motorLF ");
+        Dl.addField("motorRF ");
+        Dl.addField("mtoroLR ");
+        Dl.addField("motorRR ");
         Dl.newLine();
     }
 
@@ -347,9 +463,11 @@ public class SampleAuto extends LinearOpMode {
         Dl.addField(String.valueOf(heading));
         Dl.addField(String.valueOf((int) robotX));
         Dl.addField(String.valueOf((int) robotY));
+        Dl.addField(String.valueOf((int) robotRoll));
         Dl.addField(String.valueOf(x));
         Dl.addField(String.valueOf(y));
         Dl.addField(String.valueOf((int) robotBearing));
+        Dl.addField(String.valueOf((int) visibleTarget));
         Dl.addField(String.valueOf(initZ));
         Dl.addField(String.valueOf(currentZint));
         Dl.addField(String.valueOf(zCorrection));
@@ -380,8 +498,8 @@ public class SampleAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        FIRST_STATE, SECOND_STATE, THIRD_STATE, FOURTH_STATE,
-        FIFTH_STATE, HALT, END_STATE
+        FOUNDATION, SECOND_STATE, THIRD_STATE, FOURTH_STATE,
+        FIFTH_STATE, HALT, END_STATE, VUFORIA_TEST
     }
 
 }

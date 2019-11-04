@@ -3,18 +3,15 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 /**
  * This is the hardware definition for the Hardware test/reference platform.  This class should be
@@ -25,7 +22,7 @@ import com.qualcomm.robotcore.util.Range;
  * private HardwareProfile robot = new HardwareProfile();
  */
 
-public class HardwareProfile {
+public class HardwareProfile_CTS {
     //Wheel Setup
     public final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
     public final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
@@ -43,8 +40,6 @@ public class HardwareProfile {
     public DcMotor motorLinear = null;          //Linear Actuator motor - controls angle of lifting system
     public DcMotor motor4Bar = null;            //motor to control 4-bar system
     public OpticalDistanceSensor ods;           //Declare the optical distance sensor
-    public ColorSensor colorSensorRight;        //Declare the Color Sensor
-    public ColorSensor colorSensorLeft;         //Declare the Color Sensor
     public TouchSensor touchLiftUp;             //Declare the Lift Up Touch Sensor - indicates when lift is all the way up
     public TouchSensor touchLiftDown;           //Declare the Lift Down Touch Sensor - indicates when lift is all the way down
     public TouchSensor touchLiftForward;        //Declare the Lift Forward Touch Sensor - indicates when lift is all the way forward
@@ -59,9 +54,10 @@ public class HardwareProfile {
     public Servo servoRightGrab;                //Declare the right grabbing servo
     public Servo servoClawClose;                //Declare the claw opening/closing servo
     public Servo servoClawRotate;               //Declare the claw rotation servo
+    public WebcamName webcamName = null;
 
     /* I2C Range Sensor members*/
-    I2cDevice rangeLeft;
+/**    I2cDevice rangeLeft;
     I2cDevice rangeRight;
     I2cDevice rangeFront;
     I2cDevice rangeBack;
@@ -69,9 +65,9 @@ public class HardwareProfile {
     I2cDeviceSynch rangeRightReader;
     I2cDeviceSynch rangeFrontReader;
     I2cDeviceSynch rangeBackReader;
-
+**/
     /* Constructor */
-    public HardwareProfile() {
+    public HardwareProfile_CTS() {
 
     }
 
@@ -86,10 +82,14 @@ public class HardwareProfile {
         HardwareMap hwMap;
         hwMap = ahwMap;
 
+        /*
+         * Retrieve the camera we are to use.
+         */
+//        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+
         //Define the I2C sensors
-        ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
-//        I2cAddr i2CAddressColorRight = I2cAddr.create8bit(0x3c);
-//        I2cAddr i2CAddressColorLeft = I2cAddr.create8bit(0x4c);
+//        ods = hwMap.opticalDistanceSensor.get("ODS");  //Map the sensor to the hardware
+
         I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
         rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
         rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
@@ -107,23 +107,20 @@ public class HardwareProfile {
         rangeSensorRear.setI2cAddress(i2CAddressRangeRear);
 
 
-//        colorSensorRight = hwMap.colorSensor.get("colorR"); //Map the sensor to the hardware
-//        colorSensorLeft = hwMap.colorSensor.get("colorL"); //Map the sensor to the hardware
-//        colorSensorRight.setI2cAddress(i2CAddressColorRight);
-//        colorSensorLeft.setI2cAddress(i2CAddressColorLeft);
-//        colorSensorRight.enableLed(false);
-//        colorSensorLeft.enableLed(false);
-
         sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
         /**
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
         **/
+
+        /**
         touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
         touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
         touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
         touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+
+         **/
 
         /**
          *    Define and Initialize drive Motors
@@ -158,6 +155,7 @@ public class HardwareProfile {
          *    Configure the motors to run with encoders as needed
          *    Set the power to the motor to be 0
         **/
+
         motorLift = hwMap.dcMotor.get("motorLift");
         motorLift.setDirection(DcMotor.Direction.FORWARD);
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -181,9 +179,12 @@ public class HardwareProfile {
         /**
          * Initialize the servo motors
          */
+
+        /**
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");
         servoClawClose = hwMap.servo.get("servoClawClose");
         servoClawRotate = hwMap.servo.get("servoClawRotate");
+         **/
     }
 }

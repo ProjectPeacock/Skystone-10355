@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Test TeleOpMecanum", group = "Test")
 
-public class TeleOpMecanum extends LinearOpMode {
+public class TeleOpMecanum_CTS extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class
      */
