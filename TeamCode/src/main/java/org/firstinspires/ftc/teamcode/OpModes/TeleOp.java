@@ -112,6 +112,20 @@ public class TeleOp extends LinearOpMode {
             robot.motorRR.setPower(v4);
 
             /**
+             * Code for controlling the foundation grabber
+             */
+            if (gamepad1.x){
+                robot.servoRightGrab.setPosition(.9);
+            } else if(gamepad1.y){
+                robot.servoRightGrab.setPosition(.4);
+            }
+
+            /**
+             * Algorithm for placing the capstone on the foundation - temporary proceedure
+             */
+
+            
+            /**
              * Algorithm for controlling the lifting mechanism
              **/
 
