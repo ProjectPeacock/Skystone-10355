@@ -40,11 +40,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaSkyStone;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
-import org.firstinspires.ftc.teamcode.Libs.VuforiaLib;
+import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class RedBuildAuto extends LinearOpMode {
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     double radians = 0;
-    private VuforiaLib myVuforia = new VuforiaLib();
+    private skystoneVuforia myVuforia = new skystoneVuforia();
     private ElapsedTime runtime = new ElapsedTime();
     /**
      * Define global variables
@@ -113,14 +114,14 @@ public class RedBuildAuto extends LinearOpMode {
         /**
          * Instantiate the drive class
          */
-//        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
+        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
         /**
          * Set the initial servo positions
          */
         robot.servoRightGrab.setPosition(0);
         //robot.servoLeftGrab.setPosition(.5);
-        //robot.servoClawClose.setPosition(.5);
+        robot.servoClawClose.setPosition(.5);
         //robot.servoClawRotate.setPosition(.5);
 
 
@@ -148,6 +149,7 @@ public class RedBuildAuto extends LinearOpMode {
         /**
          * Calibrate the gyro
          *
+         **/
         robot.sensorGyro.calibrate();
         while (robot.sensorGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -156,11 +158,11 @@ public class RedBuildAuto extends LinearOpMode {
 
         /**
          * Initialize Vuforia and retrieve the list of trackable objects.
-         *
+         **/
         telemetry.addData("Waiting on Vuforia", "");
         telemetry.update();
 
-        myTrackables = myVuforia.vuforiaInit();
+//        myTrackables = myVuforia.vuforiaInit(myTrackables);
 
         telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
@@ -180,13 +182,13 @@ public class RedBuildAuto extends LinearOpMode {
                      * push base into the corner, and park
                      */
 
-//                    drive.translate(1,90, 2);
-//                    drive.motorsHalt();
+                    drive.translate(1,90, 2);
+                    drive.motorsHalt();
                     robot.servoRightGrab.setPosition(0.5);
-//                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
+                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
                     robot.servoRightGrab.setPosition(0);
-//                    drive.translate(0.5,90,0.5);
-//                    drive.translate(-1,90,1);
+                    drive.translate(0.5,90,0.5);
+                    drive.translate(-1,90,1);
 
                     state = State.HALT;
                     //Exit the state
