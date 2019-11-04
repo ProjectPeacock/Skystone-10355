@@ -16,6 +16,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -28,6 +29,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import java.util.List;
 
 @Autonomous(name = "Red 1", group = "COMP")
+@Disabled
 public class RedAutonomous {
     private final static HardwareProfile robot = new HardwareProfile();
     double radians = 0;

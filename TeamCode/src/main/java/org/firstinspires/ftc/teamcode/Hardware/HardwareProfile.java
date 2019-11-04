@@ -2,14 +2,18 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
@@ -200,15 +204,15 @@ public class HardwareProfile {
          * Initialize the servo motors
          */
 
-        /**
+
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");
         servoClawClose = hwMap.servo.get("servoClawClose");
         servoClawRotate = hwMap.servo.get("servoClawRotate");
-         **/
- //       servoLeftGrab = hwMap.servo.get("servoLeftGrab");
- //       servoRightGrab = hwMap.servo.get("servoRightGrab");
- //       servoClawClose = hwMap.servo.get("servoClawClose");
- //       servoClawRotate = hwMap.servo.get("servoClawRotate");
+
+        servoLeftGrab = hwMap.servo.get("servoLeftGrab");
+        servoRightGrab = hwMap.servo.get("servoRightGrab");
+        servoClawClose = hwMap.servo.get("servoClawClose");
+        servoClawRotate = hwMap.servo.get("servoClawRotate");
     }
 }

@@ -113,7 +113,7 @@ public class BlueBuildAuto extends LinearOpMode {
         /**
          * Instantiate the drive class
          */
-        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
+//        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
         /**
          * Set the initial servo positions
@@ -180,13 +180,13 @@ public class BlueBuildAuto extends LinearOpMode {
                      * push base into the corner, and park
                      */
 
-                    drive.translate(1,90, 2);
-                    drive.motorsHalt();
-                    robot.servoRightGrab.setPosition(0.5);
-                    drive.translate(-1,110,2); //if 110 heading doesn't work try 20
-                    robot.servoRightGrab.setPosition(0);
-                    drive.translate(0.5,90,0.5);
-                    drive.translate(-1,90,1);
+//                    drive.translate(1,90, 2);
+//                    drive.motorsHalt();
+//                    robot.servoRightGrab.setPosition(0.5);
+//                    drive.translate(-1,110,2); //if 110 heading doesn't work try 20
+//                    robot.servoRightGrab.setPosition(0);
+//                    drive.translate(0.5,90,0.5);
+//                    drive.translate(-1,90,1);
 
                     state = State.HALT;
                     //Exit the state
@@ -238,7 +238,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     break;
 
                 case HALT:
-                    drive.motorsHalt();               //Stop the motors
+//                    drive.motorsHalt();               //Stop the motors
 
                     //Stop the DataLogger
                     dlStop();
