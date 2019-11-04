@@ -33,8 +33,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 /**
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
@@ -50,9 +50,9 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Test TeleOpMecanum", group = "Test")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp", group = "Comp")
 
-public class TeleOpMecanum extends LinearOpMode {
+public class TeleOp extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class
      */
@@ -66,6 +66,8 @@ public class TeleOpMecanum extends LinearOpMode {
     private double strafeControl = 0;
     private double robotAngle =0;
     private double rightX = 0;
+    private double rightY = 0;
+    private double powerLevel = 0.5;
 
     @Override
     public void runOpMode() {
@@ -96,12 +98,13 @@ public class TeleOpMecanum extends LinearOpMode {
 //            fwdControl = -1 * gamepad1.left_stick_y;
             strafeControl = gamepad1.left_stick_x;
             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-            rightX = gamepad1.right_stick_x - gamepad1.right_stick_y;
+            rightX = gamepad1.right_stick_x;
+            rightY = gamepad1.right_stick_y;
             r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
-            v1 = r * Math.cos(robotAngle) + rightX;
-            v2 = r * Math.sin(robotAngle) - rightX;
-            v3 = r * Math.sin(robotAngle) + rightX;
-            v4 = r * Math.cos(robotAngle) - rightX;
+            v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
+            v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
+            v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
+            v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
 
             robot.motorLF.setPower(v1);
             robot.motorRF.setPower(v2);
@@ -119,8 +122,9 @@ public class TeleOpMecanum extends LinearOpMode {
             } else robot.motorLift.setPower(0);
 
             idle();
-/*            telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
-            telemetry.addData("left_stick_y", String.valueOf(gamepad1.left_stick_y));
+ /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
+            telemetry.addData("left_stick/
+             if (gamepad1.left_stick_y == 0) {_y", String.valueOf(gamepad1.left_stick_y));
             telemetry.addData("right_stick_x", String.valueOf(gamepad1.right_stick_x));
             telemetry.addData("LF", String.valueOf(v1));
             telemetry.addData("RF", String.valueOf(v2));
