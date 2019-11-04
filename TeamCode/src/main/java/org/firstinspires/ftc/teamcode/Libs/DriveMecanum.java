@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 

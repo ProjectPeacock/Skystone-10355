@@ -123,8 +123,20 @@ public class TeleOp extends LinearOpMode {
             /**
              * Algorithm for placing the capstone on the foundation - temporary proceedure
              */
+            if (gamepad1.right_bumper){
+                robot.motorLift.setPower(.05);
+                sleep(30);
+                robot.motorLift.setPower(0);
+                robot.servoClawClose.setPosition(1);
+                sleep(500);
+                robot.motorLift.setPower(-0.05);
+                sleep(30);
+                robot.motorLift.setPower(0);
+                robot.servoClawClose.setPosition(.4
+                );
+            }
 
-            
+
             /**
              * Algorithm for controlling the lifting mechanism
              **/
