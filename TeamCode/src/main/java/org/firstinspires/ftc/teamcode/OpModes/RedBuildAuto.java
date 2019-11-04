@@ -100,7 +100,7 @@ public class RedBuildAuto extends LinearOpMode {
     private String button;                          //Which button to push
     private String alliance = "red";                //Your current alliance
     private String courseCorrect = "";
-    private State state = State.FIRST_STATE;    //Machine State
+    private State state = State.SECOND_STATE;    //Machine State
     private boolean initialize = false;
 
 
@@ -119,7 +119,7 @@ public class RedBuildAuto extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
-        robot.servoRightGrab.setPosition(0);
+        robot.servoRightGrab.setPosition(0.9);
         //robot.servoLeftGrab.setPosition(.5);
         robot.servoClawClose.setPosition(.5);
         //robot.servoClawRotate.setPosition(.5);
@@ -150,8 +150,8 @@ public class RedBuildAuto extends LinearOpMode {
          * Calibrate the gyro
          *
          **/
-        robot.sensorGyro.calibrate();
-        while (robot.sensorGyro.isCalibrating()) {
+        robot.mrGyro.calibrate();
+        while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
@@ -182,13 +182,46 @@ public class RedBuildAuto extends LinearOpMode {
                      * push base into the corner, and park
                      */
 
-                    drive.translate(1,90, 2);
+//                    drive.translate(4,90, 2);
+
+                    robot.motorLR.setPower(0.0);
+                    robot.motorLF.setPower(0.3);
+                    robot.motorRR.setPower(0.3);
+                    robot.motorRF.setPower(0.0);
+                    sleep (1500);
                     drive.motorsHalt();
-                    robot.servoRightGrab.setPosition(0.5);
-                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
-                    robot.servoRightGrab.setPosition(0);
-                    drive.translate(0.5,90,0.5);
-                    drive.translate(-1,90,1);
+
+                    robot.servoRightGrab.setPosition(0.4);
+                    sleep(500);
+
+                    robot.motorLR.setPower(-0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.3);
+                    sleep (1000);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(0.2);
+                    robot.motorLF.setPower(0.2);
+                    robot.motorRR.setPower(0.2);
+                    robot.motorRF.setPower(0.2);
+                    sleep (1000);
+                    drive.motorsHalt();
+
+//                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
+
+                    robot.servoRightGrab.setPosition(.9);
+                    sleep(500);
+
+                    robot.motorLR.setPower(-0.0);
+                    robot.motorLF.setPower(-0.3);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.0);
+                    sleep (1000);
+                    drive.motorsHalt();
+
+//                    drive.translate(0.5,90,0.5);
+//                    drive.translate(-1,90,1);
 
                     state = State.HALT;
                     //Exit the state
@@ -196,11 +229,31 @@ public class RedBuildAuto extends LinearOpMode {
 
                 case SECOND_STATE:
                     /**
-                     * Provide a description of what this state does
-                     * Code goes here
+                     * This state is for testing the MR Gyro Sensor
                      */
 
-                    state = State.THIRD_STATE;
+                    drive.translateTime(0.3, 30, 2);
+                    currentZint = robot.mrGyro.getIntegratedZValue();
+                    telemetry.addData("Heading = ", currentZint);
+                    telemetry.update();
+
+                    robot.servoRightGrab.setPosition(0.4);
+                    sleep(500);
+
+                    robot.motorLR.setPower(-0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.3);
+                    sleep (1500);
+                    drive.motorsHalt();
+
+                    drive.translateTime(0.2, 0, 1);
+
+                    robot.servoRightGrab.setPosition(.9);
+                    sleep(500);
+
+                    drive.translateTime(0.3, 210, 1);
+                    state = State.HALT;
                     break;
 
                 case THIRD_STATE:

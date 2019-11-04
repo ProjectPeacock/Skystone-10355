@@ -308,14 +308,18 @@ public class DriveMecanum {
 
     }
 
-    public void translate(double power, double heading, double timeOut) {
+    public void translateTime(double power, double heading, double timeOut) {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
+        double timeElapsed;
+        double runtimeValue;
 
+        runtimeValue = runtime.time();
+        timeElapsed = runtimeValue - runtime.time();
         heading = heading * (Math.PI / 180);
 
-        while (opMode.opModeIsActive() && runtime.time() < timeOut) {
+        while (opMode.opModeIsActive() && timeElapsed < timeOut) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
@@ -414,7 +418,9 @@ public class DriveMecanum {
 
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
+            timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -426,7 +432,6 @@ public class DriveMecanum {
         motorsHalt();
 
     }
-
 
     /**
      * Robot will drive in the heading provided by the function call.  The sensor identified should

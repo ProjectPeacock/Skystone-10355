@@ -121,6 +121,17 @@ public class TeleOp extends LinearOpMode {
             }
 
             /**
+             * Code to manually control lift mechanism leaning
+             */
+
+            if (gamepad1.left_trigger >0){
+                robot.motorLinear.setPower(gamepad1.left_trigger);
+            } else if(gamepad1.right_trigger > 0){
+                robot.motorLinear.setPower(-gamepad1.right_trigger);
+            }else {
+                robot.motorLinear.setPower(0);
+            }
+            /**
              * Algorithm for placing the capstone on the foundation - temporary proceedure
              */
             if (gamepad1.right_bumper){
@@ -139,12 +150,6 @@ public class TeleOp extends LinearOpMode {
             /**
              * Algorithm for controlling the lifting mechanism
              **/
-
-            if (gamepad1.right_trigger >0){
-                robot.motorLift.setPower(gamepad1.right_trigger);
-            } else if (gamepad1.left_trigger >0) {
-                robot.motorLift.setPower(-gamepad1.left_trigger);
-            } else robot.motorLift.setPower(0);
 
             idle();
  /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));

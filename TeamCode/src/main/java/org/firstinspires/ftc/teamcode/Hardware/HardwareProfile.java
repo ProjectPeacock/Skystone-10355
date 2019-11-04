@@ -137,12 +137,10 @@ public class HardwareProfile {
         touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
         touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
         touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
-=======
 //        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
 //        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
 //        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
 //        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
->>>>>>> d5eac29955ec35e55cb439fdee7dfbf5b2c77506:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Hardware/HardwareProfile.java
 
          **/
 
