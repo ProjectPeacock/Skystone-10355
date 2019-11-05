@@ -68,6 +68,7 @@ public class TeleOp extends LinearOpMode {
     private double rightX = 0;
     private double rightY = 0;
     private double powerLevel = 0.5;
+    private double max = 0;
 
     @Override
     public void runOpMode() {
@@ -105,6 +106,15 @@ public class TeleOp extends LinearOpMode {
             v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
             v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
+
+            max = Math.max(Math.max(Math.max(Math.abs(v1), Math.abs(v2)),Math.abs(v3)),Math.abs(v4));
+
+            if (max > 1) {
+                v1 = v1/max;
+                v2 = v2/max;
+                v3 = v3/max;
+                v4 = v4/max;
+            }
 
             robot.motorLF.setPower(v1);
             robot.motorRF.setPower(v2);
