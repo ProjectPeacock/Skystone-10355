@@ -232,7 +232,7 @@ public class RedBuildAuto extends LinearOpMode {
                      * This state is for testing the MR Gyro Sensor
                      */
 
-                    drive.translateTime(0.3, 30, 2);
+                    drive.translateTime(0.3, 10, 2);
                     currentZint = robot.mrGyro.getIntegratedZValue();
                     telemetry.addData("Heading = ", currentZint);
                     telemetry.update();
@@ -240,19 +240,33 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.servoRightGrab.setPosition(0.4);
                     sleep(500);
 
-                    robot.motorLR.setPower(-0.1);
-                    robot.motorLF.setPower(-0.1);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.3);
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.4);
+                    robot.motorRF.setPower(-0.4);
+                    sleep (2500);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(0.4);
+                    robot.motorLF.setPower(0.4);
+                    robot.motorRR.setPower(-0.4);
+                    robot.motorRF.setPower(-0.4);
                     sleep (1500);
                     drive.motorsHalt();
 
-                    drive.translateTime(0.2, 0, 1);
-
+                    drive.translateTime(0.3, 0, 2);
                     robot.servoRightGrab.setPosition(.9);
                     sleep(500);
 
-                    drive.translateTime(0.3, 210, 1);
+                    robot.motorLR.setPower(-0.1);
+                    robot.motorLF.setPower(-0.3);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.1);
+                    sleep(1750);
+
+
+//                    drive.translateTime(0.3, 210, 2);
                     state = State.HALT;
                     break;
 

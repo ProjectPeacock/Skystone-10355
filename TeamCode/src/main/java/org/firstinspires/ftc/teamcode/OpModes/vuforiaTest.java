@@ -394,20 +394,20 @@ public class vuforiaTest extends LinearOpMode {
                      * Code goes here
                      */
 
-                    drive.translate(.5,20, 1);
+                    drive.translateTime(.5,20, 1);
                     drive.motorsHalt();
 
 //                    robot.servoRightGrab.setPosition(0.5);
 //                    robot.servoLeftGrab.setPosition(0.5);
 
-                    drive.translate(-1,180,.5);
+                    drive.translateTime(-1,180,.5);
                     drive.motorsHalt();
                     robot.motorRF.setPower(-0.5);
                     robot.motorRR.setPower(-0.5);
                     sleep(400);
                     drive.motorsHalt();
 
-                    drive.translate(1, 0, .3);
+                    drive.translateTime(1, 0, .3);
                     drive.motorsHalt();
 
 //                    robot.servoRightGrab.setPosition(0);
