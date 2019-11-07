@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
@@ -51,7 +52,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  */
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp V2", group = "Comp")
-
+@Disabled
 public class TeleOpV2 extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class

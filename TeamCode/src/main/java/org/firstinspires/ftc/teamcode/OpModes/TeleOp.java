@@ -67,7 +67,7 @@ public class TeleOp extends LinearOpMode {
     private double robotAngle =0;
     private double rightX = 0;
     private double rightY = 0;
-    private double powerLevel = 0.5;
+    private double powerLevel = -0.35;
     private double max = 0;
 
     @Override
@@ -99,7 +99,7 @@ public class TeleOp extends LinearOpMode {
 //            fwdControl = -1 * gamepad1.left_stick_y;
             strafeControl = gamepad1.left_stick_x;
             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-            rightX = gamepad1.right_stick_x;
+            rightX = -gamepad1.right_stick_x;
             rightY = gamepad1.right_stick_y;
             r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
             v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
