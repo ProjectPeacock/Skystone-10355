@@ -154,6 +154,8 @@ public class TeleOp extends LinearOpMode {
                 robot.motorLift.setPower(0.2);
                 sleep(750);
                 robot.motorLift.setPower(0);
+                robot.servoClawClose.setPosition(0);
+                sleep(250);
             }
 
 
