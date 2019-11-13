@@ -79,6 +79,7 @@ public class TeleOp extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+        robot.servoClawClose.setPosition(0.49);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Project Peacock");    //
@@ -154,6 +155,7 @@ public class TeleOp extends LinearOpMode {
                 robot.motorLift.setPower(0.2);
                 sleep(750);
                 robot.motorLift.setPower(0);
+                robot.servoClawClose.setPosition(0.5);
             }
 
 
