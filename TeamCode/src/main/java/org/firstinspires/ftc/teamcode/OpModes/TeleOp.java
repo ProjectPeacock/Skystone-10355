@@ -118,7 +118,7 @@ public class TeleOp extends LinearOpMode {
              * Code to manually control lift mechanism leaning
              */
 
-            if (gamepad1.left_trigger >0){
+            if (gamepad1.left_trigger > 0){
                 robot.motorLinear.setPower(gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > 0){
                 robot.motorLinear.setPower(-gamepad1.right_trigger);

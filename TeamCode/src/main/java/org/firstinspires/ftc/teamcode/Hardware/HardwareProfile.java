@@ -131,16 +131,16 @@ public class HardwareProfile {
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
          **/
 
-        /**
-         touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
-         touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+        /
+         //touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+         //touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
          touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
          touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
          //        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
          //        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
          //        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
-         //        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
-         **/
+        //       touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+
 
         /**
          *    Define and Initialize drive Motors
