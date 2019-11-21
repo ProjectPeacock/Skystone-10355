@@ -1,6 +1,8 @@
 //package org.firstinspires.ftc.teamcode.HardwareProfiles;
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import android.text.method.Touch;
+
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -132,17 +134,17 @@ public class HardwareProfile {
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
         **/
 
-        /**
-        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
-        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
-        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
-        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+
 //        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
 //        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
 //        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
 //        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+//        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+//        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+        touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
 
-         **/
+
 
         /**
          *    Define and Initialize drive Motors

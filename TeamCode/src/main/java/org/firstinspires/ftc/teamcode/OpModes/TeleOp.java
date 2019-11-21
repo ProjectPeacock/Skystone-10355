@@ -43,7 +43,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  * <p>
  * This particular OpMode executes a POV Game style Teleop for a PushBot
  * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
- * It raises and lowers the claw using the Gampad Y and A buttons respectively.
+ * It raises and lowers the claw using the Gamepad Y and A buttons respectively.
  * It also opens and closes the claws slowly using the left and right Bumper buttons.
  * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
@@ -133,16 +133,24 @@ public class TeleOp extends LinearOpMode {
             /**
              * Code to manually control lift mechanism leaning
              */
-
-            if (gamepad1.left_trigger >0){
+            if (gamepad1.right_trigger > 0 && robot.touchLiftForward.isPressed()== false){
+                robot.motorLinear.setPower(gamepad1.right_trigger);
+            }
+            else if  (gamepad1.left_trigger > 0 && robot.touchLiftBack.isPressed()== false){
+                robot.motorLinear.setPower(-gamepad1.left_trigger);
+            }
+            else robot.motorLinear.setPower(0);
+            /**if (gamepad1.left_trigger >0){
                 robot.motorLinear.setPower(gamepad1.left_trigger);
             } else if(gamepad1.right_trigger > 0){
                 robot.motorLinear.setPower(-gamepad1.right_trigger);
-            }else {
-                robot.motorLinear.setPower(0);
             }
+            else {
+                robot.motorLinear.setPower(0);
+             }**/
+
             /**
-             * Algorithm for placing the capstone on the foundation - temporary proceedure
+             * Algorithm for placing the capstone on the foundation - temporary procedure
              */
             if (gamepad1.right_bumper){
                 robot.motorLift.setPower(-.2);
