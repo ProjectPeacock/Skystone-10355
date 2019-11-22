@@ -7,7 +7,6 @@
         - Press correct button on beacon near ramp
         - Press correct button on beacon furthest from ramp
         - Park a wheel on the red ramp
-
     Hardware Setup:
         - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
         - Arm Motor with encoder - controls mechanism for dumping particles into ramp
@@ -16,7 +15,6 @@
         - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
         - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
-
     State Order:
         - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
         - SECOND STATE               // Identifies which button to press, right or left
@@ -28,7 +26,6 @@
                                         // and attempts to press over again until the button is pressed
         - END_GAME                      // identifies the last actions before the end of autonomous mode
         - HALT                          // Shutdown sequence for autonomous mode
-
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
@@ -37,7 +34,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -53,7 +49,7 @@ import java.util.List;
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Blue BuildZone", group = "COMP")
-@Disabled
+
 public class BlueBuildAuto extends LinearOpMode {
 
     /**
@@ -140,7 +136,6 @@ public class BlueBuildAuto extends LinearOpMode {
                 robot.motorLinear.setPower(0);
             }
           }
-
         /**
          *  Create the DataLogger object.
          */
@@ -149,25 +144,21 @@ public class BlueBuildAuto extends LinearOpMode {
         /**
          * Calibrate the gyro
          *
-        robot.sensorGyro.calibrate();
-        while (robot.sensorGyro.isCalibrating()) {
-            telemetry.addData("Waiting on Gyro Calibration", "");
-            telemetry.update();
-        }
-
-        /**
+         robot.sensorGyro.calibrate();
+         while (robot.sensorGyro.isCalibrating()) {
+         telemetry.addData("Waiting on Gyro Calibration", "");
+         telemetry.update();
+         }
+         /**
          * Initialize Vuforia and retrieve the list of trackable objects.
          *
-        telemetry.addData("Waiting on Vuforia", "");
-        telemetry.update();
-
-        myTrackables = myVuforia.vuforiaInit();
-
-        telemetry.addData("Status", "Vuforia Initialized");
-        telemetry.addData(">", "System initialized and Ready");
-        telemetry.update();
-
-        /**
+         telemetry.addData("Waiting on Vuforia", "");
+         telemetry.update();
+         myTrackables = myVuforia.vuforiaInit();
+         telemetry.addData("Status", "Vuforia Initialized");
+         telemetry.addData(">", "System initialized and Ready");
+         telemetry.update();
+         /**
          * Start the opMode
          */
         waitForStart();

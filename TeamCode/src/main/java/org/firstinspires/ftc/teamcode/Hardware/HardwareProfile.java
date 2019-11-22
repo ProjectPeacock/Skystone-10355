@@ -1,4 +1,3 @@
-//package org.firstinspires.ftc.teamcode.HardwareProfiles;
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import android.text.method.Touch;
@@ -63,15 +62,15 @@ public class HardwareProfile {
     public WebcamName webcamName = null;
 
     /* I2C Range Sensor members*/
-/**    I2cDevice rangeLeft;
-    I2cDevice rangeRight;
-    I2cDevice rangeFront;
-    I2cDevice rangeBack;
-    I2cDeviceSynch rangeLeftReader;
-    I2cDeviceSynch rangeRightReader;
-    I2cDeviceSynch rangeFrontReader;
-    I2cDeviceSynch rangeBackReader;
-**/
+    /**    I2cDevice rangeLeft;
+     I2cDevice rangeRight;
+     I2cDevice rangeFront;
+     I2cDevice rangeBack;
+     I2cDeviceSynch rangeLeftReader;
+     I2cDeviceSynch rangeRightReader;
+     I2cDeviceSynch rangeFrontReader;
+     I2cDeviceSynch rangeBackReader;
+     **/
     /* Constructor */
     public HardwareProfile() {
 
@@ -102,7 +101,7 @@ public class HardwareProfile {
 //        I2cAddr i2CAddressColorRight = I2cAddr.create8bit(0x3c);
 //        I2cAddr i2CAddressColorLeft = I2cAddr.create8bit(0x4c);
 //        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
- //       rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
+        //       rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
 //        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
 //
 //        I2cAddr i2CAddressRangeRight = I2cAddr.create8bit(0x28)
@@ -132,7 +131,8 @@ public class HardwareProfile {
 
         /**
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
-        **/
+         **/
+
 
 
 //        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
@@ -146,12 +146,23 @@ public class HardwareProfile {
 
 
 
+         //touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+         //touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+         touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+         touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+         //        touchLiftUp = hwMap.touchSensor.get("touchLiftUp");
+         //        touchLiftDown = hwMap.touchSensor.get("touchLiftDown");
+         //        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+        //       touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
+
+
+
         /**
          *    Define and Initialize drive Motors
          *    Set motor direction for each motor placement
          *    Configure the motors to run with encoders
          *    Set the power to the motor to be 0
-        **/
+         **/
 
         motorLF = hwMap.dcMotor.get("motorLF");
         motorLF.setDirection(DcMotor.Direction.FORWARD);
@@ -178,7 +189,7 @@ public class HardwareProfile {
          *    Set motor direction for each motor placement (assume forward until position is finalized)
          *    Configure the motors to run with encoders as needed
          *    Set the power to the motor to be 0
-        **/
+         **/
 
         motorLift = hwMap.dcMotor.get("motorLift");
         motorLift.setDirection(DcMotor.Direction.FORWARD);
@@ -195,7 +206,7 @@ public class HardwareProfile {
         motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLinear.setPower(0);
 
-       motor4Bar = hwMap.dcMotor.get("motor4Bar");
+        motor4Bar = hwMap.dcMotor.get("motor4Bar");
         motor4Bar.setDirection(DcMotor.Direction.FORWARD);
         motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor4Bar.setPower(0);

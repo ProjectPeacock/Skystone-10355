@@ -7,7 +7,6 @@
         - Press correct button on beacon near ramp
         - Press correct button on beacon furthest from ramp
         - Park a wheel on the red ramp
-
     Hardware Setup:
         - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
         - Arm Motor with encoder - controls mechanism for dumping particles into ramp
@@ -16,7 +15,6 @@
         - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
         - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
-
     State Order:
         - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
         - SECOND STATE               // Identifies which button to press, right or left
@@ -28,7 +26,6 @@
                                         // and attempts to press over again until the button is pressed
         - END_GAME                      // identifies the last actions before the end of autonomous mode
         - HALT                          // Shutdown sequence for autonomous mode
-
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
@@ -140,7 +137,6 @@ public class RedBuildAuto extends LinearOpMode {
                 robot.motorLinear.setPower(0);
             }
           }
-
         /**
          *  Create the DataLogger object.
          */
@@ -232,7 +228,7 @@ public class RedBuildAuto extends LinearOpMode {
                      * This state is for testing the MR Gyro Sensor
                      */
 
-                    drive.translateTime(0.3, 10, 2);
+                    drive.translateTime(0.3, 30, 2);
                     currentZint = robot.mrGyro.getIntegratedZValue();
                     telemetry.addData("Heading = ", currentZint);
                     telemetry.update();
@@ -240,33 +236,19 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.servoRightGrab.setPosition(0.4);
                     sleep(500);
 
-
-                    robot.motorLR.setPower(-0.2);
-                    robot.motorLF.setPower(-0.2);
-                    robot.motorRR.setPower(-0.4);
-                    robot.motorRF.setPower(-0.4);
-                    sleep (2500);
-                    drive.motorsHalt();
-
-                    robot.motorLR.setPower(0.4);
-                    robot.motorLF.setPower(0.4);
-                    robot.motorRR.setPower(-0.4);
-                    robot.motorRF.setPower(-0.4);
+                    robot.motorLR.setPower(-0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.3);
                     sleep (1500);
                     drive.motorsHalt();
 
-                    drive.translateTime(0.3, 0, 2);
+                    drive.translateTime(0.2, 0, 1);
+
                     robot.servoRightGrab.setPosition(.9);
                     sleep(500);
 
-                    robot.motorLR.setPower(-0.1);
-                    robot.motorLF.setPower(-0.3);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.1);
-                    sleep(1750);
-
-
-//                    drive.translateTime(0.3, 210, 2);
+                    drive.translateTime(0.3, 210, 1);
                     state = State.HALT;
                     break;
 

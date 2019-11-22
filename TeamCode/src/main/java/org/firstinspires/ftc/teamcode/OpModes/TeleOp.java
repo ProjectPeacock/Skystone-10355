@@ -1,23 +1,17 @@
 /*
 Copyright (c) 2016 Robert Atkinson
-
 All rights reserved.
-
 Redistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
-
 Redistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
-
 Redistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
-
 Neither the name of Robert Atkinson nor the names of his contributors may be used to
 endorse or promote products derived from this software without specific prior
 written permission.
-
 NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
 LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
@@ -67,8 +61,7 @@ public class TeleOp extends LinearOpMode {
     private double robotAngle =0;
     private double rightX = 0;
     private double rightY = 0;
-    private double powerLevel = -0.35;
-    private double max = 0;
+    private double powerLevel = 0.5;
 
     @Override
     public void runOpMode() {
@@ -99,22 +92,13 @@ public class TeleOp extends LinearOpMode {
 //            fwdControl = -1 * gamepad1.left_stick_y;
             strafeControl = gamepad1.left_stick_x;
             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-            rightX = -gamepad1.right_stick_x;
+            rightX = gamepad1.right_stick_x;
             rightY = gamepad1.right_stick_y;
             r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
             v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
             v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
             v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
-
-            max = Math.max(Math.max(Math.max(Math.abs(v1), Math.abs(v2)),Math.abs(v3)),Math.abs(v4));
-
-            if (max > 1) {
-                v1 = v1/max;
-                v2 = v2/max;
-                v3 = v3/max;
-                v4 = v4/max;
-            }
 
             robot.motorLF.setPower(v1);
             robot.motorRF.setPower(v2);
@@ -133,6 +117,7 @@ public class TeleOp extends LinearOpMode {
             /**
              * Code to manually control lift mechanism leaning
              */
+
             if (gamepad1.right_trigger > 0 && robot.touchLiftForward.isPressed()== false){
                 robot.motorLinear.setPower(gamepad1.right_trigger);
             }
@@ -141,13 +126,7 @@ public class TeleOp extends LinearOpMode {
             }
             else robot.motorLinear.setPower(0);
             /**if (gamepad1.left_trigger >0){
-                robot.motorLinear.setPower(gamepad1.left_trigger);
-            } else if(gamepad1.right_trigger > 0){
-                robot.motorLinear.setPower(-gamepad1.right_trigger);
-            }
-            else {
-                robot.motorLinear.setPower(0);
-             }**/
+
 
             /**
              * Algorithm for placing the capstone on the foundation - temporary procedure
@@ -162,8 +141,6 @@ public class TeleOp extends LinearOpMode {
                 robot.motorLift.setPower(0.2);
                 sleep(750);
                 robot.motorLift.setPower(0);
-                robot.servoClawClose.setPosition(0);
-                sleep(250);
             }
 
 
@@ -199,4 +176,3 @@ public class TeleOp extends LinearOpMode {
     }
 
 }
-
