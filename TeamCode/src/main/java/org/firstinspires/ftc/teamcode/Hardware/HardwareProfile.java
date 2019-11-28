@@ -44,6 +44,8 @@ public class HardwareProfile {
     public DcMotor motorIntake = null;          //Intake motor
     public DcMotor motorLinear = null;          //Linear Actuator motor - controls angle of lifting system
     public DcMotor motor4Bar = null;            //motor to control 4-bar system
+    public DcMotor motorGrab = null;            //motor for grab mechanism
+    public DcMotor motorIntakeFlip = null;
     public OpticalDistanceSensor ods;           //Declare the optical distance sensor
     public TouchSensor touchLiftUp;             //Declare the Lift Up Touch Sensor - indicates when lift is all the way up
     public TouchSensor touchLiftDown;           //Declare the Lift Down Touch Sensor - indicates when lift is all the way down
@@ -58,7 +60,7 @@ public class HardwareProfile {
     public Servo servoLeftGrab;                 //Declare the left grabbing servo
     public Servo servoRightGrab;                //Declare the right grabbing servo
     public Servo servoClawClose;                //Declare the claw opening/closing servo
-    public Servo servoClawRotate;               //Declare the claw rotation servo
+    public Servo servoClawRotate;
     public WebcamName webcamName = null;
 
     /* I2C Range Sensor members*/
