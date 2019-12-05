@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import android.text.method.Touch;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -61,6 +62,8 @@ public class HardwareProfile {
     public Servo servoRightGrab;                //Declare the right grabbing servo
     public Servo servoClawClose;                //Declare the claw opening/closing servo
     public Servo servoClawRotate;
+    public CRServo servoFoundation1;
+    public CRServo servoFoundation2;
     public WebcamName webcamName = null;
 
     /* I2C Range Sensor members*/
@@ -227,5 +230,8 @@ public class HardwareProfile {
         servoRightGrab = hwMap.servo.get("servoRightGrab");
         servoClawClose = hwMap.servo.get("servoClawClose");
         servoClawRotate = hwMap.servo.get("servoClawRotate");
+
+        servoFoundation1 = hwMap.crservo.get("servoFoundation1");
+        servoFoundation2 = hwMap.crservo.get("servoFoundation2");
     }
 }

@@ -85,8 +85,10 @@ public class TeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             /**
+             *
              * Driving algorithm
              * Note: this algorithm assumes that all values are zero when controls are not touched
+             *
              **/
             //Calculate the power needed for each motor
 //            fwdControl = -1 * gamepad1.left_stick_y;
@@ -109,43 +111,69 @@ public class TeleOp extends LinearOpMode {
             /** Mechanism control is for Julian therefore controls should be to his preference **/
 
 
-            /** Code for controlling the foundation grabber **/
-            if (gamepad1.x){ // (Chassis Control)
-                robot.servoRightGrab.setPosition(.9);
-            } else if(gamepad1.y){
-                robot.servoRightGrab.setPosition(.4);
+            /**
+             *
+             * Code for controlling the foundation grabber
+             *
+             * **/
+
+            if (gamepad1.dpad_down){
+                robot.servoFoundation1.setPower(1);
+                robot.servoFoundation2.setPower(.6);
+            } if (gamepad1.dpad_up){
+                robot.servoFoundation1.setPower(0.6);
+                robot.servoFoundation2.setPower(1);
             }
 
-            /** Code to manually control lift mechanism leaning **/
+            /**
+             *
+             * Code to manually control linear leaning mechanism
+             *
+             * **/
 
             if (gamepad1.right_trigger > 0 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
                 robot.motorLinear.setPower(gamepad1.right_trigger);
             }
             else if  (gamepad1.left_trigger > 0 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
-                robot.motorLinear.setPower(-gamepad1.left_trigger);
+                robot.motorLinear.setPower(gamepad1.left_trigger * -0.4);
             }
             else robot.motorLinear.setPower(0);
 
-            /** Code to manually control lift mechanism lifting **/
+            /**
+             *
+             * Code to manually control lift mechanism lifting
+             *
+             * **/
 
-            if (gamepad1.left_stick_button == true){ // Change To Right-Trigger (Mechanism Control)
+            if (gamepad1.left_bumper == true){ // Change To Right-Trigger (Mechanism Control)
                 robot.motorLift.setPower(0.5);
             }
-            else if (gamepad1.right_stick_button == true){ // Change to Left_Trigger (mechanism Control)
+            else if (gamepad1.right_bumper == true){ // Change to Left_Trigger (mechanism Control)
                 robot.motorLift.setPower(-0.5);
             }
             else {
                 robot.motorLift.setPower(0);
             }
+
+            /**
+             *
+             *  Code to control the 4-bar mechanism
+             */
+
+            robot.motor4Bar.setPower(gamepad2.left_stick_y);
+
             /** Code to control Intake **/
+            /**
             if (gamepad1.right_bumper == true){
                 robot.motorIntake.setPower(0.5);
             }
             else if (gamepad1.left_bumper == true){
                 robot.motorIntake.setPower(-0.5);
             }
+             **/
 
             /** Code to control grab mechanism **/
+            /**
 
             if (gamepad1.a == true){
                 robot.motorGrab.setPower(0.5);
@@ -156,9 +184,12 @@ public class TeleOp extends LinearOpMode {
             else {
                 robot.motorGrab.setPower(0);
             }
+             **/
+
+
 
             /** Intake Flip Mechanism **/
-
+            /**
             if (gamepad1.dpad_left == true){
                 robot.motorIntakeFlip.setPower(0.5);
             }
@@ -168,32 +199,7 @@ public class TeleOp extends LinearOpMode {
             else{
                 robot.motorIntakeFlip.setPower(0);
             }
-            //Grab Mechanism set to a = close b = open XXX
-            //Intake right bumper = in left bumper = out
-            // x = flip out intake
-            // if needed use y for intake flipping in
-
-
-            /** Algorithm for placing the capstone on the foundation - temporary procedure **/
-            if (gamepad1.right_bumper){
-                robot.motorLift.setPower(-.2);
-                sleep(750);
-                robot.motorLift.setPower(0);
-                robot.servoClawClose.setPosition(0);
-                sleep(250);
-                robot.servoClawClose.setPosition(0.5);
-                robot.motorLift.setPower(0.2);
-                sleep(750);
-                robot.motorLift.setPower(0);
-            }
-
- /**           if (gamepad1.a){
-                robot.servvoLift.setPower(0.5);
-            }
-            else if (gamepad1.b){
-                robot..setPower(-0.5);
-            }**/
-
+             **/
 
             idle();
  /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));

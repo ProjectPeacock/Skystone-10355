@@ -105,10 +105,10 @@ public class TeleOpMecanum extends LinearOpMode {
             v3 = r * Math.sin(robotAngle) + rightX;
             v4 = r * Math.cos(robotAngle) - rightX;
 
-            robot.motorLF.setPower(v1);
-            robot.motorRF.setPower(v2);
-            robot.motorLR.setPower(v3);
-            robot.motorRR.setPower(v4);
+//            robot.motorLF.setPower(v1);
+//            robot.motorRF.setPower(v2);
+//            robot.motorLR.setPower(v3);
+//            robot.motorRR.setPower(v4);
 
             /**
              * Algorithm for controlling the lifting mechanism
