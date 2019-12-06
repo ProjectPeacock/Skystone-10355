@@ -99,7 +99,7 @@ public class BlueBuildAuto1 extends LinearOpMode {
     private String button;                          //Which button to push
     private String alliance = "red";                //Your current alliance
     private String courseCorrect = "";
-    private State state = State.SECOND_STATE;    //Machine State
+    private State state = State.FIRST_STATE;    //Machine State
     private boolean initialize = false;
 
 
@@ -118,10 +118,9 @@ public class BlueBuildAuto1 extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
-        robot.servoRightGrab.setPosition(0.9);
-        //robot.servoLeftGrab.setPosition(.5);
-        robot.servoClawClose.setPosition(.5);
-        //robot.servoClawRotate.setPosition(.5);
+        robot.servoFoundation1.setPower(0.6);
+        robot.servoFoundation2.setPower(1);
+        sleep(1000);
 
 
         /**
@@ -183,41 +182,56 @@ public class BlueBuildAuto1 extends LinearOpMode {
 
 //                    drive.translate(4,90, 2);
 
-                    robot.motorLR.setPower(0.0);
-                    robot.motorLF.setPower(0.3);
+                    robot.motorLR.setPower(-0.4);
+                    robot.motorLF.setPower(-0.0);
+                    robot.motorRR.setPower(-0.0);
+                    robot.motorRF.setPower(-0.4);
+                    sleep (1200);
+                    drive.motorsHalt();
+
+                    /**
+                     * Grab the foundation
+                     */
+                    robot.servoFoundation1.setPower(1);
+                    robot.servoFoundation2.setPower(.6);
+                    sleep(500);
+
+                    robot.motorLR.setPower(0.1);
+                    robot.motorLF.setPower(0.1);
                     robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.0);
+                    robot.motorRF.setPower(0.3);
+                    sleep (2500);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(-0.2);
                     sleep (1500);
                     drive.motorsHalt();
 
-                    robot.servoRightGrab.setPosition(0.4);
+
+
+                    /**
+                     * Let go of the Foundation
+                     */
+                    robot.servoFoundation1.setPower(0.6);
+                    robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    robot.motorLR.setPower(-0.1);
-                    robot.motorLF.setPower(-0.1);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.3);
-                    sleep (1000);
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(0.3);
+                    robot.motorRR.setPower(0.3);
+                    robot.motorRF.setPower(0.3);
+                    sleep (1600);
                     drive.motorsHalt();
 
-                    robot.motorLR.setPower(0.2);
+                   /** robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(0.2);
-                    robot.motorRR.setPower(0.2);
-                    robot.motorRF.setPower(0.2);
-                    sleep (1000);
-                    drive.motorsHalt();
-
-//                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
-
-                    robot.servoRightGrab.setPosition(.9);
-                    sleep(500);
-
-                    robot.motorLR.setPower(-0.0);
-                    robot.motorLF.setPower(-0.3);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.0);
-                    sleep (1000);
-                    drive.motorsHalt();
+                    robot.motorRR.setPower(0.1);
+                    robot.motorRF.setPower(-0.1);
+                    sleep (1500);
+                    drive.motorsHalt();**/
 
 //                    drive.translate(0.5,90,0.5);
 //                    drive.translate(-1,90,1);

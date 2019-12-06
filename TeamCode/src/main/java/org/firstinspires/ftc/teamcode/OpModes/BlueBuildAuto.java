@@ -33,6 +33,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  * Import the classes we need to have local access to.
  */
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -48,8 +49,8 @@ import java.util.List;
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue BuildZone", group = "COMP")
-
+@Autonomous(name = "Blue BuildZone-DNU", group = "COMP")
+@Disabled
 public class BlueBuildAuto extends LinearOpMode {
 
     /**
@@ -115,10 +116,6 @@ public class BlueBuildAuto extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
-        robot.servoRightGrab.setPosition(0);
-        //robot.servoLeftGrab.setPosition(.5);
-        //robot.servoClawClose.setPosition(.5);
-        //robot.servoClawRotate.setPosition(.5);
 
 
         /**

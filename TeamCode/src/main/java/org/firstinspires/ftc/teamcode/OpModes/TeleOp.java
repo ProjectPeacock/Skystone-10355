@@ -117,10 +117,10 @@ public class TeleOp extends LinearOpMode {
              *
              * **/
 
-            if (gamepad1.dpad_down){
+            if (gamepad2.dpad_down){
                 robot.servoFoundation1.setPower(1);
                 robot.servoFoundation2.setPower(.6);
-            } if (gamepad1.dpad_up){
+            } if (gamepad2.dpad_up){
                 robot.servoFoundation1.setPower(0.6);
                 robot.servoFoundation2.setPower(1);
             }
@@ -131,11 +131,11 @@ public class TeleOp extends LinearOpMode {
              *
              * **/
 
-            if (gamepad1.right_trigger > 0 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
-                robot.motorLinear.setPower(gamepad1.right_trigger);
+            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
+                robot.motorLinear.setPower(gamepad2.right_stick_y);
             }
-            else if  (gamepad1.left_trigger > 0 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
-                robot.motorLinear.setPower(gamepad1.left_trigger * -0.4);
+            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
+                robot.motorLinear.setPower(gamepad2.right_stick_y);
             }
             else robot.motorLinear.setPower(0);
 
@@ -145,10 +145,10 @@ public class TeleOp extends LinearOpMode {
              *
              * **/
 
-            if (gamepad1.left_bumper == true){ // Change To Right-Trigger (Mechanism Control)
+            if (gamepad2.right_trigger > 0){ // Change To Right-Trigger (Mechanism Control)
                 robot.motorLift.setPower(0.5);
             }
-            else if (gamepad1.right_bumper == true){ // Change to Left_Trigger (mechanism Control)
+            else if (gamepad2.left_trigger > 0){ // Change to Left_Trigger (mechanism Control)
                 robot.motorLift.setPower(-0.5);
             }
             else {
@@ -160,7 +160,15 @@ public class TeleOp extends LinearOpMode {
              *  Code to control the 4-bar mechanism
              */
 
-            robot.motor4Bar.setPower(gamepad2.left_stick_y);
+            if (gamepad2.left_stick_y < -0.2){
+                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
+            }
+            else if(gamepad2.left_stick_y > 0.2){
+                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
+            }
+            else{
+                robot.motor4Bar.setPower(0);
+            }
 
             /** Code to control Intake **/
             /**

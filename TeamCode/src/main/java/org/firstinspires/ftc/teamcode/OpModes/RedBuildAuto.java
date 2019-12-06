@@ -97,7 +97,7 @@ public class RedBuildAuto extends LinearOpMode {
     private String button;                          //Which button to push
     private String alliance = "red";                //Your current alliance
     private String courseCorrect = "";
-    private State state = State.SECOND_STATE;    //Machine State
+    private State state = State.FIRST_STATE;    //Machine State
     private boolean initialize = false;
 
 
@@ -116,10 +116,9 @@ public class RedBuildAuto extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
-        robot.servoRightGrab.setPosition(0.9);
-        //robot.servoLeftGrab.setPosition(.5);
-        robot.servoClawClose.setPosition(.5);
-        //robot.servoClawRotate.setPosition(.5);
+        robot.servoFoundation1.setPower(0.6);
+        robot.servoFoundation2.setPower(1);
+        sleep(1000);
 
 
         /**
@@ -140,7 +139,6 @@ public class RedBuildAuto extends LinearOpMode {
         /**
          *  Create the DataLogger object.
          */
-        createDl();
 
         /**
          * Calibrate the gyro
@@ -172,6 +170,59 @@ public class RedBuildAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
                 case FIRST_STATE:
+                    robot.motorLR.setPower(0.0);
+                    robot.motorLF.setPower(-0.4);
+                    robot.motorRR.setPower(-0.4);
+                    robot.motorRF.setPower(0.0);
+                    sleep (1100);
+                    drive.motorsHalt();
+
+                    /**
+                     * Grab the foundation
+                     */
+                    robot.servoFoundation1.setPower(1);
+                    robot.servoFoundation2.setPower(.6);
+                    sleep(500);
+
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(0.3);
+                    robot.motorRR.setPower(0.1);
+                    robot.motorRF.setPower(0.1);
+                    sleep (2500);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(-0.2);
+                    sleep (1500);
+                    drive.motorsHalt();
+
+
+
+                    /**
+                     * Let go of the Foundation
+                     */
+                    robot.servoFoundation1.setPower(0.6);
+                    robot.servoFoundation2.setPower(1);
+                    sleep(500);
+
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(0.0);
+                    robot.motorRR.setPower(0.0);
+                    robot.motorRF.setPower(0.3);
+                    sleep (1500);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(0.2);
+                    sleep (1500);
+                    drive.motorsHalt();
+//                    drive.translate(0.5,90,0.5);
+//                    drive.translate(-1,90,1);
+
                     /**
                      *Drive forwards, lower servo,
                      * drive back, to the left,
@@ -180,14 +231,18 @@ public class RedBuildAuto extends LinearOpMode {
 
 //                    drive.translate(4,90, 2);
 
-                    robot.motorLR.setPower(0.0);
+                   /** robot.motorLR.setPower(0.0);
                     robot.motorLF.setPower(0.3);
                     robot.motorRR.setPower(0.3);
                     robot.motorRF.setPower(0.0);
                     sleep (1500);
                     drive.motorsHalt();
 
-                    robot.servoRightGrab.setPosition(0.4);
+                    /**
+                     * Grab the foundation
+                     */
+                   /** robot.servoFoundation1.setPower(1);
+                    robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
                     robot.motorLR.setPower(-0.1);
@@ -206,10 +261,14 @@ public class RedBuildAuto extends LinearOpMode {
 
 //                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
 
-                    robot.servoRightGrab.setPosition(.9);
-                    sleep(500);
+                    /**
+                     * Let go of the foundation
+                     */
+                  /**  robot.servoFoundation1.setPower(0.6);
+                    robot.servoFoundation2.setPower(1);
+                    sleep(500);**/
 
-                    robot.motorLR.setPower(-0.0);
+                  /**  robot.motorLR.setPower(-0.0);
                     robot.motorLF.setPower(-0.3);
                     robot.motorRR.setPower(-0.3);
                     robot.motorRF.setPower(-0.0);
@@ -217,7 +276,7 @@ public class RedBuildAuto extends LinearOpMode {
                     drive.motorsHalt();
 
 //                    drive.translate(0.5,90,0.5);
-//                    drive.translate(-1,90,1);
+//                    drive.translate(-1,90,1);**/
 
                     state = State.HALT;
                     //Exit the state
@@ -291,9 +350,6 @@ public class RedBuildAuto extends LinearOpMode {
                 case HALT:
 //                    drive.motorsHalt();               //Stop the motors
 
-                    //Stop the DataLogger
-                    dlStop();
-
                     //Exit the OpMode
                     requestOpModeStop();
                     break;
@@ -306,132 +362,6 @@ public class RedBuildAuto extends LinearOpMode {
         }
     }
 
-    /**
-     * Transmit telemetry.
-     */
-    private void telemetry() {
-
-        telemetry.addData("Alliance", String.valueOf(alliance));
-        telemetry.addData("State", String.valueOf(state));
-        telemetry.addData("Procedure", String.valueOf(procedure));
-        telemetry.addData("button", String.valueOf(button));
-        telemetry.addData("Heading", String.valueOf(heading));
-        telemetry.addData("robotX", String.valueOf((int) robotX));
-        telemetry.addData("robotY", String.valueOf((int) robotY));
-        telemetry.addData("Target X", String.valueOf(x));
-        telemetry.addData("Target Y", String.valueOf(y));
-        telemetry.addData("robotBearing", String.valueOf((int) robotBearing));
-        telemetry.addData("Current Z Int", String.valueOf(currentZint));
-        telemetry.addData("Z Correction", String.valueOf(zCorrection));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftForward.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftBack.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftUp.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftDown.getValue()));
-        telemetry.addData("ODS", String.valueOf(ods));
-        telemetry.addData("Color Right Red", String.valueOf(colorRightRed));
-        telemetry.addData("Color Right Blue", String.valueOf(colorRightBlue));
-        telemetry.addData("Color Left Red", String.valueOf(colorLeftRed));
-        telemetry.addData("Color Left Blue", String.valueOf(colorLeftBlue));
-        telemetry.addData("Target Encoder Position", String.valueOf(myTargetPosition));
-        telemetry.addData("Current Encoder Position", String.valueOf(robot.motorLF.getCurrentPosition()));
-        telemetry.addData("LF", String.valueOf(LF));
-        telemetry.addData("RF", String.valueOf(RF));
-        telemetry.addData("LR", String.valueOf(LR));
-        telemetry.addData("RR", String.valueOf(RR));
-        telemetry.update();
-    }
-
-
-    /**
-     * Catchall to get data from all sensor systems.  Updates global variables
-     */
-    private void getSensorData() {
-        ods = robot.ods.getLightDetected();
-        currentZint = robot.mrGyro.getIntegratedZValue();
-        vuforiaTracking = myVuforia.getLocation(myTrackables);
-        robotX = vuforiaTracking.get(0);
-        robotY = vuforiaTracking.get(1);
-        robotBearing = vuforiaTracking.get(2);
-    }
-
-    /**
-     * Setup the dataLogger
-     * The dataLogger takes a set of fields defined here and sets up the file on the Android device
-     * to save them to.  We then log data later throughout the class.
-     */
-    private void createDl() {
-
-        Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("Procedure");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("robotX");
-        Dl.addField("robotY");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("robotBearing");
-        Dl.addField("initZ");
-        Dl.addField("currentZ");
-        Dl.addField("zCorrection");
-        Dl.addField("touchSensor");
-        Dl.addField("ODS");
-        Dl.addField("colorRightRed");
-        Dl.addField("colorRightBlue");
-        Dl.addField("colorLeftRed");
-        Dl.addField("colorLeftBlue");
-        Dl.addField("LFTargetPos");
-        Dl.addField("LFMotorPos");
-        Dl.addField("LF");
-        Dl.addField("RF");
-        Dl.addField("LR");
-        Dl.addField("RR");
-        Dl.newLine();
-    }
-
-    /**
-     * Log data to the file on the phone.
-     */
-    private void logData() {
-
-        Dl.addField(String.valueOf(runtime.time()));
-        Dl.addField(String.valueOf(alliance));
-        Dl.addField(String.valueOf(state));
-        Dl.addField(String.valueOf(procedure));
-        Dl.addField(String.valueOf(courseCorrect));
-        Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf((int) robotX));
-        Dl.addField(String.valueOf((int) robotY));
-        Dl.addField(String.valueOf(x));
-        Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf((int) robotBearing));
-        Dl.addField(String.valueOf(initZ));
-        Dl.addField(String.valueOf(currentZint));
-        Dl.addField(String.valueOf(zCorrection));
-        Dl.addField(String.valueOf(robot.rangeSensorFront));
-        Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(ods));
-        Dl.addField(String.valueOf(myTargetPosition));
-        Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
-        Dl.addField(String.valueOf(LF));
-        Dl.addField(String.valueOf(RF));
-        Dl.addField(String.valueOf(LR));
-        Dl.addField(String.valueOf(RR));
-        Dl.newLine();
-    }
-
-    /**
-     * Stop the DataLogger
-     */
-    private void dlStop() {
-        Dl.closeDataLogger();
-
-    }
 
     /**
      * Enumerate the States of the machine.
