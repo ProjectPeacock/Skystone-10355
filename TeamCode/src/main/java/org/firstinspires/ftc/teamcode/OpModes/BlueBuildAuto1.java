@@ -186,7 +186,7 @@ public class BlueBuildAuto1 extends LinearOpMode {
                     robot.motorLF.setPower(-0.0);
                     robot.motorRR.setPower(-0.0);
                     robot.motorRF.setPower(-0.4);
-                    sleep (1200);
+                    sleep (1350);
                     drive.motorsHalt();
 
                     /**
@@ -200,7 +200,7 @@ public class BlueBuildAuto1 extends LinearOpMode {
                     robot.motorLF.setPower(0.1);
                     robot.motorRR.setPower(0.3);
                     robot.motorRF.setPower(0.3);
-                    sleep (2500);
+                    sleep (3100);
                     drive.motorsHalt();
 
                     robot.motorLR.setPower(-0.2);
@@ -223,15 +223,15 @@ public class BlueBuildAuto1 extends LinearOpMode {
                     robot.motorLF.setPower(0.3);
                     robot.motorRR.setPower(0.3);
                     robot.motorRF.setPower(0.3);
-                    sleep (1600);
+                    sleep (1400);
                     drive.motorsHalt();
 
-                   /** robot.motorLR.setPower(-0.2);
+                    robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(0.2);
                     robot.motorRR.setPower(0.1);
                     robot.motorRF.setPower(-0.1);
-                    sleep (1500);
-                    drive.motorsHalt();**/
+                    sleep (1000);
+                    drive.motorsHalt();
 
 //                    drive.translate(0.5,90,0.5);
 //                    drive.translate(-1,90,1);
