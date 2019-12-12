@@ -1,48 +1,39 @@
 /*
-Copyright (c) 2016 Robert Atkinson
-All rights reserved.
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-Neither the name of Robert Atkinson nor the names of his contributors may be used to
-endorse or promote products derived from this software without specific prior
-written permission.
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESSFOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    Team:       10355 - Project Peacock
+    TeleOp Program
+    Alliance Color: Either
+    Robot Starting Position: Should be in the parked zone.
+    Strategy Description:
+        - Can operated as a miner
+        - Can operate as a builder
+
+    Hardware Setup:
+        - 4 mecanum wheels with encoders - encoder utilized to control program accuracy and for
+             measuring distance for fwd/rev drive operation
+        - Linear actuator with encoder - controls mechanism for leaning lifting mechanism forward
+             and backward
+        - Grabbing mechanism - controlled by continuous rotation servo
+        - Foundation Grabbing mechanism - controlled by two continuous rotation servos (one for
+             each side of the robot)
+        - 4-bar mechanism - Controlled by Rev motor with encoder. Allows for extension and
+             positioning of the stone.
+        - Lifting mechanism - Controlled by 1 motor with encoder. Lifts the placement system.
+        - Delivery mechanism - Controlled by 3 continuous rotation servos. Moves stones from intake
+             mechanism to the placement mechanism.
+        - Intake mechanism - Controlled by 1 motor.
+        - Gyro sensor located at the center of the robot - utilized to compensate for drift during
+             autonomous mode operation.
+        - 2 x Touch sensors - limits lift mechanism when leaning forward and backward.
+        - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
+ **/
+
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
-/**
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
- * All device access is managed through the HardwarePushbot class.
- * The code is structured as a LinearOpMode
- * <p>
- * This particular OpMode executes a POV Game style Teleop for a PushBot
- * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
- * It raises and lowers the claw using the Gamepad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- * <p>
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp", group = "Comp")
 
@@ -91,7 +82,9 @@ public class TeleOp extends LinearOpMode {
              *
              **/
             //Calculate the power needed for each motor
-//            fwdControl = -1 * gamepad1.left_stick_y; // Caleb's Settings
+            /**
+             * Drive control for Caleb
+             */
             strafeControl = -gamepad1.left_stick_x;
             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * 1)) - Math.PI / 4;
             rightX = gamepad1.right_stick_x;
@@ -102,7 +95,10 @@ public class TeleOp extends LinearOpMode {
             v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
 
-            /**  //Calculate the power needed for each motor
+            /**
+             * Drive control for Jameson
+             *
+             //Calculate the power needed for each motor
              //            fwdControl = -1 * gamepad1.left_stick_y; //Jameson's Settings
              strafeControl = gamepad1.left_stick_x;
              robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
@@ -112,7 +108,9 @@ public class TeleOp extends LinearOpMode {
              v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
              v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
              v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
-             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;**/
+             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
+             **/
+
             robot.motorLF.setPower(v1);
             robot.motorRF.setPower(v2);
             robot.motorLR.setPower(v3);
@@ -128,10 +126,10 @@ public class TeleOp extends LinearOpMode {
              *
              * **/
 
-            if (gamepad2.dpad_down){
+            if (gamepad2.dpad_down || gamepad1.dpad_down){
                 robot.servoFoundation1.setPower(1);
                 robot.servoFoundation2.setPower(.6);
-            } if (gamepad2.dpad_up){
+            } if (gamepad2.dpad_up || gamepad1.dpad_up){
                 robot.servoFoundation1.setPower(0.6);
                 robot.servoFoundation2.setPower(1);
             }
@@ -140,7 +138,7 @@ public class TeleOp extends LinearOpMode {
              *
              * Code to manually control linear leaning mechanism
              *
-             * **/
+             **/
 
             if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
                 robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.125);
@@ -152,10 +150,9 @@ public class TeleOp extends LinearOpMode {
 
             /**
              *
-             * Code to manually control` lift mechanism lifting
+             * Code to manually control lift mechanism lifting
              *
-             * **/
-
+             **/
             if (gamepad2.right_trigger > 0){ // Change To Right-Trigger (Mechanism Control)
                 robot.motorLift.setPower(0.5);
             }
@@ -169,8 +166,7 @@ public class TeleOp extends LinearOpMode {
             /**
              *
              *  Code to control the 4-bar mechanism
-             */
-
+             **/
             if (gamepad2.left_stick_y < -0.2){
                 robot.motor4Bar.setPower(-gamepad2.left_stick_y);
             }
@@ -181,8 +177,14 @@ public class TeleOp extends LinearOpMode {
                 robot.motor4Bar.setPower(0);
             }
 
-            /** Code to control Intake **/
             /**
+             * Code to control Intake
+             **/
+
+            /**
+             * Code is disabled for now.  Will add back in the future.
+             *
+             *
              if (gamepad1.right_bumper == true){
              robot.motorIntake.setPower(0.5);
              }
@@ -191,12 +193,9 @@ public class TeleOp extends LinearOpMode {
              }
              **/
 
-            /** Code to control grab mechanism **/
-
-
-            /** if (gamepad2.a == true){
-             robot.servoGrab.setPower(0.5);
-             } **/
+            /**
+             * Code to control grab mechanism
+             **/
             if (gamepad2.b == true){
                 robot.servoGrab.setPower(-0.5);
             }
@@ -205,10 +204,14 @@ public class TeleOp extends LinearOpMode {
             }
 
 
-
-
-            /** Intake Flip Mechanism **/
             /**
+             * Intake Flip Mechanism
+             **/
+
+            /**
+             * Code is disabled for now.  Will add back in the future.
+             *
+             *
              if (gamepad1.dpad_left == true){
              robot.motorIntakeFlip.setPower(0.5);
              }
@@ -221,18 +224,7 @@ public class TeleOp extends LinearOpMode {
              **/
 
             idle();
- /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
-            telemetry.addData("left_stick/
-             if (gamepad1.left_stick_y == 0) {_y", String.valueOf(gamepad1.left_stick_y));
-            telemetry.addData("right_stick_x", String.valueOf(gamepad1.right_stick_x));
-            telemetry.addData("LF", String.valueOf(v1));
-            telemetry.addData("RF", String.valueOf(v2));
-            telemetry.addData("LR", String.valueOf(v3));
-            telemetry.addData("RR", String.valueOf(v4));
-            telemetry.addData("Touch Lift Forward", robot.touchLiftForward.getValue());
-            telemetry.update();
-*/
-        }
+         }
 
     }
 

@@ -1,32 +1,32 @@
 /*
     Team:       10355 - Project Peacock
-    Autonomous Program - Red Strategy #1
-    Alliance Color: Red
-    Robot Starting Position: Red zone, wall near ramp
+    Autonomous Program - Parking Only Mode
+    Alliance Color: Either
+    Robot Starting Position: Wherever needed.
     Strategy Description:
-        - Press correct button on beacon near ramp
-        - Press correct button on beacon furthest from ramp
-        - Park a wheel on the red ramp
+        - Point robot towards parking zone.  Needs to have 1 tile of space between start and stop.
 
     Hardware Setup:
-        - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
-        - Arm Motor with encoder - controls mechanism for dumping particles into ramp
-        - Gyro sensor located at the center of the robot - utilized to compensate for drift
-        - 1 x Color sensor (colorSensorLeft)- utilized to identify beacon color
-        - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
-        - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
+        - 4 mecanum wheels with encoders - encoder utilized to control program accuracy and for
+             measuring distance for fwd/rev drive operation
+        - Linear actuator with encoder - controls mechanism for leaning lifting mechanism forward
+             and backward
+        - Grabbing mechanism - controlled by continuous rotation servo
+        - Foundation Grabbing mechanism - controlled by two continuous rotation servos (one for
+             each side of the robot)
+        - 4-bar mechanism - Controlled by Rev motor with encoder. Allows for extension and
+             positioning of the stone.
+        - Lifting mechanism - Controlled by 1 motor with encoder. Lifts the placement system.
+        - Delivery mechanism - Controlled by 3 continuous rotation servos. Moves stones from intake
+             mechanism to the placement mechanism.
+        - Intake mechanism - Controlled by 1 motor.
+        - Gyro sensor located at the center of the robot - utilized to compensate for drift during
+             autonomous mode operation.
+        - 2 x Touch sensors - limits lift mechanism when leaning forward and backward.
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
 
     State Order:
-        - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
-        - SECOND STATE               // Identifies which button to press, right or left
-        - THIRD STATE                  // presses the correct button - also validates that the button is pressed
-                                        // and attempts to press over again until the button is pressed
-        - FOURTH STATE      // moves from the wall to the second beacon on the right of the field
-        - FIFTH STATE               // Identifies which button to press, right or left
-        - SIXTH STATE                  // presses the correct button - also validates that the button is pressed
-                                        // and attempts to press over again until the button is pressed
-        - END_GAME                      // identifies the last actions before the end of autonomous mode
+        - FIRST STATE       // All operation is currently performed in the first state
         - HALT                          // Shutdown sequence for autonomous mode
 
  */
@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "ParkingAuto", group = "COMP")
+@Autonomous(name = "Parking Auto", group = "COMP")
 
 public class ParkingAuto extends LinearOpMode {
 
@@ -116,54 +116,10 @@ public class ParkingAuto extends LinearOpMode {
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
         /**
-         * Set the initial servo positions
-         */
-        robot.servoRightGrab.setPosition(0.9);
-        //robot.servoLeftGrab.setPosition(.5);
-        robot.servoClawClose.setPosition(.5);
-        //robot.servoClawRotate.setPosition(.5);
-
-
-        /**
-         * Set the initial position for the Lift mechanism
-         */
-
-/*        robot.motorLinear.setPower(-0.3);
-        robot.motorLift.setPower(-0.3);
-        while (!initialize) {
-            // wait for the touch sensor to be pressed
-            if (robot.touchLiftBack.isPressed()){
-                robot.motorLift.setPower(0);
-            }
-            if (robot.touchLiftDown.isPressed()){
-                robot.motorLinear.setPower(0);
-            }
-          }
-
-        /**
          *  Create the DataLogger object.
          */
         createDl();
 
-        /**
-         * Calibrate the gyro
-         *
-         **/
-        robot.mrGyro.calibrate();
-        while (robot.mrGyro.isCalibrating()) {
-            telemetry.addData("Waiting on Gyro Calibration", "");
-            telemetry.update();
-        }
-
-        /**
-         * Initialize Vuforia and retrieve the list of trackable objects.
-         **/
-        telemetry.addData("Waiting on Vuforia", "");
-        telemetry.update();
-
-//        myTrackables = myVuforia.vuforiaInit(myTrackables);
-
-        telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
         telemetry.update();
 
@@ -175,54 +131,7 @@ public class ParkingAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
                 case FIRST_STATE:
-                    /**
-                     *Drive forwards, lower servo,
-                     * drive back, to the left,
-                     * push base into the corner, and park
-                     */
-
-//                    drive.translate(4,90, 2);
-
-                    robot.motorLR.setPower(0.0);
-                    robot.motorLF.setPower(0.3);
-                    robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.0);
-                    sleep (1500);
-                    drive.motorsHalt();
-
-                    robot.servoRightGrab.setPosition(0.4);
-                    sleep(500);
-
-                    robot.motorLR.setPower(-0.1);
-                    robot.motorLF.setPower(-0.1);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.3);
-                    sleep (1000);
-                    drive.motorsHalt();
-
-                    robot.motorLR.setPower(0.2);
-                    robot.motorLF.setPower(0.2);
-                    robot.motorRR.setPower(0.2);
-                    robot.motorRF.setPower(0.2);
-                    sleep (1000);
-                    drive.motorsHalt();
-
-//                    drive.translate(-1,20,2); //if 20 heading doesn't work try 110
-
-                    robot.servoRightGrab.setPosition(.9);
-                    sleep(500);
-
-                    robot.motorLR.setPower(-0.0);
-                    robot.motorLF.setPower(-0.3);
-                    robot.motorRR.setPower(-0.3);
-                    robot.motorRF.setPower(-0.0);
-                    sleep (1000);
-                    drive.motorsHalt();
-
-//                    drive.translate(0.5,90,0.5);
-//                    drive.translate(-1,90,1);
-
-                    state = State.HALT;
+                    state = State.SECOND_STATE;
                     //Exit the state
                     break;
 
@@ -243,42 +152,6 @@ public class ParkingAuto extends LinearOpMode {
                     state = State.HALT;
                     break;
 
-                case THIRD_STATE:
-                    /**
-                     * Provide a description of what this state does
-                     * Code goes here
-                     */
-
-                    state = State.FOURTH_STATE;
-                    break;
-
-                case FOURTH_STATE:
-                    /**
-                     * Provide a description of what this state does
-                     * Code goes here
-                     */
-
-                    state = State.FIFTH_STATE;
-                    break;
-
-                case FIFTH_STATE:
-                    /**
-                     * Provide a description of what this state does
-                     * Code goes here
-                     */
-
-                    state = State.END_STATE;
-                    break;
-
-                case END_STATE:
-                    /**
-                     * Provide a description of what this state does
-                     * Code goes here
-                     */
-
-                    state = State.HALT;
-                    break;
-
                 case HALT:
 //                    drive.motorsHalt();               //Stop the motors
 
@@ -289,11 +162,6 @@ public class ParkingAuto extends LinearOpMode {
                     requestOpModeStop();
                     break;
             }
-            /**
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             * Don't change anything past this point.  Bad things could happen.
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             */
         }
     }
 

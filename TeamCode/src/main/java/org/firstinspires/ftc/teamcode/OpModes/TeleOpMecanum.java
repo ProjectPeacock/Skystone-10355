@@ -137,8 +137,8 @@ public class TeleOpMecanum extends LinearOpMode {
     private void begin() {
 
         /**
-         * Inititialize the robot's hardware.  The hardware configuration can be found in the
-         * HardwareTestPlatform.java class.
+         * Initialize the robot's hardware.  The hardware configuration can be found in the
+         * Hardware/HardwareProfile.java class.
          */
         robot.init(hardwareMap);
 

@@ -1,30 +1,35 @@
 /*
     Team:       10355 - Project Peacock
-    Autonomous Program - Red Strategy #1
+    Autonomous Program - Red Strategy #2
+    Actions: Grab Stone, Place Foundation, Place Stone, and Park
     Alliance Color: Red
-    Robot Starting Position: Red zone, wall near ramp
+    Robot Starting Position: Quarry zone on tile next to blue depot. Grabber should be aligned
+         with the middle of the 2nd stone from the right.
     Strategy Description:
-        - Press correct button on beacon near ramp
-        - Press correct button on beacon furthest from ramp
-        - Park a wheel on the red ramp
+        - Grab a stone
+        - Grab foundation and place it in the build site
+        - place the stone on the foundation
+        - park under the skybridge
     Hardware Setup:
-        - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
-        - Arm Motor with encoder - controls mechanism for dumping particles into ramp
-        - Gyro sensor located at the center of the robot - utilized to compensate for drift
-        - 1 x Color sensor (colorSensorLeft)- utilized to identify beacon color
-        - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
-        - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
+        - 4 mecanum wheels with encoders - encoder utilized to control program accuracy and for
+             measuring distance for fwd/rev drive operation
+        - Linear actuator with encoder - controls mechanism for leaning lifting mechanism forward
+             and backward
+        - Grabbing mechanism - controlled by continuous rotation servo
+        - Foundation Grabbing mechanism - controlled by two continuous rotation servos (one for
+             each side of the robot)
+        - 4-bar mechanism - Controlled by Rev motor with encoder. Allows for extension and
+             positioning of the stone.
+        - Lifting mechanism - Controlled by 1 motor with encoder. Lifts the placement system.
+        - Delivery mechanism - Controlled by 3 continuous rotation servos. Moves stones from intake
+             mechanism to the placement mechanism.
+        - Intake mechanism - Controlled by 1 motor.
+        - Gyro sensor located at the center of the robot - utilized to compensate for drift during
+             autonomous mode operation.
+        - 2 x Touch sensors - limits lift mechanism when leaning forward and backward.
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
     State Order:
-        - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
-        - SECOND STATE               // Identifies which button to press, right or left
-        - THIRD STATE                  // presses the correct button - also validates that the button is pressed
-                                        // and attempts to press over again until the button is pressed
-        - FOURTH STATE      // moves from the wall to the second beacon on the right of the field
-        - FIFTH STATE               // Identifies which button to press, right or left
-        - SIXTH STATE                  // presses the correct button - also validates that the button is pressed
-                                        // and attempts to press over again until the button is pressed
-        - END_GAME                      // identifies the last actions before the end of autonomous mode
+        - FIRST STATE       // All operation is currently performed in the first state
         - HALT                          // Shutdown sequence for autonomous mode
  */
 package org.firstinspires.ftc.teamcode.OpModes;
