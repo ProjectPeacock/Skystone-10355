@@ -7,6 +7,7 @@
         - Press correct button on beacon near ramp
         - Press correct button on beacon furthest from ramp
         - Park a wheel on the red ramp
+
     Hardware Setup:
         - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
         - Arm Motor with encoder - controls mechanism for dumping particles into ramp
@@ -15,6 +16,7 @@
         - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
         - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
+
     State Order:
         - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
         - SECOND STATE               // Identifies which button to press, right or left
@@ -26,6 +28,7 @@
                                         // and attempts to press over again until the button is pressed
         - END_GAME                      // identifies the last actions before the end of autonomous mode
         - HALT                          // Shutdown sequence for autonomous mode
+
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
@@ -33,7 +36,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
  * Import the classes we need to have local access to.
  */
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -42,15 +44,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
-import org.firstinspires.ftc.teamcode.Libs.VuforiaLib;
+import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue BuildZone-DNU", group = "COMP")
-@Disabled
+@Autonomous(name = "Blue-Foundation, Park", group = "COMP")
+
 public class BlueBuildAuto extends LinearOpMode {
 
     /**
@@ -60,7 +62,7 @@ public class BlueBuildAuto extends LinearOpMode {
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     double radians = 0;
-    private VuforiaLib myVuforia = new VuforiaLib();
+    private skystoneVuforia myVuforia = new skystoneVuforia();
     private ElapsedTime runtime = new ElapsedTime();
     /**
      * Define global variables
@@ -95,7 +97,7 @@ public class BlueBuildAuto extends LinearOpMode {
     private DataLogger Dl;                          //Datalogger object
     private double motorCorrectCoefficient = .05;    //Amount to divide the zInt drift by
     private String button;                          //Which button to push
-    private String alliance = "blue";                //Your current alliance
+    private String alliance = "red";                //Your current alliance
     private String courseCorrect = "";
     private State state = State.FIRST_STATE;    //Machine State
     private boolean initialize = false;
@@ -111,11 +113,14 @@ public class BlueBuildAuto extends LinearOpMode {
         /**
          * Instantiate the drive class
          */
-//        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
+        DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
         /**
          * Set the initial servo positions
          */
+        robot.servoFoundation1.setPower(0.6);
+        robot.servoFoundation2.setPower(1);
+        sleep(1000);
 
 
         /**
@@ -133,6 +138,7 @@ public class BlueBuildAuto extends LinearOpMode {
                 robot.motorLinear.setPower(0);
             }
           }
+
         /**
          *  Create the DataLogger object.
          */
@@ -141,21 +147,26 @@ public class BlueBuildAuto extends LinearOpMode {
         /**
          * Calibrate the gyro
          *
-         robot.sensorGyro.calibrate();
-         while (robot.sensorGyro.isCalibrating()) {
-         telemetry.addData("Waiting on Gyro Calibration", "");
-         telemetry.update();
-         }
-         /**
+         **/
+        robot.mrGyro.calibrate();
+        while (robot.mrGyro.isCalibrating()) {
+            telemetry.addData("Waiting on Gyro Calibration", "");
+            telemetry.update();
+        }
+
+        /**
          * Initialize Vuforia and retrieve the list of trackable objects.
-         *
-         telemetry.addData("Waiting on Vuforia", "");
-         telemetry.update();
-         myTrackables = myVuforia.vuforiaInit();
-         telemetry.addData("Status", "Vuforia Initialized");
-         telemetry.addData(">", "System initialized and Ready");
-         telemetry.update();
-         /**
+         **/
+        telemetry.addData("Waiting on Vuforia", "");
+        telemetry.update();
+
+//        myTrackables = myVuforia.vuforiaInit(myTrackables);
+
+        telemetry.addData("Status", "Vuforia Initialized");
+        telemetry.addData(">", "System initialized and Ready");
+        telemetry.update();
+
+        /**
          * Start the opMode
          */
         waitForStart();
@@ -169,11 +180,59 @@ public class BlueBuildAuto extends LinearOpMode {
                      * push base into the corner, and park
                      */
 
-//                    drive.translate(1,90, 2);
-//                    drive.motorsHalt();
-//                    robot.servoRightGrab.setPosition(0.5);
-//                    drive.translate(-1,110,2); //if 110 heading doesn't work try 20
-//                    robot.servoRightGrab.setPosition(0);
+//                    drive.translate(4,90, 2);
+
+                    robot.motorLR.setPower(-0.4);
+                    robot.motorLF.setPower(-0.0);
+                    robot.motorRR.setPower(-0.0);
+                    robot.motorRF.setPower(-0.4);
+                    sleep (1350);
+                    drive.motorsHalt();
+
+                    /**
+                     * Grab the foundation
+                     */
+                    robot.servoFoundation1.setPower(1);
+                    robot.servoFoundation2.setPower(.6);
+                    sleep(500);
+
+                    robot.motorLR.setPower(0.1);
+                    robot.motorLF.setPower(0.1);
+                    robot.motorRR.setPower(0.3);
+                    robot.motorRF.setPower(0.3);
+                    sleep (3100);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(-0.2);
+                    sleep (1500);
+                    drive.motorsHalt();
+
+
+
+                    /**
+                     * Let go of the Foundation
+                     */
+                    robot.servoFoundation1.setPower(0.6);
+                    robot.servoFoundation2.setPower(1);
+                    sleep(500);
+
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(0.3);
+                    robot.motorRR.setPower(0.3);
+                    robot.motorRF.setPower(0.3);
+                    sleep (1400);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(0.2);
+                    robot.motorRR.setPower(0.1);
+                    robot.motorRF.setPower(-0.1);
+                    sleep (1000);
+                    drive.motorsHalt();
+
 //                    drive.translate(0.5,90,0.5);
 //                    drive.translate(-1,90,1);
 
@@ -183,11 +242,45 @@ public class BlueBuildAuto extends LinearOpMode {
 
                 case SECOND_STATE:
                     /**
-                     * Provide a description of what this state does
-                     * Code goes here
+                     * This state is for testing the MR Gyro Sensor
                      */
 
-                    state = State.THIRD_STATE;
+                    drive.translateTime(0.3, 330, 1.8);
+                    currentZint = robot.mrGyro.getIntegratedZValue();
+                    telemetry.addData("Heading = ", currentZint);
+                    telemetry.update();
+
+                    robot.servoRightGrab.setPosition(0.4);
+                    sleep(500);
+
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.4);
+                    robot.motorRF.setPower(-0.4);
+                    sleep (1400);
+                    drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.4);
+                    robot.motorLF.setPower(-0.4);
+                    robot.motorRR.setPower(0.4);
+                    robot.motorRF.setPower(0.4);
+                    sleep (1500);
+                    drive.motorsHalt();
+
+                    drive.translateTime(0.3, 0, 2);
+                    robot.servoRightGrab.setPosition(.9);
+                    sleep(500);
+
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(-0.2);
+                    sleep(1750);
+
+
+//                    drive.translateTime(0.3, 210, 2);
+                    state = State.HALT;
                     break;
 
                 case THIRD_STATE:

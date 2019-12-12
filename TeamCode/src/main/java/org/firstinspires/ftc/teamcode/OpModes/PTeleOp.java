@@ -44,9 +44,9 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "PTeleOp", group = "Comp")
 
-public class TeleOp extends LinearOpMode {
+public class PTeleOp extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class
      */
@@ -90,33 +90,7 @@ public class TeleOp extends LinearOpMode {
              * Note: this algorithm assumes that all values are zero when controls are not touched
              *
              **/
-            //Calculate the power needed for each motor
-//            fwdControl = -1 * gamepad1.left_stick_y; // Caleb's Settings
-            strafeControl = -gamepad1.left_stick_x;
-            robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * 1)) - Math.PI / 4;
-            rightX = gamepad1.right_stick_x;
-            rightY = gamepad1.right_stick_y;
-            r = Math.hypot((gamepad1.left_stick_x * 1), gamepad1.left_stick_y);
-            v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
-            v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
-            v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
-            v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
 
-            /**  //Calculate the power needed for each motor
-             //            fwdControl = -1 * gamepad1.left_stick_y; //Jameson's Settings
-             strafeControl = gamepad1.left_stick_x;
-             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
-             rightX = gamepad1.right_stick_x;
-             rightY = gamepad1.right_stick_y;
-             r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
-             v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
-             v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
-             v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
-             v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;**/
-            robot.motorLF.setPower(v1);
-            robot.motorRF.setPower(v2);
-            robot.motorLR.setPower(v3);
-            robot.motorRR.setPower(v4);
 
             /** Chassis control is for jameson meaning it should all be the way jameson wants it **/
             /** Mechanism control is for Julian therefore controls should be to his preference **/
@@ -152,7 +126,7 @@ public class TeleOp extends LinearOpMode {
 
             /**
              *
-             * Code to manually control` lift mechanism lifting
+             * Code to manually control lift mechanism lifting
              *
              * **/
 
@@ -192,18 +166,17 @@ public class TeleOp extends LinearOpMode {
              **/
 
             /** Code to control grab mechanism **/
-
-
-            /** if (gamepad2.a == true){
-             robot.servoGrab.setPower(0.5);
-             } **/
-            if (gamepad2.b == true){
-                robot.servoGrab.setPower(-0.5);
-            }
-            else {
-                robot.servoGrab.setPower(0);
-            }
-
+            /**
+             if (gamepad1.a == true){
+             robot.motorGrab.setPower(0.5);
+             }
+             else if (gamepad1.b == true){
+             robot.motorGrab.setPower(-0.5);
+             }
+             else {
+             robot.motorGrab.setPower(0);
+             }
+             **/
 
 
 

@@ -7,7 +7,6 @@
         - Press correct button on beacon near ramp
         - Press correct button on beacon furthest from ramp
         - Park a wheel on the red ramp
-
     Hardware Setup:
         - 4 mecanum wheels with encoder on LF wheel - encoder utilized for measuring distance for fwd/rev drive operation
         - Arm Motor with encoder - controls mechanism for dumping particles into ramp
@@ -16,7 +15,6 @@
         - 1 x Touch sensor - utilized to identify when robot touches wall with the front of the robot
         - 1 x Optical Distance Sensor (ODS) - utilized to locate the white lines on the floor
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
-
     State Order:
         - FIRST STATE       // moves from the wall to the first beacon closest to the ramp
         - SECOND STATE               // Identifies which button to press, right or left
@@ -28,7 +26,6 @@
                                         // and attempts to press over again until the button is pressed
         - END_GAME                      // identifies the last actions before the end of autonomous mode
         - HALT                          // Shutdown sequence for autonomous mode
-
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
@@ -51,9 +48,9 @@ import java.util.List;
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue Build Zone", group = "COMP")
+@Autonomous(name = "Red-Stone, Foundation, park", group = "COMP")
 
-public class BlueBuildAuto1 extends LinearOpMode {
+public class RedStoneAuto extends LinearOpMode {
 
     /**
      * Instantiate all objects needed in this class
@@ -118,9 +115,11 @@ public class BlueBuildAuto1 extends LinearOpMode {
         /**
          * Set the initial servo positions
          */
+        robot.servoGrab.setPower(-1);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
         sleep(1000);
+
 
 
         /**
@@ -138,11 +137,9 @@ public class BlueBuildAuto1 extends LinearOpMode {
                 robot.motorLinear.setPower(0);
             }
           }
-
         /**
          *  Create the DataLogger object.
          */
-        createDl();
 
         /**
          * Calibrate the gyro
@@ -174,68 +171,159 @@ public class BlueBuildAuto1 extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
                 case FIRST_STATE:
+
                     /**
-                     *Drive forwards, lower servo,
-                     * drive back, to the left,
-                     * push base into the corner, and park
+                     * drive towards the stone
+                     * Note: The robot needs to be positioned on the second tile from the corner.
+                     * The 2nd stone from the end should be centered with the grabber.
                      */
 
-//                    drive.translate(4,90, 2);
+                    robot.motorRR.setPower(-0.25);
+                    robot.motorRF.setPower(-0.25);
+                    robot.motorLR.setPower(-0.25);
+                    robot.motorLF.setPower(-0.25);
+                    sleep(60);
 
-                    robot.motorLR.setPower(-0.4);
-                    robot.motorLF.setPower(-0.0);
-                    robot.motorRR.setPower(-0.0);
-                    robot.motorRF.setPower(-0.4);
-                    sleep (1350);
+                    /**
+                     * Raise the lifting mechanism to position the grabber to grab the stone.
+                     * This occurs while the robot is still moving forward.
+                     */
+
+                    robot.motorLinear.setPower(0.3);
+                    sleep(800);
+                    robot.motorLinear.setPower(0);
+
+                    /**
+                     * Stop all motors.  This should place the robot right next to the stone we
+                     * want to grab.
+                     * Pause to allow the robot to stop moving and the stone to settle.
+                     */
+                    drive.motorsHalt();
+                    sleep(500);
+
+                    /**
+                     * Grab the block with the grabber.
+                     */
+                    robot.servoGrab.setPower(0);
+                    sleep(1000);
+
+                    /**
+                     * Lay the lifting mechanism down so that we can pass under the bar.
+                     */
+                    robot.motorLinear.setPower(-0.3);
+                    sleep(300);
+
+                    /**
+                     * Back the robot up so that we can avoid the skybridge.
+                     */
+                    robot.motorRF.setPower(0.2);
+                    robot.motorRR.setPower(0.2);
+                    robot.motorLR.setPower(0.2);
+                    robot.motorLF.setPower(0.2);
+                    sleep(600);
                     drive.motorsHalt();
 
                     /**
-                     * Grab the foundation
+                     * Strafe to the foundation.
+                     */
+                    robot.motorRF.setPower(0.3);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(-0.3);
+                    sleep(2900);
+                    drive.motorsHalt();
+
+                    /**
+                     * Adjust the robot so that the left side is more parallel with the foundation.
+                     * This step is not needed if the gyro sensor is in place as the robot should
+                     * strafe without sway or yaw.  This is a temporary fix.
+                     */
+                    robot.motorLF.setPower(-0.2);
+                    robot.motorLR.setPower(-0.2);
+                    sleep(300);
+                    drive.motorsHalt();
+
+                    /**
+                     * Drive the robot forward into the foundation so that we can grab it.
+                     */
+                    robot.motorRF.setPower(-0.2);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorLR.setPower(-0.2);
+                    robot.motorLF.setPower(-0.2);
+                    sleep(500);
+                    drive.motorsHalt();
+
+                    /**
+                     * Engage the tractor beam! (i.e. grab the foundation)
                      */
                     robot.servoFoundation1.setPower(1);
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
-                    robot.motorLR.setPower(0.1);
-                    robot.motorLF.setPower(0.1);
-                    robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.3);
-                    sleep (3100);
+                    /**
+                     * Pull the foundation towards the build site, arcing so that the long side of
+                     * the foundation will be parallel to the back wall.
+                     */
+                    robot.motorLR.setPower(0.3);
+                    robot.motorLF.setPower(0.3);
+                    robot.motorRR.setPower(0.15);
+                    robot.motorRF.setPower(0.15);
+                    sleep (2100);
                     drive.motorsHalt();
 
+                    /**
+                     * Push the foundation into the wall.
+                     */
                     robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(-0.2);
                     robot.motorRR.setPower(-0.2);
                     robot.motorRF.setPower(-0.2);
-                    sleep (1500);
+                    sleep (1900);
                     drive.motorsHalt();
 
-
+                    /**
+                     * Deposit the payload onto the foundation.
+                     */
+                    robot.servoGrab.setPower(-0.5);
+                    sleep(500);
 
                     /**
-                     * Let go of the Foundation
+                     * return the grabber to original position for teleop mode.
+                     */
+                    robot.servoGrab.setPower(0);
+                    sleep(500);
+
+                    /**
+                     * Release the tractor beam. (i.e.let go of the Foundation.)
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
+                    /**
+                     * Move to the parking position
+                     */
                     robot.motorLR.setPower(0.3);
-                    robot.motorLF.setPower(0.3);
-                    robot.motorRR.setPower(0.3);
+                    robot.motorLF.setPower(0.0);
+                    robot.motorRR.setPower(0.0);
                     robot.motorRF.setPower(0.3);
-                    sleep (1400);
+                    sleep (1900);
                     drive.motorsHalt();
 
-                    robot.motorLR.setPower(-0.2);
-                    robot.motorLF.setPower(0.2);
-                    robot.motorRR.setPower(0.1);
-                    robot.motorRF.setPower(-0.1);
-                    sleep (1000);
+                    /**
+                     * Strafe towards the wall to get out of the way of the partner robot.
+                     */
+                    robot.motorLR.setPower(0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.2);
+                    robot.motorRF.setPower(0.2);
+                    sleep (1500);
                     drive.motorsHalt();
 
-//                    drive.translate(0.5,90,0.5);
-//                    drive.translate(-1,90,1);
 
+                    /**
+                     * Close out the program.
+                     */
                     state = State.HALT;
                     //Exit the state
                     break;
@@ -245,7 +333,7 @@ public class BlueBuildAuto1 extends LinearOpMode {
                      * This state is for testing the MR Gyro Sensor
                      */
 
-                    drive.translateTime(0.3, 330, 1.8);
+                    drive.translateTime(0.3, 30, 2);
                     currentZint = robot.mrGyro.getIntegratedZValue();
                     telemetry.addData("Heading = ", currentZint);
                     telemetry.update();
@@ -253,33 +341,19 @@ public class BlueBuildAuto1 extends LinearOpMode {
                     robot.servoRightGrab.setPosition(0.4);
                     sleep(500);
 
-
-                    robot.motorLR.setPower(-0.2);
-                    robot.motorLF.setPower(-0.2);
-                    robot.motorRR.setPower(-0.4);
-                    robot.motorRF.setPower(-0.4);
-                    sleep (1400);
-                    drive.motorsHalt();
-
-                    robot.motorLR.setPower(-0.4);
-                    robot.motorLF.setPower(-0.4);
-                    robot.motorRR.setPower(0.4);
-                    robot.motorRF.setPower(0.4);
+                    robot.motorLR.setPower(-0.1);
+                    robot.motorLF.setPower(-0.1);
+                    robot.motorRR.setPower(-0.3);
+                    robot.motorRF.setPower(-0.3);
                     sleep (1500);
                     drive.motorsHalt();
 
-                    drive.translateTime(0.3, 0, 2);
+                    drive.translateTime(0.2, 0, 1);
+
                     robot.servoRightGrab.setPosition(.9);
                     sleep(500);
 
-                    robot.motorLR.setPower(-0.2);
-                    robot.motorLF.setPower(-0.2);
-                    robot.motorRR.setPower(-0.2);
-                    robot.motorRF.setPower(-0.2);
-                    sleep(1750);
-
-
-//                    drive.translateTime(0.3, 210, 2);
+                    drive.translateTime(0.3, 210, 1);
                     state = State.HALT;
                     break;
 
@@ -322,9 +396,6 @@ public class BlueBuildAuto1 extends LinearOpMode {
                 case HALT:
 //                    drive.motorsHalt();               //Stop the motors
 
-                    //Stop the DataLogger
-                    dlStop();
-
                     //Exit the OpMode
                     requestOpModeStop();
                     break;
@@ -337,132 +408,6 @@ public class BlueBuildAuto1 extends LinearOpMode {
         }
     }
 
-    /**
-     * Transmit telemetry.
-     */
-    private void telemetry() {
-
-        telemetry.addData("Alliance", String.valueOf(alliance));
-        telemetry.addData("State", String.valueOf(state));
-        telemetry.addData("Procedure", String.valueOf(procedure));
-        telemetry.addData("button", String.valueOf(button));
-        telemetry.addData("Heading", String.valueOf(heading));
-        telemetry.addData("robotX", String.valueOf((int) robotX));
-        telemetry.addData("robotY", String.valueOf((int) robotY));
-        telemetry.addData("Target X", String.valueOf(x));
-        telemetry.addData("Target Y", String.valueOf(y));
-        telemetry.addData("robotBearing", String.valueOf((int) robotBearing));
-        telemetry.addData("Current Z Int", String.valueOf(currentZint));
-        telemetry.addData("Z Correction", String.valueOf(zCorrection));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftForward.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftBack.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftUp.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftDown.getValue()));
-        telemetry.addData("ODS", String.valueOf(ods));
-        telemetry.addData("Color Right Red", String.valueOf(colorRightRed));
-        telemetry.addData("Color Right Blue", String.valueOf(colorRightBlue));
-        telemetry.addData("Color Left Red", String.valueOf(colorLeftRed));
-        telemetry.addData("Color Left Blue", String.valueOf(colorLeftBlue));
-        telemetry.addData("Target Encoder Position", String.valueOf(myTargetPosition));
-        telemetry.addData("Current Encoder Position", String.valueOf(robot.motorLF.getCurrentPosition()));
-        telemetry.addData("LF", String.valueOf(LF));
-        telemetry.addData("RF", String.valueOf(RF));
-        telemetry.addData("LR", String.valueOf(LR));
-        telemetry.addData("RR", String.valueOf(RR));
-        telemetry.update();
-    }
-
-
-    /**
-     * Catchall to get data from all sensor systems.  Updates global variables
-     */
-    private void getSensorData() {
-        ods = robot.ods.getLightDetected();
-        currentZint = robot.mrGyro.getIntegratedZValue();
-        vuforiaTracking = myVuforia.getLocation(myTrackables);
-        robotX = vuforiaTracking.get(0);
-        robotY = vuforiaTracking.get(1);
-        robotBearing = vuforiaTracking.get(2);
-    }
-
-    /**
-     * Setup the dataLogger
-     * The dataLogger takes a set of fields defined here and sets up the file on the Android device
-     * to save them to.  We then log data later throughout the class.
-     */
-    private void createDl() {
-
-        Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("Procedure");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("robotX");
-        Dl.addField("robotY");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("robotBearing");
-        Dl.addField("initZ");
-        Dl.addField("currentZ");
-        Dl.addField("zCorrection");
-        Dl.addField("touchSensor");
-        Dl.addField("ODS");
-        Dl.addField("colorRightRed");
-        Dl.addField("colorRightBlue");
-        Dl.addField("colorLeftRed");
-        Dl.addField("colorLeftBlue");
-        Dl.addField("LFTargetPos");
-        Dl.addField("LFMotorPos");
-        Dl.addField("LF");
-        Dl.addField("RF");
-        Dl.addField("LR");
-        Dl.addField("RR");
-        Dl.newLine();
-    }
-
-    /**
-     * Log data to the file on the phone.
-     */
-    private void logData() {
-
-        Dl.addField(String.valueOf(runtime.time()));
-        Dl.addField(String.valueOf(alliance));
-        Dl.addField(String.valueOf(state));
-        Dl.addField(String.valueOf(procedure));
-        Dl.addField(String.valueOf(courseCorrect));
-        Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf((int) robotX));
-        Dl.addField(String.valueOf((int) robotY));
-        Dl.addField(String.valueOf(x));
-        Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf((int) robotBearing));
-        Dl.addField(String.valueOf(initZ));
-        Dl.addField(String.valueOf(currentZint));
-        Dl.addField(String.valueOf(zCorrection));
-        Dl.addField(String.valueOf(robot.rangeSensorFront));
-        Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(ods));
-        Dl.addField(String.valueOf(myTargetPosition));
-        Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
-        Dl.addField(String.valueOf(LF));
-        Dl.addField(String.valueOf(RF));
-        Dl.addField(String.valueOf(LR));
-        Dl.addField(String.valueOf(RR));
-        Dl.newLine();
-    }
-
-    /**
-     * Stop the DataLogger
-     */
-    private void dlStop() {
-        Dl.closeDataLogger();
-
-    }
 
     /**
      * Enumerate the States of the machine.
