@@ -64,6 +64,7 @@ public class HardwareProfile {
     public Servo servoClawRotate;
     public CRServo servoFoundation1;
     public CRServo servoFoundation2;
+    public CRServo servoGrab;
     public WebcamName webcamName = null;
 
     /* I2C Range Sensor members*/
@@ -233,5 +234,6 @@ public class HardwareProfile {
 
         servoFoundation1 = hwMap.crservo.get("servoFoundation1");
         servoFoundation2 = hwMap.crservo.get("servoFoundation2");
+        servoGrab = hwMap.crservo.get("servoGrab");
     }
 }
