@@ -86,12 +86,10 @@ public class PTeleOp extends LinearOpMode {
              * Code to manually control linear leaning mechanism
              **/
 
-            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){
-                // Analog stick pointing up for going up (Mechanism Control)
+            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
                 robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.125);
             }
-            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){
-                // analog stick down for going down (Mechanism Control)
+            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
                 robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.125);
             }
             else robot.motorLinear.setPower(0);

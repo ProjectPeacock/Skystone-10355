@@ -141,10 +141,10 @@ public class TeleOp extends LinearOpMode {
              **/
 
             if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
-                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.125);
+                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.200);
             }
             else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
-                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.125);
+                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.200);
             }
             else robot.motorLinear.setPower(0);
 
@@ -178,11 +178,22 @@ public class TeleOp extends LinearOpMode {
             }
 
             /**
+             * Code to control grab mechanism
+             **/
+            if (gamepad2.b == true){
+                robot.servoGrab.setPower(-0.5);
+            }
+
+            else {
+                robot.servoGrab.setPower(0.2);
+            }
+
+            /**
              * Code to control Intake
              **/
 
             /**
-             * Code is disabled for now.  Will add back in the future.
+             * Code is Disabled for now. Will add in the future
              *
              *
              if (gamepad1.right_bumper == true){
@@ -193,15 +204,7 @@ public class TeleOp extends LinearOpMode {
              }
              **/
 
-            /**
-             * Code to control grab mechanism
-             **/
-            if (gamepad2.b == true){
-                robot.servoGrab.setPower(-0.5);
-            }
-            else {
-                robot.servoGrab.setPower(0);
-            }
+
 
 
             /**

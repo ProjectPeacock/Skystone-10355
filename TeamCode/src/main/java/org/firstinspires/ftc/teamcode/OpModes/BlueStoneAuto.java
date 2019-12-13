@@ -123,6 +123,7 @@ public class BlueStoneAuto extends LinearOpMode {
          */
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
+        robot.servoGrab.setPower(-1);
         sleep(1000);
 
         /**
@@ -171,7 +172,7 @@ public class BlueStoneAuto extends LinearOpMode {
                     robot.motorRF.setPower(-0.25);
                     robot.motorLR.setPower(-0.25);
                     robot.motorLF.setPower(-0.25);
-                    sleep(60);
+                    sleep(50);
 
                     /**
                      * Raise the lifting mechanism to position the grabber to grab the stone.
@@ -193,7 +194,7 @@ public class BlueStoneAuto extends LinearOpMode {
                     /**
                      * Grab the block with the grabber.
                      */
-                    robot.servoGrab.setPower(0);
+                    robot.servoGrab.setPower(0.2);
                     sleep(1000);
 
                     /**
@@ -206,17 +207,18 @@ public class BlueStoneAuto extends LinearOpMode {
                      * Back the robot up so that we can avoid the skybridge.
                      */
 
-                    drive.translateTime(.2,0,600);
+                    drive.translateTime(.3,0,0.7);
+                    sleep(500);
 
                     /**
                      * Strafe to the foundation.
                      */
-                    drive.translateTime(.3,90,2900);
+                    drive.translateTime(.3,90,4.4);
 
                     /**
                      * Drive the robot forward into the foundation so that we can grab it.
                      */
-                    drive.translateTime(.2,180,500);
+                    drive.translateTime(.2,180,1.8);
 
                     /**
                      * Engage the tractor beam! (i.e. grab the foundation)
@@ -225,16 +227,16 @@ public class BlueStoneAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
-                    drive.translateTime(.3,0,2900);
+                   // drive.translateTime(.3,0,2.900);
 
                     robot.motorLR.setPower(0.1);
                     robot.motorLF.setPower(0.1);
-                    robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.3);
-                    sleep (3100);
+                    robot.motorRR.setPower(0.4);
+                    robot.motorRF.setPower(0.4);
+                    sleep (3600);
                     drive.motorsHalt();
 
-                    drive.translateTime(.2,180,1500);
+                    drive.translateTime(.2,180,1.500);
 
                     /**
                      * Deposit the payload onto the foundation.
@@ -255,7 +257,7 @@ public class BlueStoneAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    drive.translateTime(.3,0,1400);
+                    drive.translateTime(.3,0,1.400);
 
 
                     robot.motorLR.setPower(-0.2);

@@ -187,16 +187,17 @@ public class RedStoneAuto extends LinearOpMode {
                     robot.motorRF.setPower(-0.25);
                     robot.motorLR.setPower(-0.25);
                     robot.motorLF.setPower(-0.25);
-                    sleep(60);
+                    sleep(360);
+
 
                     /**
                      * Raise the lifting mechanism to position the grabber to grab the stone.
                      * This occurs while the robot is still moving forward.
                      */
+                        robot.motorLinear.setPower(0.75);
+                        sleep(500);
 
-                    robot.motorLinear.setPower(0.3);
-                    sleep(800);
-                    robot.motorLinear.setPower(0);
+                   robot.motorLinear.setPower(0);
 
                     /**
                      * Stop all motors.  This should place the robot right next to the stone we
@@ -209,14 +210,17 @@ public class RedStoneAuto extends LinearOpMode {
                     /**
                      * Grab the block with the grabber.
                      */
-                    robot.servoGrab.setPower(0);
+                    robot.servoGrab.setPower(1);
                     sleep(1000);
 
                     /**
                      * Lay the lifting mechanism down so that we can pass under the bar.
                      */
-                    robot.motorLinear.setPower(-0.3);
-                    sleep(300);
+
+                        robot.motorLinear.setPower(-0.7);
+                        sleep(300);
+
+                    robot.motorLinear.setPower(0);
 
                     /**
                      * Back the robot up so that we can avoid the skybridge.
@@ -225,7 +229,7 @@ public class RedStoneAuto extends LinearOpMode {
                     robot.motorRR.setPower(0.2);
                     robot.motorLR.setPower(0.2);
                     robot.motorLF.setPower(0.2);
-                    sleep(600);
+                    sleep(500);
                     drive.motorsHalt();
 
                     /**
@@ -243,10 +247,10 @@ public class RedStoneAuto extends LinearOpMode {
                      * This step is not needed if the gyro sensor is in place as the robot should
                      * strafe without sway or yaw.  This is a temporary fix.
                      */
-                    robot.motorLF.setPower(-0.2);
+                    /**robot.motorLF.setPower(-0.2);
                     robot.motorLR.setPower(-0.2);
                     sleep(300);
-                    drive.motorsHalt();
+                    drive.motorsHalt();**/
 
                     /**
                      * Drive the robot forward into the foundation so that we can grab it.
@@ -255,7 +259,7 @@ public class RedStoneAuto extends LinearOpMode {
                     robot.motorRR.setPower(-0.2);
                     robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(-0.2);
-                    sleep(500);
+                    sleep(700);
                     drive.motorsHalt();
 
                     /**
@@ -265,15 +269,23 @@ public class RedStoneAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
+
+                    robot.motorRF.setPower(0.2);
+                    robot.motorRR.setPower(0.2);
+                    robot.motorLR.setPower(0.2);
+                    robot.motorLF.setPower(0.2);
+                    sleep(300);
+                    drive.motorsHalt();
+
                     /**
                      * Pull the foundation towards the build site, arcing so that the long side of
                      * the foundation will be parallel to the back wall.
                      */
                     robot.motorLR.setPower(0.3);
                     robot.motorLF.setPower(0.3);
-                    robot.motorRR.setPower(0.15);
-                    robot.motorRF.setPower(0.15);
-                    sleep (2100);
+                    robot.motorRR.setPower(0.1);
+                    robot.motorRF.setPower(0.1);
+                    sleep (1900);
                     drive.motorsHalt();
 
                     /**
