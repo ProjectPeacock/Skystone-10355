@@ -51,7 +51,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp V2", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp grabBot V2", group = "Comp")
 @Disabled
 public class TeleOpV2 extends LinearOpMode {
     /**
@@ -87,7 +87,7 @@ public class TeleOpV2 extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        telemetry.addData("COMP TeleOp V2 Active", "");    //
+        telemetry.addData("COMP grabBot V2 Active", "");    //
         telemetry.update();
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {

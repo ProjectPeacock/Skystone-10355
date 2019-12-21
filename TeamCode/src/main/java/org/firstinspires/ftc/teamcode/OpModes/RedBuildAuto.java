@@ -213,7 +213,7 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.motorLF.setPower(0.0);
                     robot.motorRR.setPower(0.0);
                     robot.motorRF.setPower(0.3);
-                    sleep (1500);
+                    sleep (1700);
                     drive.motorsHalt();
 
                     robot.motorLR.setPower(0.1);
