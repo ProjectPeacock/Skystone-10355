@@ -82,7 +82,7 @@ public class BlueStoneAuto extends LinearOpMode {
     private double timeOut = 5;         //Timeout in seconds for translateTime method
     private double timeOutTime;         //Calculated time to stop
     private String procedure;           //Name of the method that is running
-    private double odsThreshold = .3;   //Threshold at which the ODS sensor acquires the whie line
+    private double odsThreshold = .3;   //Threshold at which the ODS sensor acquires the white line
     private double ods = 0;             //Value returned from the Optical Distance Sensor
     private double colorRightRed = 0;   //Value from color sensor
     private double colorRightBlue = 0;  //Value from color sensor
