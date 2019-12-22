@@ -207,18 +207,18 @@ public class BlueStoneAuto extends LinearOpMode {
                      * Back the robot up so that we can avoid the skybridge.
                      */
 
-                    drive.translateTime(.3,0,0.7);
+                    drive.translateTime(.3,0,0.65);
                     sleep(500);
 
                     /**
                      * Strafe to the foundation.
                      */
-                    drive.translateTime(.3,90,4.4);
+                    drive.translateTime(.5,90,2.7);
 
                     /**
                      * Drive the robot forward into the foundation so that we can grab it.
                      */
-                    drive.translateTime(.2,180,1.8);
+                    drive.translateTime(.15,180,0.9);
 
                     /**
                      * Engage the tractor beam! (i.e. grab the foundation)
@@ -233,7 +233,7 @@ public class BlueStoneAuto extends LinearOpMode {
                     robot.motorLF.setPower(0.1);
                     robot.motorRR.setPower(0.4);
                     robot.motorRF.setPower(0.4);
-                    sleep (3600);
+                    sleep (3100);
                     drive.motorsHalt();
 
                     drive.translateTime(.2,180,1.500);

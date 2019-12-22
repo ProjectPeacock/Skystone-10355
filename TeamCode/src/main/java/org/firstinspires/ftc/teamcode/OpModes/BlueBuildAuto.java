@@ -198,11 +198,17 @@ public class BlueBuildAuto extends LinearOpMode {
                     sleep(500);
 
                     robot.motorLR.setPower(0.1);
-                    robot.motorLF.setPower(0.1);
-                    robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.3);
-                    sleep (3100);
+                    robot.motorLF.setPower(0.0);
+                    robot.motorRR.setPower(0.0);
+                    robot.motorRF.setPower(0.1);
+                    sleep (2300);
                     drive.motorsHalt();
+
+                    robot.motorLF.setPower(-.3);
+                    robot.motorLR.setPower(-.3);
+                    robot.motorRF.setPower(.3);
+                    robot.motorRR.setPower(0.3);
+                    sleep (1200);
 
                     robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(-0.2);
@@ -220,19 +226,25 @@ public class BlueBuildAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    robot.motorLR.setPower(0.3);
-                    robot.motorLF.setPower(0.3);
-                    robot.motorRR.setPower(0.3);
-                    robot.motorRF.setPower(0.3);
-                    sleep (1400);
+                    robot.motorLR.setPower(0.0);
+                    robot.motorLF.setPower(0.4);
+                    robot.motorRR.setPower(0.4);
+                    robot.motorRF.setPower(0.0);
+                    sleep (1550);
                     drive.motorsHalt();
 
                     robot.motorLR.setPower(-0.2);
                     robot.motorLF.setPower(0.2);
                     robot.motorRR.setPower(0.1);
                     robot.motorRF.setPower(-0.1);
-                    sleep (1000);
+                    sleep (1500);
                     drive.motorsHalt();
+
+                    robot.motorLR.setPower(-0.4);
+                    robot.motorLF.setPower(-0.0);
+                    robot.motorRR.setPower(-0.0);
+                    robot.motorRF.setPower(-0.4);
+                    sleep (300);
 
 //                    drive.translate(0.5,90,0.5);
 //                    drive.translate(-1,90,1);

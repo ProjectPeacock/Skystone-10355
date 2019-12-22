@@ -1,6 +1,9 @@
+package org.firstinspires.ftc.teamcode.OpModes;
+
+
 /*
     Team:       10355 - Project Peacock
-    TeleOp Program
+    grabBot Program
     Alliance Color: Either
     Robot Starting Position: Should be in the parked zone.
     Strategy Description:
@@ -27,7 +30,6 @@
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
  **/
 
-package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -35,9 +37,9 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Comp TeleOp", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "pushBot", group = "Comp")
 
-public class TeleOp extends LinearOpMode {
+public class pushBot extends LinearOpMode {
     /**
      * Instantiate all objects needed in this class
      */
@@ -85,37 +87,42 @@ public class TeleOp extends LinearOpMode {
             /**
              * Drive control for Caleb
              */
-            strafeControl = -gamepad1.left_stick_x;
-            robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * 1)) - Math.PI / 4;
-            rightX = gamepad1.right_stick_x;
-            rightY = gamepad1.right_stick_y;
-            r = Math.hypot((gamepad1.left_stick_x * 1), gamepad1.left_stick_y);
-            v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
-            v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
-            v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
-            v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
 
-            /**
-             * Drive control for Jameson
-             *
-             //Calculate the power needed for each motor
-             //            fwdControl = -1 * gamepad1.left_stick_y; //Jameson's Settings
-             strafeControl = gamepad1.left_stick_x;
-             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
+             strafeControl = -gamepad1.left_stick_x;
+             robotAngle = Math.atan2(gamepad1.left_stick_y * -1, (gamepad1.left_stick_x * 1)) - Math.PI / 4;
              rightX = gamepad1.right_stick_x;
              rightY = gamepad1.right_stick_y;
-             r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
+             r = Math.hypot((gamepad1.left_stick_x * 1), gamepad1.left_stick_y * -1);
              v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
              v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
              v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
              v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
-             **/
 
             robot.motorLF.setPower(v1);
             robot.motorRF.setPower(v2);
             robot.motorLR.setPower(v3);
             robot.motorRR.setPower(v4);
 
+
+             /** Drive control for Jameson
+
+            //Calculate the power needed for each motor
+            //            fwdControl = -1 * gamepad1.left_stick_y; //Jameson's Settings
+            strafeControl = gamepad1.left_stick_x;
+            robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
+            rightX = gamepad1.right_stick_x;
+            rightY = gamepad1.right_stick_y;
+            r = Math.hypot((gamepad1.left_stick_x * -1), gamepad1.left_stick_y);
+            v1 = (r * Math.cos(robotAngle) + rightX + rightY) * powerLevel;
+            v2 = (r * Math.sin(robotAngle) - rightX + rightY) * powerLevel;
+            v3 = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
+            v4 = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
+
+            robot.motorLF.setPower(v1);
+            robot.motorRF.setPower(v2);
+            robot.motorLR.setPower(v3);
+            robot.motorRR.setPower(v4);
+            **/
             /** Chassis control is for jameson meaning it should all be the way jameson wants it **/
             /** Mechanism control is for Julian therefore controls should be to his preference **/
 
@@ -227,7 +234,7 @@ public class TeleOp extends LinearOpMode {
              **/
 
             idle();
-         }
+        }
 
     }
 
