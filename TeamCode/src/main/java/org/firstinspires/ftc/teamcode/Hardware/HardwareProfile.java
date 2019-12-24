@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -67,6 +69,8 @@ public class HardwareProfile {
     public CRServo servoGrab;
     public WebcamName webcamName = null;
     public ColorSensor colorSensorStone;        //Declare the Color Sensor
+    public ColorSensor colorSensorRevStone;
+    public DistanceSensor sensorProximity;
 
 
     /* I2C Range Sensor members*/
@@ -108,11 +112,14 @@ public class HardwareProfile {
         sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
-        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x4c);
-//        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x3c);
+//        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x4c);
+        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x3c);
         colorSensorStone = hwMap.colorSensor.get("colorSensorStone"); //Map the sensor to the hardware
         colorSensorStone.setI2cAddress(i2CAddressColor);
         colorSensorStone.enableLed(true);
+
+        colorSensorRevStone = hwMap.colorSensor.get("colorSensorRevStone");
+        sensorProximity = hwMap.get(DistanceSensor.class, "colorSensorRevStone");
 
         /**
          * Initialize the touch sensors responsible for limiting the motion of the lifting system

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Libs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -433,6 +435,131 @@ public class DriveMecanum {
 
     }
 
+    public void translateSkystone(double power, double heading) {
+        double changeSpeed = 0;
+        double initZ = robot.mrGyro.getIntegratedZValue();
+        double currentZint;
+        double timeElapsed;
+        double runtimeValue;
+
+        runtimeValue = runtime.time();
+        timeElapsed = runtimeValue - runtime.time();
+        heading = heading * (Math.PI / 180);
+
+        while (robot.colorSensorRevStone.red() > 30) {
+
+            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
+            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
+            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
+            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+
+            if (LF > 1 || LF < -1) {
+                LF = 0;
+            }
+
+            if (RF > 1 || RF < -1) {
+                RF = 0;
+            }
+
+            if (LR > 1 || LR < -1) {
+                LR = 0;
+            }
+
+            if (RR > 1 || RR < -1) {
+                RR = 0;
+            }
+
+            currentZint = robot.mrGyro.getIntegratedZValue();
+
+            if (currentZint != initZ) {  //Robot has drifted off course
+                double zCorrection = Math.abs(initZ - currentZint);
+
+                if (heading > 180 && heading < 359.99999) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading > 0 && heading < 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 0) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+                }
+            }
+            robot.motorLF.setPower(LF);
+            robot.motorRF.setPower(RF);
+            robot.motorLR.setPower(LR);
+            robot.motorRR.setPower(RR);
+
+            myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
+
+            timeElapsed = runtime.time() - runtimeValue;
+            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
+            opMode.telemetry.addData("LF", String.valueOf(LF));
+            opMode.telemetry.addData("RF", String.valueOf(RF));
+            opMode.telemetry.addData("LR", String.valueOf(LR));
+            opMode.telemetry.addData("RR", String.valueOf(RR));
+            opMode.telemetry.update();
+
+            opMode.idle();
+        }
+        motorsHalt();
+
+    }
+
     /**
      * Robot will drive in the heading provided by the function call.  The sensor identified should
      * be the sensor on the side of the robot that the robot is heading to.  The robot will stop
@@ -585,6 +712,46 @@ public class DriveMecanum {
             opMode.idle();
         }
         motorsHalt();
+    }
+
+    /**
+     * locate and center on the Skystone
+     */
+    public void driveToSkystone(){
+
+        robot.motorRR.setPower(.15);
+        robot.motorLR.setPower(.15);
+        robot.motorLF.setPower(.15);
+        robot.motorRF.setPower(.15);
+
+        while (robot.sensorProximity.getDistance(DistanceUnit.CM) <10){
+        }
+
+        robot.motorRR.setPower(0);
+        robot.motorLR.setPower(0);
+        robot.motorLF.setPower(0);
+        robot.motorRF.setPower(0);
+    }
+
+
+    /**
+     * Raise the lift up
+     */
+    public void raiseLift(){
+        robot.motorLinear.setPower(0.200);
+        while (robot.touchLiftForward.isPressed()== false){
+        }
+        robot.motorLinear.setPower(0);
+    }
+
+    /**
+     * Raise the lift up
+     */
+    public void lowerLift(){
+        robot.motorLinear.setPower(-0.200);
+        while (robot.touchLiftBack.isPressed()== false){
+        }
+        robot.motorLinear.setPower(0);
     }
 
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,

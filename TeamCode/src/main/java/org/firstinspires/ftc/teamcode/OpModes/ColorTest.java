@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import org.firstinspires.ftc.teamcode.Libs.DataLogger;
@@ -160,8 +161,21 @@ public class ColorTest extends LinearOpMode {
                      * push base into the corner, and park
                      */
 
-                    telemetry.addData("Color Sensor Red = ", robot.colorSensorStone.red());
-                    telemetry.addData("Color Sensor Blue = ", robot.colorSensorStone.blue());
+                    telemetry.addData("deviceName",robot.sensorProximity.getDeviceName() );
+                    telemetry.addData("range", String.format("%.01f mm", robot.sensorProximity.getDistance(DistanceUnit.MM)));
+                    telemetry.addData("range", String.format("%.01f cm", robot.sensorProximity.getDistance(DistanceUnit.CM)));
+                    telemetry.addData("range", String.format("%.01f m", robot.sensorProximity.getDistance(DistanceUnit.METER)));
+                    telemetry.addData("range", String.format("%.01f in", robot.sensorProximity.getDistance(DistanceUnit.INCH)));
+
+                    telemetry.addData("Rev Red Value = ", robot.colorSensorRevStone.red());   // Red channel value
+                    telemetry.addData("Rev Green Value = ", robot.colorSensorRevStone.green()); // Green channel value
+                    telemetry.addData("Rev Blue Value = ", robot.colorSensorRevStone.blue());  // Blue channel value
+
+                    telemetry.addData("Rev Total Luminosity = ", robot.colorSensorRevStone.alpha()); // Total luminosityrobot
+                    telemetry.addData("Rev Green Value = ", robot.colorSensorRevStone.argb());  // Combined color value
+
+                    telemetry.addData("MR Color Sensor Red = ", robot.colorSensorStone.red());
+                    telemetry.addData("MR Color Sensor Blue = ", robot.colorSensorStone.blue());
                     telemetry.addData("Gyro Value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Status", "Initialized");
                     telemetry.update();
