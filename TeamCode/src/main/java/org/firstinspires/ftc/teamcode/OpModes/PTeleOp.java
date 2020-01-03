@@ -25,6 +25,7 @@
 
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
@@ -34,6 +35,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
  */
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Presentation Teleop", group = "Comp")
+@Disabled
 
 public class PTeleOp extends LinearOpMode {
     /**

@@ -51,7 +51,7 @@ import java.util.List;
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red Build Zone", group = "COMP")
+@Autonomous(name = "Red-Foundation, Park", group = "COMP")
 
 public class RedBuildAuto extends LinearOpMode {
 
@@ -102,7 +102,6 @@ public class RedBuildAuto extends LinearOpMode {
     private State state = State.FIRST_STATE;    //Machine State
     private boolean initialize = false;
 
-
     public void runOpMode() {
         /**
          * Setup the init state of the robot.  This configures all the hardware that is defined in
@@ -120,7 +119,9 @@ public class RedBuildAuto extends LinearOpMode {
          */
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
-        sleep(1000);
+        robot.servoGrab.setPower(-1);
+        sleep(2000);
+        robot.servoGrab.setPower(0.2);
 
 
         /**

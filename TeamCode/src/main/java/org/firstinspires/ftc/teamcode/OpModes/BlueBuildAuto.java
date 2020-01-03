@@ -111,8 +111,8 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
         robot.servoGrab.setPower(-1);
-        sleep(1000);
-
+        sleep(2000);
+        robot.servoGrab.setPower(0.2);
 
         /**
          * Set the initial position for the Lift mechanism
@@ -207,7 +207,6 @@ public class BlueBuildAuto extends LinearOpMode {
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
-                    robot.servoGrab.setPower(-1);
                     sleep(500);
 
                     /**
@@ -234,11 +233,6 @@ public class BlueBuildAuto extends LinearOpMode {
                     requestOpModeStop();
                     break;
             }
-            /**
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             * Don't change anything past this point.  Bad things could happen.
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             */
         }
     }
 
