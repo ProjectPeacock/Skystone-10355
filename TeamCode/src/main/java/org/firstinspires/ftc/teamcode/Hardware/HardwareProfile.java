@@ -71,7 +71,7 @@ public class HardwareProfile {
     public ColorSensor colorSensorStone;        //Declare the Color Sensor
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
-    public ModernRoboticsI2cRangeSensor wallRangeSensor;
+    public DistanceSensor wallRangeSensor;
 
 
     /* I2C Range Sensor members*/
@@ -117,6 +117,8 @@ public class HardwareProfile {
         sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
+        wallRangeSensor = hwMap.get(DistanceSensor.class, "wallRangeSensor");
+        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)wallRangeSensor;
 //        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x4c);
 //        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x3c);
 //        colorSensorStone = hwMap.colorSensor.get("colorSensorStone"); //Map the sensor to the hardware

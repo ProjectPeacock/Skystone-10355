@@ -183,53 +183,26 @@ public class BlueStoneAuto2 extends LinearOpMode {
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
 
-                   // drive.translateTime(.3, 235, 1.5);
+                    drive.translateTime(.3, 240, 1.75);
 
-                   // drive.raiseLift();
-                    while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 63)
-                        robot.motorRR.setPower(-0.1);
-                        robot.motorLR.setPower(-0.1);
-                        robot.motorLF.setPower(-0.1);
-                        robot.motorRF.setPower(-0.1);
+                    drive.raiseLift();
 
-                  /**  while (robot.rangeSensorRear.getDistance(DistanceUnit.CM) < 63 ) {
-                        robot.motorRR.setPower(-0.1);
-                        robot.motorLR.setPower(-0.1);
-                        robot.motorLF.setPower(-0.1);
-                        robot.motorRF.setPower(-0.1);
-                    }**/
+                    drive.driveToSkystone();
 
-                    /*while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 12 || robot.sensorProximity.getDistance(DistanceUnit.CM) == 0){
-                        robot.motorRR.setPower(-0.1);
-                        robot.motorLR.setPower(-0.1);
-                        robot.motorLF.setPower(-0.1);
-                        robot.motorRF.setPower(-0.1);
-                    }
-*/
-                   drive.motorsHalt();
-
-
-                /**    robot.motorRR.setPower(.2);
-                    robot.motorLR.setPower(.2);
-                    robot.motorLF.setPower(.2);
-                    robot.motorRF.setPower(.2);
-
-                    while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
-                        telemetry.addData("Distance = ",robot.sensorProximity.getDistance(DistanceUnit.CM));
-                        telemetry.update();
-                    }
-
-                    robot.motorRR.setPower(0);
-                    robot.motorLR.setPower(0);
-                    robot.motorLF.setPower(0);
-                    robot.motorRF.setPower(0);**/
-
-                    //drive.driveToSkystone();
+                    drive.translateSkystone(0.2,90);
 
                     /**
-                     * Strafe to locate Skystone
+                     * Grab the block with the grabber.
                      */
-//                    drive.translateSkystone(.2, 90);
+                    drive.translateTime(.2, 90, .5);
+                    robot.servoGrab.setPower(0.2);
+                    sleep(1000);
+
+                    drive.translateTime(.2,0,.8);
+
+                    drive.lowerLift();
+
+                    drive.translateTime(.3, 90, 2);
 
                     /**
                      * Strafe to the center of the Skystone

@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.OpModes;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -47,14 +47,14 @@ import java.util.Locale;
  * This is an example LinearOpMode that shows how to use
  * the REV Robotics Color-Distance Sensor.
  *
- * It assumes the sensor is configured with the name "sensor_color_distance".
+ * It assumes the sensor is configured with the name "sensorProximity".
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  */
 @TeleOp(name = "Sensor: REVColorDistance", group = "Sensor")
-@Disabled                            // Comment this out to add to the opmode list
-public class SensorREVColorDistance extends LinearOpMode {
+//@Disabled                            // Comment this out to add to the opmode list
+public class SensorREVColorDistanceTest extends LinearOpMode {
 
     /**
      * Note that the REV Robotics Color-Distance incorporates two sensors into one device.

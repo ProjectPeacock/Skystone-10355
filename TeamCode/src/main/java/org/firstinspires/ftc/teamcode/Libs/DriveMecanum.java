@@ -446,7 +446,7 @@ public class DriveMecanum {
         timeElapsed = runtimeValue - runtime.time();
         heading = heading * (Math.PI / 180);
 
-        while (robot.colorSensorRevStone.red() > 30) {
+        while (robot.colorSensorRevStone.alpha() > 50) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
@@ -720,10 +720,12 @@ public class DriveMecanum {
     public void driveToSkystone(){
 
 
-            robot.motorRR.setPower(.15);
-            robot.motorLR.setPower(.15);
-            robot.motorLF.setPower(.15);
-            robot.motorRF.setPower(.15);
+        while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 59) {
+            robot.motorRR.setPower(-0.1);
+            robot.motorLR.setPower(-0.1);
+            robot.motorLF.setPower(-0.1);
+            robot.motorRF.setPower(-0.1);
+        }
 
 
         while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
@@ -741,7 +743,7 @@ public class DriveMecanum {
      * Raise the lift up
      */
     public void raiseLift(){
-        robot.motorLinear.setPower(0.2);
+        robot.motorLinear.setPower(0.3);
         while (robot.touchLiftForward.isPressed()== false){
         }
         robot.motorLinear.setPower(0);
