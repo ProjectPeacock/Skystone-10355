@@ -719,18 +719,21 @@ public class DriveMecanum {
      */
     public void driveToSkystone(){
 
-        robot.motorRR.setPower(.15);
-        robot.motorLR.setPower(.15);
-        robot.motorLF.setPower(.15);
-        robot.motorRF.setPower(.15);
 
-        while (robot.sensorProximity.getDistance(DistanceUnit.CM) <10){
+            robot.motorRR.setPower(.15);
+            robot.motorLR.setPower(.15);
+            robot.motorLF.setPower(.15);
+            robot.motorRF.setPower(.15);
+
+
+        while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
         }
 
-        robot.motorRR.setPower(0);
-        robot.motorLR.setPower(0);
-        robot.motorLF.setPower(0);
-        robot.motorRF.setPower(0);
+            robot.motorRR.setPower(0);
+            robot.motorLR.setPower(0);
+            robot.motorLF.setPower(0);
+            robot.motorRF.setPower(0);
+
     }
 
 
@@ -738,7 +741,7 @@ public class DriveMecanum {
      * Raise the lift up
      */
     public void raiseLift(){
-        robot.motorLinear.setPower(0.200);
+        robot.motorLinear.setPower(0.2);
         while (robot.touchLiftForward.isPressed()== false){
         }
         robot.motorLinear.setPower(0);

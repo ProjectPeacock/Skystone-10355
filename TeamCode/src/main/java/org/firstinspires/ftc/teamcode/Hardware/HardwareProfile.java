@@ -71,6 +71,7 @@ public class HardwareProfile {
     public ColorSensor colorSensorStone;        //Declare the Color Sensor
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
+    public ModernRoboticsI2cRangeSensor wallRangeSensor;
 
 
     /* I2C Range Sensor members*/
@@ -106,23 +107,38 @@ public class HardwareProfile {
 
         //Define the I2C sensors
 
-        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
-        rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
-        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
+//        I2cAddr i2CAddressRangeLeft = I2cAddr.create8bit(0x28);
+//        rangeSensorLeft = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorLeft");
+//        rangeSensorLeft.setI2cAddress(i2CAddressRangeLeft);
+
+ //       I2cAddr i2CAddressRangeRear = I2cAddr.create8bit(0x28);
+ //       rangeSensorRear = hwMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensorRear");
+ //       rangeSensorRear.setI2cAddress(i2CAddressRangeRear);
         sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
 //        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x4c);
-        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x3c);
-        colorSensorStone = hwMap.colorSensor.get("colorSensorStone"); //Map the sensor to the hardware
-        colorSensorStone.setI2cAddress(i2CAddressColor);
-        colorSensorStone.enableLed(true);
+//        I2cAddr i2CAddressColor = I2cAddr.create8bit(0x3c);
+//        colorSensorStone = hwMap.colorSensor.get("colorSensorStone"); //Map the sensor to the hardware
+//        colorSensorStone.setI2cAddress(i2CAddressColor);
+//        colorSensorStone.enableLed(true);
 
-        colorSensorRevStone = hwMap.colorSensor.get("colorSensorRevStone");
-        sensorProximity = hwMap.get(DistanceSensor.class, "colorSensorRevStone");
+        colorSensorRevStone = hwMap.get(ColorSensor.class, "sensorProximity");
+        sensorProximity = hwMap.get(DistanceSensor.class, "sensorProximity");
 
+
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
         /**
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
+         * colorSensorRevStone
          **/
 
         touchLiftForward = hwMap.touchSensor.get("touchLiftForward");

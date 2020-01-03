@@ -49,13 +49,14 @@ import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Foundation, Park", group = "COMP")
+@Autonomous(name = "Blue-Stones, Foundation, Park", group = "EXPERIMENT")
 
-public class BlueBuildAuto extends LinearOpMode {
+public class BlueStoneAuto2 extends LinearOpMode {
 
     /**
      * Instantiate all objects needed in this class
@@ -89,7 +90,7 @@ public class BlueBuildAuto extends LinearOpMode {
     private DataLogger Dl;                          //Datalogger object
     private String alliance = "blue";                //Your current alliance
     private String courseCorrect = "";
-    private State state = State.PLACE_FOUNDATION;    //Machine State
+    private State state = State.LOCATESKYSTONE;    //Machine State
     private double foundationStrafe=3;  // amount of time it takes to strafe from front wall to the foundation
 
 
@@ -112,6 +113,8 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servoFoundation2.setPower(1);
         robot.servoGrab.setPower(-1);
         sleep(1000);
+
+        robot.sensorProximity.getDistance(DistanceUnit.CM);
 
 
         /**
@@ -155,6 +158,7 @@ public class BlueBuildAuto extends LinearOpMode {
 
         telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
+        telemetry.addData("CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.update();
 
         /**
@@ -165,17 +169,184 @@ public class BlueBuildAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
 
+                case LOCATESKYSTONE:
+                    /**
+                     * This state is for testing the MR Gyro Sensor
+                     */
+
+                    /**
+                     * Drive to the front wall
+                     */
+
+                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("Distance (cm)",
+                            String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
+                    telemetry.update();
+
+                   // drive.translateTime(.3, 235, 1.5);
+
+                   // drive.raiseLift();
+                    while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 63)
+                        robot.motorRR.setPower(-0.1);
+                        robot.motorLR.setPower(-0.1);
+                        robot.motorLF.setPower(-0.1);
+                        robot.motorRF.setPower(-0.1);
+
+                  /**  while (robot.rangeSensorRear.getDistance(DistanceUnit.CM) < 63 ) {
+                        robot.motorRR.setPower(-0.1);
+                        robot.motorLR.setPower(-0.1);
+                        robot.motorLF.setPower(-0.1);
+                        robot.motorRF.setPower(-0.1);
+                    }**/
+
+                    /*while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 12 || robot.sensorProximity.getDistance(DistanceUnit.CM) == 0){
+                        robot.motorRR.setPower(-0.1);
+                        robot.motorLR.setPower(-0.1);
+                        robot.motorLF.setPower(-0.1);
+                        robot.motorRF.setPower(-0.1);
+                    }
+*/
+                   drive.motorsHalt();
+
+
+                /**    robot.motorRR.setPower(.2);
+                    robot.motorLR.setPower(.2);
+                    robot.motorLF.setPower(.2);
+                    robot.motorRF.setPower(.2);
+
+                    while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
+                        telemetry.addData("Distance = ",robot.sensorProximity.getDistance(DistanceUnit.CM));
+                        telemetry.update();
+                    }
+
+                    robot.motorRR.setPower(0);
+                    robot.motorLR.setPower(0);
+                    robot.motorLF.setPower(0);
+                    robot.motorRF.setPower(0);**/
+
+                    //drive.driveToSkystone();
+
+                    /**
+                     * Strafe to locate Skystone
+                     */
+//                    drive.translateSkystone(.2, 90);
+
+                    /**
+                     * Strafe to the center of the Skystone
+                     */
+//                    drive.translateTime(0.2, .2, .3);
+
+                    /**
+                     * pickup skystone
+                     */
+//                    drive.translateTime(0.2, 0, 0.2);
+//                    robot.servoRightGrab.setPosition(0.4);
+//                    sleep(500);
+
+                    /**
+                     * Lower the lift
+                     */
+//                    drive.lowerLift();
+
+                    /**
+                     * Drive back to clear the sky bridge
+                     */
+
+//                    drive.translateTime(.2, 180, .4);
+
+                    state = State.HALT;
+                    break;
+
+                case PLACE_FIRST_STONE:
+                    /**
+                     * This state takes the first stone to the foundation and places it.
+                     */
+
+                    /**
+                     * strafeTime is calculated by calculating how much time has already been spent
+                     * staffing while searching for the stone.
+                     *
+                     * The stafe time should be the amount of time it takes to strafe from the wall
+                     * to the foundation at 30% (.3) power on the motors.
+                     *
+                     * Note: The last value of the calculation is the time it takes to compete all
+                     * other tasks besides strafing to look for the skystone (i.e. strafe to the wall,
+                     * raise the lift mechanism, move towards the stone, grab the stone, and lower
+                     * the lift.
+                     */
+                    strafeTime = foundationStrafe - runtime.time() - 5;
+                    drive.translateTime(0.3, 270, strafeTime);
+
+                    /**
+                     * drive forward to the foundation
+                     */
+
+                    drive.translateTime(0.3, 0, 200);
+
+                    /**
+                     * drop the stone; resets the position of the grabber
+                     */
+                    robot.servoGrab.setPower(-1);
+
+                    drive.translateTime(0.3, 180, 200);
+
+                    state = State.GRAB_2ND_STONE;
+                    break;
+
+                case GRAB_2ND_STONE:
+                    /**
+                     * locate the 2nd stone
+                     */
+
+                    /**
+                     * strafe to the first stone
+                     */
+                    drive.translateTime(.3, 90, 1);
+
+                    /**
+                     * lower the lift
+                     */
+                    drive.lowerLift();
+
+                    /**
+                     * drive forward to the stones
+                     */
+                    drive.driveToSkystone();
+
+                    /**
+                     * locate the skystone
+                     */
+                    drive.translateSkystone(.2, 90);
+
+                    /**
+                     * pickup skystone
+                     */
+                    drive.translateTime(0.2, 0, 0.2);
+                    robot.servoRightGrab.setPosition(0.4);
+                    sleep(500);
+
+                    /**
+                     * back away from the stone
+                     */
+                    drive.translateTime(.2, 180, .2);
+
+                    state = State.FIFTH_STATE;
+                    break;
+
                 case PLACE_FOUNDATION:
                     /**
                      * Strafe to the foundation and move it into position
                      */
 
                     /**
-                     * strafe diagonally to the foundation
+                     * strafe to the foundation
                      */
-                    drive.translateTime(.3, 165, 2.0);
-                    drive.translateTime(.1, 180, 0.25);
+                    drive.translateTime(.3, 270, 1.5);
 
+                    /**
+                     * Drive forward into the foundation and grab it
+                     */
+                    drive.translateTime(.2, 0, 500);
                     /**
                      * Grab the foundation
                      */
@@ -186,7 +357,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     /**
                      * drive towards the wall
                      */
-                    drive.translateTime(.3,0,2);
+                    drive.translateTime(.3,180,2.3);
 
                     /**
                      * rotate the foundation towards the wall
@@ -195,12 +366,12 @@ public class BlueBuildAuto extends LinearOpMode {
                     robot.motorLR.setPower(-.3);
                     robot.motorRF.setPower(.3);
                     robot.motorRR.setPower(0.3);
-                    sleep (1400);
+                    sleep (1200);
 
                     /**
                      * drive the robot into the wall
                      */
-                    drive.translateTime(0.3,180,1);
+                    drive.translateTime(0.2,0,1.5);
 
                     /**
                      * Let go of the Foundation and the stone
@@ -213,7 +384,8 @@ public class BlueBuildAuto extends LinearOpMode {
                     /**
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 25, 2.2);
+                    drive.translateTime(.3, 145, 1.5);
+                    sleep (1550);
 
                     /**
                      * strafe out of the way
