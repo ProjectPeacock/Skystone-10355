@@ -120,8 +120,7 @@ public class RedBuildAuto extends LinearOpMode {
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
         robot.servoGrab.setPower(-1);
-        sleep(2000);
-        robot.servoGrab.setPower(0.2);
+        sleep(1000);
 
 
         /**
