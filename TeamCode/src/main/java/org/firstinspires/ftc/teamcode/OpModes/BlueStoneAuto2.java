@@ -85,6 +85,9 @@ public class BlueStoneAuto2 extends LinearOpMode {
     private String alliance = "blue";                //Your current alliance
     private String courseCorrect = "";
     private State state = State.LOCATESKYSTONE;    //Machine State
+    private double strafeTime = 0;
+    private double strafeTimeInit = 0;
+    private double timeToSkystone = 4;
 
 
     public void runOpMode() {
@@ -162,10 +165,12 @@ public class BlueStoneAuto2 extends LinearOpMode {
 
                     drive.driveToSkystone();
 
+                    strafeTimeInit = runtime.time();
                     drive.translateSkystone(0.2,90);
+                    strafeTime = runtime.time() - strafeTimeInit;
 
                     /**
-                     * Staffe more to center on the Skystone.
+                     * Stafe more to center on the Skystone.
                      */
                     drive.translateTime(.2, 90, .75);
 
@@ -184,7 +189,9 @@ public class BlueStoneAuto2 extends LinearOpMode {
 
                     drive.lowerLift();
 
-                    drive.translateTime(.4, 90, 4);
+                    timeToSkystone = 4 - (strafeTime * 0.3);
+
+                    drive.translateTime(.4, 90, timeToSkystone);
 
                     /**
                      * Strafe to the center of the Skystone
@@ -220,7 +227,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /**
                      * drive forward to the foundation
                      */
-                    drive.translateTime(.3, 180, 1);
+                    drive.translateTime(.3, 180, 0.8);
 
                     /**
                      * Grab the foundation
@@ -259,13 +266,12 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /**
                      * strafe to parking position near the bridge
                      */
-                    drive.translateTime(.3, 330, 2);
-                    sleep (1550);
+                    drive.translateTime(.3, 0, 2);
 
                     /**
                      * strafe out of the way
                      */
-                    drive.translateTime(.2, 90, .5);
+                    drive.translateTime(.3, 270, 1);
 
                     state = State.HALT;
                     //Exit the state

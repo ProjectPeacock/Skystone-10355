@@ -68,7 +68,6 @@ public class BlueBuildAuto extends LinearOpMode {
     private double heading = 90;        //Heading for all methods
     private double y = -200;            //Vuforia y stop coordinate
     private double x = -200;            //Vuforia x stop coordinate
-    private double ods = 0;             //Value returned from the Optical Distance Sensor
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
     private DataLogger Dl;                          //Datalogger object
@@ -214,7 +213,6 @@ public class BlueBuildAuto extends LinearOpMode {
         Dl.addField("Lift Up touchSensor");
         Dl.addField("Lift Forward touchSensor");
         Dl.addField("Lift Back touchSensor");
-        Dl.addField("ODS");
         Dl.addField("Left Front Motor Encoder Value");
         Dl.newLine();
     }
@@ -236,7 +234,6 @@ public class BlueBuildAuto extends LinearOpMode {
         Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
         Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
         Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(ods));
         Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
         Dl.newLine();
     }
