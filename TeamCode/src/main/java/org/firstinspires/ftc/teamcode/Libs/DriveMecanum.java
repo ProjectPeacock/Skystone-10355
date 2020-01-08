@@ -96,15 +96,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -351,6 +351,7 @@ public class DriveMecanum {
 
                 if (heading > 180 && heading < 359.99999) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -358,6 +359,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -367,22 +369,25 @@ public class DriveMecanum {
 
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
 
                 if (heading == 0) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -390,6 +395,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -399,6 +405,7 @@ public class DriveMecanum {
 
                 if (heading == 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -406,6 +413,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -423,6 +431,9 @@ public class DriveMecanum {
             timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
             opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
+            opMode.telemetry.addData("Gyro Value", String.valueOf(currentZint));
+            opMode.telemetry.addData("intZ", String.valueOf(initZ));
+
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -493,15 +504,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -548,6 +559,8 @@ public class DriveMecanum {
             timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
             opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
+            opMode.telemetry.addData("Gyro Value", String.valueOf(currentZint));
+            opMode.telemetry.addData("intZ", String.valueOf(initZ));
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -636,15 +649,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -719,14 +732,12 @@ public class DriveMecanum {
      */
     public void driveToSkystone(){
 
-
-        while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 59) {
+        while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 55) {
             robot.motorRR.setPower(-0.1);
             robot.motorLR.setPower(-0.1);
             robot.motorLF.setPower(-0.1);
             robot.motorRF.setPower(-0.1);
         }
-
 
         while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
         }
