@@ -38,6 +38,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -55,45 +56,20 @@ import java.util.Locale;
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "STRAFE TEST", group = "EXPERIMENT")
-//@Disabled
+@Disabled
 
 public class StraffeTest extends LinearOpMode {
 
     /**
      * Instantiate all objects needed in this class
      */
-
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
-    double radians = 0;
     private skystoneVuforia myVuforia = new skystoneVuforia();
-    private ElapsedTime runtime = new ElapsedTime();
-    /**
-     * Define global variables
-     */
-    private double mm = 500;            //Distance for translateDistance method
-    private double power = .6;          //Motor power for all methods
-    private double heading = 90;        //Heading for all methods
-    private double y = -200;            //Vuforia y stop coordinate
-    private double x = -200;            //Vuforia x stop coordinate
-    private double currentZint;         //Current integrated Z value
-    private double strafeTime;         //Timeout in seconds for translateTime method
-    private double ods = 0;             //Value returned from the Optical Distance Sensor
-    private double colorRightRed = 0;   //Value from color sensor
-    private double colorRightBlue = 0;  //Value from color sensor
-    private double colorLeftRed = 0;    //Value from color sensor
-    private double colorLeftBlue = 0;   //Value from color sensor
-    private double robotX;              // The robot's X position from VuforiaLib
-    private double robotY;              // The robot's Y position from VuforiaLib
-    private double robotBearing;        //Bearing to, i.e. the bearing you need to steer toward
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
     private DataLogger Dl;                          //Datalogger object
-    private String alliance = "blue";                //Your current alliance
-    private String courseCorrect = "";
     private State state = State.LOCATESKYSTONE;    //Machine State
-    private double foundationStrafe=3;  // amount of time it takes to strafe from front wall to the foundation
-
 
     public void runOpMode() {
         /**
@@ -117,10 +93,8 @@ public class StraffeTest extends LinearOpMode {
 
         robot.sensorProximity.getDistance(DistanceUnit.CM);
 
-
         /**
          * Calibrate the gyro
-         *
          **/
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
@@ -128,15 +102,6 @@ public class StraffeTest extends LinearOpMode {
             telemetry.update();
         }
 
-        /**
-         * Initialize Vuforia and retrieve the list of trackable objects.
-         **/
-        telemetry.addData("Waiting on Vuforia", "");
-        telemetry.update();
-
-//        myTrackables = myVuforia.vuforiaInit(myTrackables);
-
-        telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.update();
@@ -158,23 +123,13 @@ public class StraffeTest extends LinearOpMode {
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
 
-                    //Stop the DataLogger
-
                     //Exit the OpMode
                     requestOpModeStop();
                     break;
             }
-            /**
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             * Don't change anything past this point.  Bad things could happen.
-             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             */
         }
     }
 
-    /**
-     * Transmit telemetry.
-     */
     /**
      * Enumerate the States of the machine.
      */

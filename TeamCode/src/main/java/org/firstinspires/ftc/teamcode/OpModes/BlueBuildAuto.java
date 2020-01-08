@@ -2,7 +2,7 @@
     Team:       10355 - Project Peacock
     Autonomous Program - Blue Strategy #1 - Place Foundation and park
     Alliance Color: Blue
-    Robot Starting Position: Blue buidl zone, wall next to build site
+    Robot Starting Position: Blue build zone, wall next to build site
     Strategy Description:
         - Grab Foundation and place in build site
         - Park robot in under the skybridge
@@ -63,34 +63,18 @@ public class BlueBuildAuto extends LinearOpMode {
 
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
-    double radians = 0;
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private ElapsedTime runtime = new ElapsedTime();
-    /**
-     * Define global variables
-     */
-    private double mm = 500;            //Distance for translateDistance method
-    private double power = .6;          //Motor power for all methods
     private double heading = 90;        //Heading for all methods
     private double y = -200;            //Vuforia y stop coordinate
     private double x = -200;            //Vuforia x stop coordinate
-    private double currentZint;         //Current integrated Z value
-    private double strafeTime;         //Timeout in seconds for translateTime method
     private double ods = 0;             //Value returned from the Optical Distance Sensor
-    private double colorRightRed = 0;   //Value from color sensor
-    private double colorRightBlue = 0;  //Value from color sensor
-    private double colorLeftRed = 0;    //Value from color sensor
-    private double colorLeftBlue = 0;   //Value from color sensor
-    private double robotX;              // The robot's X position from VuforiaLib
-    private double robotY;              // The robot's Y position from VuforiaLib
-    private double robotBearing;        //Bearing to, i.e. the bearing you need to steer toward
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
     private DataLogger Dl;                          //Datalogger object
     private String alliance = "blue";                //Your current alliance
     private String courseCorrect = "";
     private State state = State.PLACE_FOUNDATION;    //Machine State
-    private double foundationStrafe=3;  // amount of time it takes to strafe from front wall to the foundation
 
 
     public void runOpMode() {
@@ -114,22 +98,6 @@ public class BlueBuildAuto extends LinearOpMode {
         sleep(1000);
 
         /**
-         * Set the initial position for the Lift mechanism
-         */
-
-/*        robot.motorLinear.setPower(-0.3);
-        robot.motorLift.setPower(-0.3);
-        while (!initialize) {
-            // wait for the touch sensor to be pressed
-            if (robot.touchLiftBack.isPressed()){
-                robot.motorLift.setPower(0);
-            }
-            if (robot.touchLiftDown.isPressed()){
-                robot.motorLinear.setPower(0);
-            }
-          }
-
-        /**
          *  Create the DataLogger object.
          */
         createDl();
@@ -144,15 +112,6 @@ public class BlueBuildAuto extends LinearOpMode {
             telemetry.update();
         }
 
-        /**
-         * Initialize Vuforia and retrieve the list of trackable objects.
-         **/
-        telemetry.addData("Waiting on Vuforia", "");
-        telemetry.update();
-
-//        myTrackables = myVuforia.vuforiaInit(myTrackables);
-
-        telemetry.addData("Status", "Vuforia Initialized");
         telemetry.addData(">", "System initialized and Ready");
         telemetry.update();
 
@@ -236,46 +195,6 @@ public class BlueBuildAuto extends LinearOpMode {
     }
 
     /**
-     * Transmit telemetry.
-     */
-    private void telemetry() {
-
-        telemetry.addData("Alliance", String.valueOf(alliance));
-        telemetry.addData("State", String.valueOf(state));
-        telemetry.addData("Heading", String.valueOf(heading));
-        telemetry.addData("robotX", String.valueOf((int) robotX));
-        telemetry.addData("robotY", String.valueOf((int) robotY));
-        telemetry.addData("Target X", String.valueOf(x));
-        telemetry.addData("Target Y", String.valueOf(y));
-        telemetry.addData("robotBearing", String.valueOf((int) robotBearing));
-        telemetry.addData("Current Z Int", String.valueOf(currentZint));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftForward.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftBack.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftUp.getValue()));
-        telemetry.addData("touchSensor", String.valueOf(robot.touchLiftDown.getValue()));
-        telemetry.addData("ODS", String.valueOf(ods));
-        telemetry.addData("Color Right Red", String.valueOf(colorRightRed));
-        telemetry.addData("Color Right Blue", String.valueOf(colorRightBlue));
-        telemetry.addData("Color Left Red", String.valueOf(colorLeftRed));
-        telemetry.addData("Color Left Blue", String.valueOf(colorLeftBlue));
-        telemetry.addData("Current Encoder Position", String.valueOf(robot.motorLF.getCurrentPosition()));
-        telemetry.update();
-    }
-
-
-    /**
-     * Catchall to get data from all sensor systems.  Updates global variables
-     */
-    private void getSensorData() {
-        ods = robot.ods.getLightDetected();
-        currentZint = robot.mrGyro.getIntegratedZValue();
-        vuforiaTracking = myVuforia.getLocation(myTrackables);
-        robotX = vuforiaTracking.get(0);
-        robotY = vuforiaTracking.get(1);
-        robotBearing = vuforiaTracking.get(2);
-    }
-
-    /**
      * Setup the dataLogger
      * The dataLogger takes a set of fields defined here and sets up the file on the Android device
      * to save them to.  We then log data later throughout the class.
@@ -286,29 +205,17 @@ public class BlueBuildAuto extends LinearOpMode {
         Dl.addField("runTime");
         Dl.addField("Alliance");
         Dl.addField("State");
-        Dl.addField("Procedure");
         Dl.addField("courseCorrect");
         Dl.addField("heading");
-        Dl.addField("robotX");
-        Dl.addField("robotY");
         Dl.addField("X");
         Dl.addField("Y");
-        Dl.addField("robotBearing");
-        Dl.addField("initZ");
-        Dl.addField("currentZ");
-        Dl.addField("zCorrection");
-        Dl.addField("touchSensor");
+        Dl.addField("Range Sensor Front");
+        Dl.addField("Lift Down touchSensor");
+        Dl.addField("Lift Up touchSensor");
+        Dl.addField("Lift Forward touchSensor");
+        Dl.addField("Lift Back touchSensor");
         Dl.addField("ODS");
-        Dl.addField("colorRightRed");
-        Dl.addField("colorRightBlue");
-        Dl.addField("colorLeftRed");
-        Dl.addField("colorLeftBlue");
-        Dl.addField("LFTargetPos");
-        Dl.addField("LFMotorPos");
-        Dl.addField("LF");
-        Dl.addField("RF");
-        Dl.addField("LR");
-        Dl.addField("RR");
+        Dl.addField("Left Front Motor Encoder Value");
         Dl.newLine();
     }
 
@@ -322,12 +229,8 @@ public class BlueBuildAuto extends LinearOpMode {
         Dl.addField(String.valueOf(state));
         Dl.addField(String.valueOf(courseCorrect));
         Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf((int) robotX));
-        Dl.addField(String.valueOf((int) robotY));
         Dl.addField(String.valueOf(x));
         Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf((int) robotBearing));
-        Dl.addField(String.valueOf(currentZint));
         Dl.addField(String.valueOf(robot.rangeSensorFront));
         Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
         Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
@@ -351,7 +254,7 @@ public class BlueBuildAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATESKYSTONE, PLACE_FIRST_STONE, GRAB_2ND_STONE,
+        PLACE_FOUNDATION, LOCATE_SKYSTONE, PLACE_FIRST_STONE, GRAB_2ND_STONE,
         FIFTH_STATE, HALT, END_STATE
     }
 
