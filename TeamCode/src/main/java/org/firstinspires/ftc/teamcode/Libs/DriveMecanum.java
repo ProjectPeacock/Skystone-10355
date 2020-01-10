@@ -457,7 +457,7 @@ public class DriveMecanum {
         timeElapsed = runtimeValue - runtime.time();
         heading = heading * (Math.PI / 180);
 
-        while (robot.colorSensorRevStone.alpha() > 50) {
+        while (opMode.opModeIsActive() && robot.colorSensorRevStone.alpha() > 50) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
@@ -730,44 +730,51 @@ public class DriveMecanum {
     /**
      * locate and center on the Skystone
      */
-    public void driveToSkystone(){
+    public void driveToSkystone(double distance){
 
-        while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 55) {
-            robot.motorRR.setPower(-0.1);
-            robot.motorLR.setPower(-0.1);
-            robot.motorLF.setPower(-0.1);
-            robot.motorRF.setPower(-0.1);
+        // turn the motors on so that the robot drives forward
+        robot.motorRR.setPower(-0.1);
+        robot.motorLR.setPower(-0.1);
+        robot.motorLF.setPower(-0.1);
+        robot.motorRF.setPower(-0.1);
+
+        while (opMode.opModeIsActive() && robot.wallRangeSensor.getDistance(DistanceUnit.CM) < distance) {
+            // wait for the range sensor to measure greater than 55cm.
         }
 
-        while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
+        // continues driving forward
+
+        while (opMode.opModeIsActive() && robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
+            // wait for the proximity sensor to measure less than 10cm.
         }
 
-            robot.motorRR.setPower(0);
-            robot.motorLR.setPower(0);
-            robot.motorLF.setPower(0);
-            robot.motorRF.setPower(0);
-
+        motorsHalt();       // shut the motors off
     }
-
 
     /**
      * Raise the lift up
      */
     public void raiseLift(){
+        // turn the linear motor on to begin raising the lift
         robot.motorLinear.setPower(0.3);
-        while (robot.touchLiftForward.isPressed()== false){
+
+        while (opMode.opModeIsActive() && robot.touchLiftForward.isPressed()== false){
+            // wait for the lift to lean all the way forward
         }
-        robot.motorLinear.setPower(0);
+        robot.motorLinear.setPower(0);  // shut the motor off
     }
 
     /**
      * Raise the lift up
      */
     public void lowerLift(){
+        // turn the linear motor on to begin lowering the lift
         robot.motorLinear.setPower(-0.200);
-        while (robot.touchLiftBack.isPressed()== false){
+
+        while (opMode.opModeIsActive() && robot.touchLiftBack.isPressed()== false){
+            // wait for the lift to lean all the way backward
         }
-        robot.motorLinear.setPower(0);
+        robot.motorLinear.setPower(0);  // shut the motor off
     }
 
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,

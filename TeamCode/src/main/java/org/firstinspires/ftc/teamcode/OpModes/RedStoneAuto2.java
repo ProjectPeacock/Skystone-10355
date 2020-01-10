@@ -67,9 +67,8 @@ import java.util.Locale;
 public class RedStoneAuto2 extends LinearOpMode {
 
     /**
-     * Instantiate all objects needed in this class
+     * Instantiate all variables needed in this class
      */
-
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
@@ -85,7 +84,9 @@ public class RedStoneAuto2 extends LinearOpMode {
     private String alliance = "blue";                //Your current alliance
     private String courseCorrect = "";
     private State state = State.LOCATE_SKYSTONE;    //Machine State
-
+    private double strafeTime = 0;
+    private double strafeTimeInit = 0;
+    private double timeToSkystone = 4;
 
     public void runOpMode() {
         /**
@@ -138,15 +139,15 @@ public class RedStoneAuto2 extends LinearOpMode {
             switch (state) {
 
                 case LOCATE_SKYSTONE:
-                    /**
-                     * Drive to the front wall
-                     */
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
 
-                    drive.translateTime(.3, 135, 1.75);
+                    /**
+                     * Drive to the front wall (stafe diagonally)
+                     */
+                    drive.translateTime(.3, 115, 1.5);
 
                     /**
                      * Raise the lift into position to be able to grab skystone
@@ -154,35 +155,51 @@ public class RedStoneAuto2 extends LinearOpMode {
                     drive.raiseLift();
 
                     /**
-                     * Drive close enough to the Skystones for the color sensor to detect the stones
+                     * Drive close enough to the Skystone for the color sensor to detect the stones.
+                     * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.driveToSkystone();
+                    drive.driveToSkystone(65);
 
                     /**
-                     * Strafe across the row of stones to locate the skystone
+                     * Because the color sensor is on the left side of the robot, it may detect
+                     * the first stone as being a Skystone.  We are unable to grab the first
+                     * stone due to the positioning of the grabber so we will strafe to the
+                     * right past the first stone and look at the second stone.
                      */
+                    drive.translateTime(.3, 270, .5);
+
+                    /**
+                     * Strafe across the row of stones to locate the skystone. For this function,
+                     * we track the time it takes to locate the Skystone so that we can make
+                     * necessary adjustments to the time required to strafe to the foundation.
+                     */
+                    strafeTimeInit = runtime.time();    // track the starting time
                     drive.translateSkystone(0.2,270);
+                    strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
                     /**
-                     * Stafe more to adjust to the center on the Skystone.
+                     * Stafe into position to pick up the Skystone. For this side, we need to
+                     * backtrack because the color sensor is on the left side of the robot.
                      */
-                    drive.translateTime(.2, 270, .75);
+//                    drive.translateTime(.2, 90, 0.5);
 
                     /**
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .5);
+                    drive.translateTime(.2, 180, .3);
 
                     /**
                      * Grab the Skystone with the grabber.
                      */
-                    robot.servoGrab.setPower(0.2);
-                    sleep(1000);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoGrab.setPower(0.2);
+                        sleep(1000);
+                    }
 
                     /**
                      * Back away from the stones into a position so that we can clear the skybridge
                      */
-                    drive.translateTime(.2,0,.8);
+                    drive.translateTime(.2,0,.5);
 
                     /**
                      * Lower the lift mechanism so that we can clear the skybridge
@@ -190,9 +207,13 @@ public class RedStoneAuto2 extends LinearOpMode {
                     drive.lowerLift();
 
                     /**
-                     * strafe to the Foundation
+                     * Strafe to the Foundation.  In the middle position, the robot takes about
+                     * 4 seconds to strafe to the skystone at 40% power. In general, we need to
+                     * reduce the total stafe time by about 1/3 of the time it takes to locate
+                     * the Skystone with the translateSkystone algorithm.
                      */
-                    drive.translateTime(.4, 90, 4);
+                    timeToSkystone = 4 - (strafeTime * 0.3);
+                    drive.translateTime(.4, 270, timeToSkystone);
 
                     state = State.PLACE_FOUNDATION;
                     break;
@@ -206,9 +227,11 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /**
                      * Grab the foundation
                      */
-                    robot.servoFoundation1.setPower(1);
-                    robot.servoFoundation2.setPower(.6);
-                    sleep(500);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoFoundation1.setPower(1);
+                        robot.servoFoundation2.setPower(.6);
+                        sleep(500);
+                    }
 
                     /**
                      * Pull the Foundation towards the wall
@@ -216,7 +239,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     drive.translateTime(.3,0,2.5);
 
                     /**
-                     * rotate the foundation towards the back wall
+                     * rotate the foundation towards the wall
                      */
                     robot.motorLF.setPower(0.3);
                     robot.motorLR.setPower(0.3);
@@ -227,30 +250,56 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /**
                      * drive the robot into the back wall; will help to align the robot
                      */
-                    drive.translateTime(0.2,180,1.5);
+                    drive.translateTime(0.2,180,1.7);
 
                     /**
                      * Let go of the Foundation and the skystone (should fall onto the foundation)
                      */
-                    robot.servoFoundation1.setPower(0.6);
-                    robot.servoFoundation2.setPower(1);
-                    robot.servoGrab.setPower(-1);
-                    sleep(500);
 
+                    if (opMode.opModeIsActive()){   // check to make sure time has not expired
+                        robot.servoFoundation1.setPower(0.6);
+                        robot.servoFoundation2.setPower(1);
+                        robot.servoGrab.setPower(-1);
+                        sleep(500);
+                    }
+
+                    state = State.PARK_BRIDGE;
+                    //Exit the state
+                    break;
+
+                case PARK_BRIDGE:
                     /**
                      * strafe to parking position near the bridge
                      */
-                    drive.translateTime(.3, 330, 2);
-                    sleep (1550);
+                    drive.translateTime(.3, 20, 2);
 
                     /**
-                     * strafe out of the way
+                     * strafe closer to the bridge
                      */
-                    drive.translateTime(.2, 270, .5);
+                    drive.translateTime(.3, 90, 1);
 
-                    state = State.HALT;
-                    //Exit the state
+                    state = State.HALT;         //Exit the state
                     break;
+
+                case PARK_WALL:
+                    /**
+                     * strafe closer to the wall
+                     */
+                    drive.translateTime(.3, 270, 0.5);
+
+                    /**
+                     * Drive to parking position under the bridge
+                     */
+                    drive.translateTime(.3, 0, 2);
+
+                    /**
+                     * strafe closer to the wall
+                     */
+                    drive.translateTime(.3, 270, 0.5);
+
+                    state = State.HALT;         //Exit the state
+                    break;
+
 
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
@@ -324,8 +373,7 @@ public class RedStoneAuto2 extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        LOCATE_SKYSTONE, PLACE_FOUNDATION, PLACE_FIRST_STONE, GRAB_2ND_STONE,
-        FIFTH_STATE, HALT, END_STATE
+        LOCATE_SKYSTONE, PLACE_FOUNDATION, PARK_WALL, PARK_BRIDGE, HALT
     }
 
 }

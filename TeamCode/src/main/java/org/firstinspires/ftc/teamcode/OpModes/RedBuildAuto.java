@@ -129,7 +129,7 @@ public class RedBuildAuto extends LinearOpMode {
                     /**
                      * drive towards the wall
                      */
-                    drive.translateTime(.3,0,2);
+                    drive.translateTime(.3,20,2.5);
 
                     /**
                      * rotate the foundation towards the wall
@@ -138,7 +138,7 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.motorLR.setPower(0.3);
                     robot.motorRF.setPower(-0.3);
                     robot.motorRR.setPower(-0.3);
-                    sleep (1400);
+                    sleep (1700);
 
                     /**
                      * drive the robot into the wall
@@ -155,7 +155,7 @@ public class RedBuildAuto extends LinearOpMode {
                     /**
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 205, 2.2);
+                    drive.translateTime(.3, 330, 2.2);
 
                     /**
                      * strafe out of the way

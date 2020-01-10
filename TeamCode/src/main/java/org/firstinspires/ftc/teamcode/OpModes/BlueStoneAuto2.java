@@ -68,9 +68,8 @@ import java.util.Locale;
 public class BlueStoneAuto2 extends LinearOpMode {
 
     /**
-     * Instantiate all objects needed in this class
+     * Instantiate all variables needed in this class
      */
-
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
@@ -146,25 +145,32 @@ public class BlueStoneAuto2 extends LinearOpMode {
             switch (state) {
 
                 case LOCATESKYSTONE:
-                    /**
-                     * This state is for testing the MR Gyro Sensor
-                     */
-
-                    /**
-                     * Drive to the front wall
-                     */
-
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
 
+                    /**
+                     * Drive to the front wall (stafe diagonally)
+                     */
                     drive.translateTime(.3, 240, 1.75);
 
+                    /**
+                     * Raise the lift into position to be able to grab skystone
+                     */
                     drive.raiseLift();
 
-                    drive.driveToSkystone();
+                    /**
+                     * Drive close enough to the Skystone for the color sensor to detect the stones.
+                     * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
+                     */
+                    drive.driveToSkystone(55);
 
+                    /**
+                     * Strafe across the row of stones to locate the skystone. For this function,
+                     * we track the time it takes to locate the Skystone so that we can make
+                     * necessary adjustments to the time required to strafe to the foundation.
+                     */
                     strafeTimeInit = runtime.time();
                     drive.translateSkystone(0.2,90);
                     strafeTime = runtime.time() - strafeTimeInit;
@@ -177,104 +183,118 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /**
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .5);
+                    drive.translateTime(.2, 180, .3);
 
                     /**
                      * Grab the block with the grabber.
                      */
-                    robot.servoGrab.setPower(0.2);
-                    sleep(1000);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoGrab.setPower(0.2);
+                        sleep(1000);
+                    }
 
-                    drive.translateTime(.2,0,.8);
+                    /**
+                     * Back away from the Skystone to clear the Skybridge.
+                     */
+                    drive.translateTime(.2,0,.6);
 
+                    /**
+                     * Lower the lifting mechanism so that we can clear the skybridge.
+                     */
                     drive.lowerLift();
 
+                    /**
+                     * Strafe to the Foundation.  In the middle position, the robot takes about
+                     * 4 seconds to strafe to the skystone at 40% power. In general, we need to
+                     * reduce the total stafe time by about 1/3 of the time it takes to locate
+                     * the Skystone with the translateSkystone algorithm.
+                     */
                     timeToSkystone = 4 - (strafeTime * 0.3);
-
                     drive.translateTime(.4, 90, timeToSkystone);
-
-                    /**
-                     * Strafe to the center of the Skystone
-                     */
-//                    drive.translateTime(0.2, .2, .3);
-
-                    /**
-                     * pickup skystone
-                     */
-//                    drive.translateTime(0.2, 0, 0.2);
-//                    robot.servoRightGrab.setPosition(0.4);
-//                    sleep(500);
-
-                    /**
-                     * Lower the lift
-                     */
-//                    drive.lowerLift();
-
-                    /**
-                     * Drive back to clear the sky bridge
-                     */
-
-//                    drive.translateTime(.2, 180, .4);
 
                     state = State.PLACE_FOUNDATION;
                     break;
 
                 case PLACE_FOUNDATION:
                     /**
-                     * Strafe to the foundation and move it into position
-                     */
-
-                    /**
                      * drive forward to the foundation
                      */
-                    drive.translateTime(.3, 180, 0.8);
+                    drive.translateTime(.3, 180, 0.7);
 
                     /**
                      * Grab the foundation
                      */
-                    robot.servoFoundation1.setPower(1);
-                    robot.servoFoundation2.setPower(.6);
-                    sleep(500);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoFoundation1.setPower(1);
+                        robot.servoFoundation2.setPower(.6);
+                        sleep(500);
+                    }
 
                     /**
-                     * drive towards the wall
+                     * Pull the foundation towards the wall.
                      */
                     drive.translateTime(.3,0,2.5);
 
                     /**
                      * rotate the foundation towards the wall
                      */
-                    robot.motorLF.setPower(-.3);
-                    robot.motorLR.setPower(-.3);
-                    robot.motorRF.setPower(.3);
-                    robot.motorRR.setPower(0.3);
-                    sleep (1800);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.motorLF.setPower(-.3);
+                        robot.motorLR.setPower(-.3);
+                        robot.motorRF.setPower(.3);
+                        robot.motorRR.setPower(0.3);
+                        sleep(1800);
+                    }
 
                     /**
                      * drive the robot into the wall
                      */
-                    drive.translateTime(0.2,180,1.5);
+                    drive.translateTime(0.2,180,2.0);
 
                     /**
                      * Let go of the Foundation and the stone
                      */
-                    robot.servoFoundation1.setPower(0.6);
-                    robot.servoFoundation2.setPower(1);
-                    robot.servoGrab.setPower(-1);
-                    sleep(500);
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoFoundation1.setPower(0.6);
+                        robot.servoFoundation2.setPower(1);
+                        robot.servoGrab.setPower(-1);
+                        sleep(500);
+                    }
 
+                    state = State.PARK_BRIDGE;      //Exit the state
+                    break;
+
+                case PARK_BRIDGE:
                     /**
                      * strafe to parking position near the bridge
+                     */
+                    drive.translateTime(.3, 330, 2);
+
+                    /**
+                     * strafe closer to the bridge
+                     */
+                    drive.translateTime(.3, 270, 1);
+
+                    state = State.HALT;         //Exit the state
+                    break;
+
+                case PARK_WALL:
+                    /**
+                     * strafe closer to the wall
+                     */
+                    drive.translateTime(.3, 90, 0.5);
+
+                    /**
+                     * Drive to parking position under the bridge
                      */
                     drive.translateTime(.3, 0, 2);
 
                     /**
-                     * strafe out of the way
+                     * strafe closer to the wall
                      */
-                    drive.translateTime(.3, 270, 1);
+                    drive.translateTime(.3, 90, 0.5);
 
-                    state = State.HALT;
-                    //Exit the state
+                    state = State.HALT;         //Exit the state
                     break;
 
                 case HALT:
@@ -345,13 +365,10 @@ public class BlueStoneAuto2 extends LinearOpMode {
 
     }
 
-
     /**
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATESKYSTONE, PLACE_FIRST_STONE, GRAB_2ND_STONE,
-        FIFTH_STATE, HALT, END_STATE
+        PLACE_FOUNDATION, LOCATESKYSTONE, PARK_BRIDGE, PARK_WALL, HALT,
     }
-
 }

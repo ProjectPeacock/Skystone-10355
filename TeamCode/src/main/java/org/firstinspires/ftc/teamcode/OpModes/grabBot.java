@@ -222,11 +222,9 @@ public class grabBot extends LinearOpMode {
              * Mechanism Control
              **/
             if (gamepad2.b == true){
-                robot.servoGrab.setPower(-0.5);
-            }
-
-            else {
-                robot.servoGrab.setPower(0.2);
+                robot.servoGrab.setPower(-0.5); // opens the grabber only when required
+            } else {
+                robot.servoGrab.setPower(0.2);  // automatically closes grabber
             }
 
             /**
