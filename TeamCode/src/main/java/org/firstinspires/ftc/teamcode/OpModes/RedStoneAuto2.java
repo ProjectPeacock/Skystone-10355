@@ -103,8 +103,7 @@ public class RedStoneAuto2 extends LinearOpMode {
 
         /*
          * Calibrate the gyro
-         *
-         **/
+         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -115,7 +114,7 @@ public class RedStoneAuto2 extends LinearOpMode {
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.addData("Color Red", robot.colorSensorRevStone.red());
         telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
-        if (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10){
+        if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
             telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
             telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
         }
@@ -150,7 +149,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.driveToSkystone(-0.1, 65, 1.5);
+                    drive.translateFromWall(-0.1, 180, 65, 1.5);
 
                     /*
                      * Because the color sensor is on the left side of the robot, it may detect
@@ -166,14 +165,16 @@ public class RedStoneAuto2 extends LinearOpMode {
                      * necessary adjustments to the time required to strafe to the foundation.
                      */
                     strafeTimeInit = runtime.time();    // track the starting time
-                    drive.translateSkystone(0.2,270, 20, 1.5);
+                    //alphaColor should be set to the desired upper threshold for the red value
+                    drive.translateSkystone(0.2,270, 27, 1.5);
+                    drive.translateTime(0.2,90, 0.25);
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
                     /*
                      * Stafe into position to pick up the Skystone. For this side, we need to
                      * backtrack because the color sensor is on the left side of the robot.
                      */
-//                    drive.translateTime(.2, 90, 0.5);
+                    drive.translateTime(.2, 90, 0.3);
 
                     /*
                      * Drive forward to grab the Skystone
@@ -214,7 +215,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * drive forward to the foundation
                      */
-                    drive.translateFromWall(0.3, 180, 80, 1);
+                    drive.translateFromWall(0.3, 180, 90, 1);
 //                    drive.translateTime(.3, 180, 1);
 
                     /*
@@ -235,7 +236,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 90, "right", 2000);
+                    drive.rotateGyro(0.3, 85, "right", 2);
 /*
             Note: this is the old code - remove after rotateGyro Function is validated
 
@@ -270,7 +271,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe to parking position near the bridge
                      */
-                    drive.translateTime(.3, 20, 2);
+                    drive.translateTime(.4, 20, 1.8);
 
                     /*
                      * strafe closer to the bridge

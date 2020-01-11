@@ -123,9 +123,9 @@ public class TeleOpV2 extends LinearOpMode {
              * Code for controlling the foundation grabber
              */
             if (gamepad1.x){
-                robot.servoRightGrab.setPosition(.9);
+//                robot.servoRightGrab.setPosition(.9);
             } else if(gamepad1.y){
-                robot.servoRightGrab.setPosition(.4);
+//                robot.servoRightGrab.setPosition(.4);
             }
 
             /*
@@ -146,30 +146,13 @@ public class TeleOpV2 extends LinearOpMode {
                 robot.motorLift.setPower(-.2);
                 sleep(750);
                 robot.motorLift.setPower(0);
-                robot.servoClawClose.setPosition(0);
                 sleep(250);
-                robot.servoClawClose.setPosition(0.5);
                 robot.motorLift.setPower(0.2);
                 sleep(750);
                 robot.motorLift.setPower(0);
             }
 
-
-            /*
-             * Algorithm for controlling the lifting mechanism
-             */
-
             idle();
- /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
-            telemetry.addData("left_stick/
-             if (gamepad1.left_stick_y == 0) {_y", String.valueOf(gamepad1.left_stick_y));
-            telemetry.addData("right_stick_x", String.valueOf(gamepad1.right_stick_x));
-            telemetry.addData("LF", String.valueOf(v1));
-            telemetry.addData("RF", String.valueOf(v2));
-            telemetry.addData("LR", String.valueOf(v3));
-            telemetry.addData("RR", String.valueOf(v4));
-            telemetry.update();
-*/
         }
 
     }

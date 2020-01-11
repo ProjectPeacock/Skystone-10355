@@ -113,7 +113,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.addData("Color Red", robot.colorSensorRevStone.red());
         telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
-        if (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10){
+        if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
             telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
             telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
         }
@@ -137,7 +137,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive to the front wall (stafe diagonally)
                      */
-                    drive.translateTime(.3, 240, 1.75);
+                    drive.translateTime(.3, 240, 1.6);
 
                     /*
                      * Raise the lift into position to be able to grab skystone
@@ -148,7 +148,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.driveToSkystone(-0.1, 55, 1.5);
+                    drive.translateFromWall(0.1, 180, 55, 1.5);
 
                     /*
                      * Strafe across the row of stones to locate the skystone. For this function,
@@ -156,13 +156,14 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * necessary adjustments to the time required to strafe to the foundation.
                      */
                     strafeTimeInit = runtime.time();
-                    drive.translateSkystone(0.2,90, 20, 1.5);
+                    //alphaColor should be set to the desired upper threshold for the red value
+                    drive.translateSkystone(0.2,90, 27, 1.5);
                     strafeTime = runtime.time() - strafeTimeInit;
 
                     /*
                      * Stafe more to center on the Skystone.
                      */
-                    drive.translateTime(.2, 90, .75);
+                    drive.translateTime(.2, 90, .65);
 
                     /*
                      * Drive forward to grab the Skystone
@@ -203,8 +204,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * drive forward to the foundation
                      */
-                    drive.translateFromWall(0.3, 180, 80, 1);
-//                    drive.translateTime(.3, 180, 0.7);
+                    drive.translateFromWall(0.3, 180, 90, 1);
 
                     /*
                      * Grab the foundation
@@ -219,22 +219,12 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * Pull the foundation towards the wall.
                      */
                     drive.translateToWall(.3, 0, 20, 30);
-//                    drive.translateTime(.3,0,2.5);
 
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 90, "left", 2000);
-/*
-        Note: this is the old code - remove after rotateGyro Function is validated
-                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
-                        robot.motorLF.setPower(-.3);
-                        robot.motorLR.setPower(-.3);
-                        robot.motorRF.setPower(.3);
-                        robot.motorRR.setPower(0.3);
-                        sleep(1800);
-                    }
-*/
+                    drive.rotateGyro(0.3, 80, "left", 1.5);
+
                     /*
                      * drive the robot into the wall
                      */
@@ -262,7 +252,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the bridge
                      */
-                    drive.translateTime(.3, 270, 1);
+                    drive.translateTime(.4, 270, 1);
 
                     state = State.HALT;         //Exit the state
                     break;

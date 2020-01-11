@@ -40,6 +40,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
@@ -97,8 +98,15 @@ public class BlueBuildAuto extends LinearOpMode {
         }
 
         telemetry.addData(">", "System initialized and Ready");
-        telemetry.update();
+        telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
+        telemetry.addData("Color Red", robot.colorSensorRevStone.red());
+        telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
+        if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
+            telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
+            telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
+        }
 
+        telemetry.update();
         /*
          * Start the opMode
          */
@@ -111,10 +119,8 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * strafe diagonally to the foundation
                      */
-//                    drive.translateTime(.3, 165, 2.0);
-                    drive.translateFromWall(.3, 165, 70, 2);
-                    drive.translateFromWall(.1, 180, 80, 0.5);
-//                    drive.translateTime(.1, 180, 0.25);
+                    drive.translateFromWall(.3, 155, 70, 2);
+                    drive.translateFromWall(.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation
@@ -127,21 +133,12 @@ public class BlueBuildAuto extends LinearOpMode {
                      * drive towards the wall
                      */
                     drive.translateToWall(.3, 0, 20, 30);
-//                    drive.translateTime(.3,0,2);
 
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 90, "left", 2000);
+                    drive.rotateGyro(0.3, 80, "left", 2);
 
-/*
-            Note: this is the old code - remove after rotateGyro Function is validated
-                    robot.motorLF.setPower(-.3);
-                    robot.motorLR.setPower(-.3);
-                    robot.motorRF.setPower(.3);
-                    robot.motorRR.setPower(0.3);
-                    sleep (1400);
-*/
                     /*
                      * drive the robot into the wall
                      */
@@ -153,6 +150,11 @@ public class BlueBuildAuto extends LinearOpMode {
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
+
+                    /**
+                     * Make sure that the Lift is all the way down so it doesn't bump the skybridge
+                     */
+                    drive.lowerLift(0.3);
 
                     /*
                      * strafe to parking position

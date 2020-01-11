@@ -867,225 +867,6 @@ public class DriveMecanum {
         motorsHalt();
     }
 
-
-    /*
-     * Robot will drive in the heading provided by the function call.  The sensor identified should
-     * be the sensor on the side of the robot that the robot is heading to.  The robot will stop
-     * when the robot is within the distance provided in the parameters.
-     * @param sensor
-     * @param power
-     * @param heading
-     * @param distance
-     */
-    public void translateRange(String sensor, double power, double heading, double distance) {
-        double changeSpeed = 0;
-        double initZ = robot.mrGyro.getIntegratedZValue();
-        double currentZint;
-        double currentRange = 0;
-        boolean active = true;
-
-        switch(sensor){
-            case "front" :
-                currentRange = robot.rangeSensorFront.rawUltrasonic();
-                break;
-
-            case "rear" :
-                currentRange = robot.rangeSensorRear.rawUltrasonic();
-                break;
-
-            case "left" :
-                currentRange = robot.rangeSensorLeft.rawUltrasonic();
-                break;
-
-            case "right" :
-                currentRange = robot.rangeSensorRight.rawUltrasonic();
-                break;
-
-             default:
-                 active = false;      // a proper range sensor was not identified. Exit routine.
-                 break;
-        }
-
-        heading = heading * (Math.PI / 180);
-
-        while (opMode.opModeIsActive() && active) {
-
-            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
-
-            if (LF > 1 || LF < -1) {
-                LF = 0;
-            }
-
-            if (RF > 1 || RF < -1) {
-                RF = 0;
-            }
-
-            if (LR > 1 || LR < -1) {
-                LR = 0;
-            }
-
-            if (RR > 1 || RR < -1) {
-                RR = 0;
-            }
-
-            currentZint = robot.mrGyro.getIntegratedZValue();
-
-            if (currentZint != initZ) {  //Robot has drifted off course
-                double zCorrection = Math.abs(initZ - currentZint);
-
-                if (heading > 180 && heading < 359.99999) {
-                    if (currentZint > initZ) {  //Robot has drifted left
-                        LF = LF + (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
-                        RR = RR - (zCorrection / 100);
-                    }
-
-                    if (currentZint < initZ) {  //Robot has drifted right
-                        LF = LF - (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
-                        RR = RR + (zCorrection / 100);
-                    }
-                }
-
-                if (heading > 0 && heading < 180) {
-                    if (currentZint > initZ) {  //Robot has drifted left
-                        LF = LF + (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
-                        RR = RR - (zCorrection / 100);
-                    }
-
-                    if (currentZint < initZ) {  //Robot has drifted right
-                        LF = LF - (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
-                        RR = RR + (zCorrection / 100);
-                    }
-                }
-
-                if (heading == 0) {
-                    if (currentZint > initZ) {  //Robot has drifted left
-                        LF = LF + (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
-                        RR = RR - (zCorrection / 100);
-                    }
-
-                    if (currentZint < initZ) {  //Robot has drifted right
-                        LF = LF - (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
-                        RR = RR + (zCorrection / 100);
-                    }
-                }
-
-                if (heading == 180) {
-                    if (currentZint > initZ) {  //Robot has drifted left
-                        LF = LF - (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
-                        RR = RR + (zCorrection / 100);
-                    }
-
-                    if (currentZint < initZ) {  //Robot has drifted right
-                        LF = LF + (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
-                        RR = RR - (zCorrection / 100);
-                    }
-                }
-            }
-            robot.motorLF.setPower(LF);
-            robot.motorRF.setPower(RF);
-            robot.motorLR.setPower(LR);
-            robot.motorRR.setPower(RR);
-
-            myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
-
-            switch(sensor){
-                case "front" :
-                    currentRange = robot.rangeSensorFront.rawUltrasonic();
-                    break;
-
-                case "rear" :
-                    currentRange = robot.rangeSensorRear.rawUltrasonic();
-                    break;
-
-                case "left" :
-                    currentRange = robot.rangeSensorLeft.rawUltrasonic();
-                    break;
-
-                case "right" :
-                    currentRange = robot.rangeSensorRight.rawUltrasonic();
-                    break;
-
-                default:
-                    active = false;      // a proper range sensor was not identified. Exit routine.
-                    break;
-            }
-
-            // check to see if the distance traveled is less than the range specification
-            if (currentRange < distance){
-                active = false;
-            }
-            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
-            opMode.telemetry.addData("LF", String.valueOf(LF));
-            opMode.telemetry.addData("RF", String.valueOf(RF));
-            opMode.telemetry.addData("LR", String.valueOf(LR));
-            opMode.telemetry.addData("RR", String.valueOf(RR));
-            opMode.telemetry.update();
-
-            opMode.idle();
-        }
-        motorsHalt();
-    }
-
-    /*
-     * locate and center on the Skystone
-     */
-    public void driveToSkystone(double power, double distance, double maxTime){
-        double timeElapsed;
-        double runtimeValue;
-
-        /*
-         * In the case where the sensor fails or the sensor is too far away from the stones to
-         * detect the skystone, we want the function to abort the effort and go to grab the closest
-         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
-         * and tell it to cancel if the maxTime is exceeded.
-         */
-        runtimeValue = runtime.time();
-        timeElapsed = runtime.time() - runtimeValue;
-
-        // turn the motors on so that the robot drives forward
-        robot.motorRR.setPower(power);
-        robot.motorLR.setPower(power);
-        robot.motorLF.setPower(power);
-        robot.motorRF.setPower(power);
-
-        while (opMode.opModeIsActive() && (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < distance) && (timeElapsed < maxTime)) {
-            timeElapsed = runtime.time() - runtimeValue;
-            // wait for the range sensor to measure greater than 55cm.
-            opMode.telemetry.addData("Status", "Run Time: " + timeElapsed);
-            opMode.telemetry.update();
-
-        }
-
-        // continues driving forward
-        while (opMode.opModeIsActive() && robot.sensorProximity.getDistance(DistanceUnit.CM) > 10 && (timeElapsed < maxTime)) {
-            timeElapsed = runtime.time() - runtimeValue;
-            // wait for the proximity sensor to measure less than 10cm.
-            opMode.telemetry.addData("Status", "Run Time: ", timeElapsed);
-            opMode.telemetry.update();
-        }
-
-        motorsHalt();       // shut the motors off
-    }
-
     /*
      * Raise the lift up
      */
@@ -1228,26 +1009,34 @@ public class DriveMecanum {
 
         switch(direction){
             case "right" :
-                targetZ = currentZinit + angle;
+                targetZ = currentZinit - angle;
                 robot.motorLF.setPower(power);
                 robot.motorLR.setPower(power);
                 robot.motorRF.setPower(-power);
                 robot.motorRR.setPower(-power);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit< targetZ){
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ){
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
                 }
                 break;
 
             case "left" :
-                targetZ = currentZinit - angle;
+                targetZ = currentZinit + angle;
                 robot.motorLF.setPower(-power);
                 robot.motorLR.setPower(-power);
                 robot.motorRF.setPower(power);
                 robot.motorRR.setPower(power);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ){
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit < targetZ){
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
                 }
                 break;
 
