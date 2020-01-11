@@ -58,21 +58,20 @@ public class TeleOpV2 extends LinearOpMode {
      * Instantiate all objects needed in this class
      */
     private final static HardwareProfile robot = new HardwareProfile();
-    private double v1 = 0;
-    private double v2 = 0;
-    private double v3 = 0;
-    private double v4 = 0;
-    private double r = 0;
-    private double fwdControl =0;
-    private double strafeControl = 0;
-    private double robotAngle =0;
-    private double rightX = 0;
-    private double rightY = 0;
-    private double powerLevel = 0.5;
-    private double max = 0.0;
 
     @Override
     public void runOpMode() {
+
+        double v1;
+        double v2;
+        double v3;
+        double v4;
+        double r;
+        double strafeControl;
+        double robotAngle;
+        double rightX;
+        double powerLevel = 0.5;
+        double max;
 
         begin();                    // initialize the robot's hardware
 
@@ -92,13 +91,12 @@ public class TeleOpV2 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            /**
+            /*
              * Driving algorithm
              * Note: this algorithm assumes that all values are zero when controls are not touched
-             **/
+             */
             //Calculate the power needed for each motor
 //            fwdControl = -1 * gamepad1.left_stick_y;
-            strafeControl = gamepad1.left_stick_x;
             robotAngle = Math.atan2(gamepad1.left_stick_y, (gamepad1.left_stick_x * -1)) - Math.PI / 4;
             rightX = gamepad1.right_stick_x;
          //   rightY = gamepad1.right_stick_y;
@@ -121,7 +119,7 @@ public class TeleOpV2 extends LinearOpMode {
             robot.motorLR.setPower(v3);
             robot.motorRR.setPower(v4);
 
-            /**
+            /*
              * Code for controlling the foundation grabber
              */
             if (gamepad1.x){
@@ -130,7 +128,7 @@ public class TeleOpV2 extends LinearOpMode {
                 robot.servoRightGrab.setPosition(.4);
             }
 
-            /**
+            /*
              * Code to manually control lift mechanism leaning
              */
 
@@ -141,7 +139,7 @@ public class TeleOpV2 extends LinearOpMode {
             }else {
                 robot.motorLinear.setPower(0);
             }
-            /**
+            /*
              * Algorithm for placing the capstone on the foundation - temporary proceedure
              */
             if (gamepad1.right_bumper){
@@ -157,9 +155,9 @@ public class TeleOpV2 extends LinearOpMode {
             }
 
 
-            /**
+            /*
              * Algorithm for controlling the lifting mechanism
-             **/
+             */
 
             idle();
  /*           telemetry.addData("left_stick_x", String.valueOf(gamepad1.left_stick_x));
@@ -178,8 +176,8 @@ public class TeleOpV2 extends LinearOpMode {
 
     private void begin() {
 
-        /**
-         * Inititialize the robot's hardware.  The hardware configuration can be found in the
+        /*
+         * Initialize the robot's hardware.  The hardware configuration can be found in the
          * HardwareTestPlatform.java class.
          */
         robot.init(hardwareMap);
@@ -187,6 +185,5 @@ public class TeleOpV2 extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
-
 }
 

@@ -33,62 +33,52 @@
 
 package org.firstinspires.ftc.teamcode.OpModes;
 
-/**
+/*
  * Import the classes we need to have local access to.
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 
-/**
+/*
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Blue-Foundation, Park", group = "COMP")
 
 public class BlueBuildAuto extends LinearOpMode {
 
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
 
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
-    private ElapsedTime runtime = new ElapsedTime();
-    private double heading = 90;        //Heading for all methods
-    private double y = -200;            //Vuforia y stop coordinate
-    private double x = -200;            //Vuforia x stop coordinate
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private DataLogger Dl;                          //Datalogger object
-    private String alliance = "blue";                //Your current alliance
-    private String courseCorrect = "";
     private State state = State.PLACE_FOUNDATION;    //Machine State
 
 
     public void runOpMode() {
-        /**
+        /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
          */
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
-        /**
+        /*
          * Set the initial servo positions
          */
         robot.servoFoundation1.setPower(0.6);
@@ -96,15 +86,10 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servoGrab.setPower(-1);
         sleep(1000);
 
-        /**
-         *  Create the DataLogger object.
-         */
-        createDl();
-
-        /**
+        /*
          * Calibrate the gyro
          *
-         **/
+         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -114,7 +99,7 @@ public class BlueBuildAuto extends LinearOpMode {
         telemetry.addData(">", "System initialized and Ready");
         telemetry.update();
 
-        /**
+        /*
          * Start the opMode
          */
         waitForStart();
@@ -123,55 +108,58 @@ public class BlueBuildAuto extends LinearOpMode {
             switch (state) {
 
                 case PLACE_FOUNDATION:
-                    /**
-                     * Strafe to the foundation and move it into position
-                     */
-
-                    /**
+                    /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateTime(.3, 165, 2.0);
-                    drive.translateTime(.1, 180, 0.25);
+//                    drive.translateTime(.3, 165, 2.0);
+                    drive.translateFromWall(.3, 165, 70, 2);
+                    drive.translateFromWall(.1, 180, 80, 0.5);
+//                    drive.translateTime(.1, 180, 0.25);
 
-                    /**
+                    /*
                      * Grab the foundation
                      */
                     robot.servoFoundation1.setPower(1);
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
-                    /**
+                    /*
                      * drive towards the wall
                      */
-                    drive.translateTime(.3,0,2);
+                    drive.translateToWall(.3, 0, 20, 30);
+//                    drive.translateTime(.3,0,2);
 
-                    /**
+                    /*
                      * rotate the foundation towards the wall
                      */
+                    drive.rotateGyro(0.3, 90, "left", 2000);
+
+/*
+            Note: this is the old code - remove after rotateGyro Function is validated
                     robot.motorLF.setPower(-.3);
                     robot.motorLR.setPower(-.3);
                     robot.motorRF.setPower(.3);
                     robot.motorRR.setPower(0.3);
                     sleep (1400);
-
-                    /**
+*/
+                    /*
                      * drive the robot into the wall
                      */
                     drive.translateTime(0.3,180,1);
 
-                    /**
+                    /*
                      * Let go of the Foundation and the stone
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    /**
+                    /*
                      * strafe to parking position
                      */
                     drive.translateTime(.3, 25, 2.2);
 
-                    /**
+                    /*
                      * strafe out of the way
                      */
                     drive.translateTime(.2, 90, .5);
@@ -183,9 +171,6 @@ public class BlueBuildAuto extends LinearOpMode {
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
 
-                    //Stop the DataLogger
-                    dlStop();
-
                     //Exit the OpMode
                     requestOpModeStop();
                     break;
@@ -193,66 +178,11 @@ public class BlueBuildAuto extends LinearOpMode {
         }
     }
 
-    /**
-     * Setup the dataLogger
-     * The dataLogger takes a set of fields defined here and sets up the file on the Android device
-     * to save them to.  We then log data later throughout the class.
-     */
-    private void createDl() {
-
-        Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("Range Sensor Front");
-        Dl.addField("Lift Down touchSensor");
-        Dl.addField("Lift Up touchSensor");
-        Dl.addField("Lift Forward touchSensor");
-        Dl.addField("Lift Back touchSensor");
-        Dl.addField("Left Front Motor Encoder Value");
-        Dl.newLine();
-    }
-
-    /**
-     * Log data to the file on the phone.
-     */
-    private void logData() {
-
-        Dl.addField(String.valueOf(runtime.time()));
-        Dl.addField(String.valueOf(alliance));
-        Dl.addField(String.valueOf(state));
-        Dl.addField(String.valueOf(courseCorrect));
-        Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf(x));
-        Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf(robot.rangeSensorFront));
-        Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
-        Dl.newLine();
-    }
-
-    /**
-     * Stop the DataLogger
-     */
-    private void dlStop() {
-        Dl.closeDataLogger();
-
-    }
-
-
-    /**
+    /*
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATE_SKYSTONE, PLACE_FIRST_STONE, GRAB_2ND_STONE,
-        FIFTH_STATE, HALT, END_STATE
+        PLACE_FOUNDATION, HALT,
     }
 
 }

@@ -40,26 +40,24 @@
 
 package org.firstinspires.ftc.teamcode.OpModes;
 
-/**
+/*
  * Import the classes we need to have local access to.
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 import java.util.Locale;
 
-/**
+/*
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Blue-Skystones, Foundation, Park", group = "EXPERIMENT")
@@ -74,15 +72,8 @@ public class BlueStoneAuto2 extends LinearOpMode {
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private ElapsedTime runtime = new ElapsedTime();
-    private double heading = 90;        //Heading for all methods
-    private double y = -200;            //Vuforia y stop coordinate
-    private double x = -200;            //Vuforia x stop coordinate
-    private double ods = 0;             //Value returned from the Optical Distance Sensor
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private DataLogger Dl;                          //Datalogger object
-    private String alliance = "blue";                //Your current alliance
-    private String courseCorrect = "";
     private State state = State.LOCATESKYSTONE;    //Machine State
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
@@ -90,18 +81,18 @@ public class BlueStoneAuto2 extends LinearOpMode {
 
 
     public void runOpMode() {
-        /**
+        /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
          */
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
-        /**
+        /*
          * Set the initial servo positions
          */
         robot.servoFoundation1.setPower(0.6);
@@ -109,22 +100,9 @@ public class BlueStoneAuto2 extends LinearOpMode {
         robot.servoGrab.setPower(-1);
         sleep(1000);
 
-        robot.sensorProximity.getDistance(DistanceUnit.CM);
-
-
-        /**
-         * Set the initial position for the Lift mechanism
-         */
-
-        /**
-         *  Create the DataLogger object.
-         */
-        createDl();
-
-        /**
+        /*
          * Calibrate the gyro
-         *
-         **/
+         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -132,11 +110,17 @@ public class BlueStoneAuto2 extends LinearOpMode {
         }
 
         telemetry.addData(">", "System initialized and Ready");
-        telemetry.addData("CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
+        telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
+        telemetry.addData("Color Red", robot.colorSensorRevStone.red());
         telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
+        if (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10){
+            telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
+            telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
+        }
+
         telemetry.update();
 
-        /**
+        /*
          * Start the opMode
          */
         waitForStart();
@@ -150,42 +134,42 @@ public class BlueStoneAuto2 extends LinearOpMode {
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
 
-                    /**
+                    /*
                      * Drive to the front wall (stafe diagonally)
                      */
                     drive.translateTime(.3, 240, 1.75);
 
-                    /**
+                    /*
                      * Raise the lift into position to be able to grab skystone
                      */
-                    drive.raiseLift();
+                    drive.raiseLift(2);
 
-                    /**
+                    /*
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.driveToSkystone(55);
+                    drive.driveToSkystone(-0.1, 55, 1.5);
 
-                    /**
+                    /*
                      * Strafe across the row of stones to locate the skystone. For this function,
                      * we track the time it takes to locate the Skystone so that we can make
                      * necessary adjustments to the time required to strafe to the foundation.
                      */
                     strafeTimeInit = runtime.time();
-                    drive.translateSkystone(0.2,90);
+                    drive.translateSkystone(0.2,90, 20, 1.5);
                     strafeTime = runtime.time() - strafeTimeInit;
 
-                    /**
+                    /*
                      * Stafe more to center on the Skystone.
                      */
                     drive.translateTime(.2, 90, .75);
 
-                    /**
+                    /*
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .3);
+                    drive.translateTime(.2, 180, .4);
 
-                    /**
+                    /*
                      * Grab the block with the grabber.
                      */
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
@@ -193,17 +177,17 @@ public class BlueStoneAuto2 extends LinearOpMode {
                         sleep(1000);
                     }
 
-                    /**
+                    /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
                     drive.translateTime(.2,0,.6);
 
-                    /**
+                    /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
                      */
-                    drive.lowerLift();
+                    drive.lowerLift(2);
 
-                    /**
+                    /*
                      * Strafe to the Foundation.  In the middle position, the robot takes about
                      * 4 seconds to strafe to the skystone at 40% power. In general, we need to
                      * reduce the total stafe time by about 1/3 of the time it takes to locate
@@ -216,12 +200,13 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     break;
 
                 case PLACE_FOUNDATION:
-                    /**
+                    /*
                      * drive forward to the foundation
                      */
-                    drive.translateTime(.3, 180, 0.7);
+                    drive.translateFromWall(0.3, 180, 80, 1);
+//                    drive.translateTime(.3, 180, 0.7);
 
-                    /**
+                    /*
                      * Grab the foundation
                      */
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
@@ -230,14 +215,18 @@ public class BlueStoneAuto2 extends LinearOpMode {
                         sleep(500);
                     }
 
-                    /**
+                    /*
                      * Pull the foundation towards the wall.
                      */
-                    drive.translateTime(.3,0,2.5);
+                    drive.translateToWall(.3, 0, 20, 30);
+//                    drive.translateTime(.3,0,2.5);
 
-                    /**
+                    /*
                      * rotate the foundation towards the wall
                      */
+                    drive.rotateGyro(0.3, 90, "left", 2000);
+/*
+        Note: this is the old code - remove after rotateGyro Function is validated
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
                         robot.motorLF.setPower(-.3);
                         robot.motorLR.setPower(-.3);
@@ -245,13 +234,13 @@ public class BlueStoneAuto2 extends LinearOpMode {
                         robot.motorRR.setPower(0.3);
                         sleep(1800);
                     }
-
-                    /**
+*/
+                    /*
                      * drive the robot into the wall
                      */
                     drive.translateTime(0.2,180,2.0);
 
-                    /**
+                    /*
                      * Let go of the Foundation and the stone
                      */
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
@@ -265,12 +254,12 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     break;
 
                 case PARK_BRIDGE:
-                    /**
+                    /*
                      * strafe to parking position near the bridge
                      */
                     drive.translateTime(.3, 330, 2);
 
-                    /**
+                    /*
                      * strafe closer to the bridge
                      */
                     drive.translateTime(.3, 270, 1);
@@ -279,17 +268,17 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     break;
 
                 case PARK_WALL:
-                    /**
+                    /*
                      * strafe closer to the wall
                      */
                     drive.translateTime(.3, 90, 0.5);
 
-                    /**
+                    /*
                      * Drive to parking position under the bridge
                      */
                     drive.translateTime(.3, 0, 2);
 
-                    /**
+                    /*
                      * strafe closer to the wall
                      */
                     drive.translateTime(.3, 90, 0.5);
@@ -300,9 +289,6 @@ public class BlueStoneAuto2 extends LinearOpMode {
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
 
-                    //Stop the DataLogger
-                    dlStop();
-
                     //Exit the OpMode
                     requestOpModeStop();
                     break;
@@ -310,62 +296,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
         }
     }
 
-    /**
-     * Setup the dataLogger
-     * The dataLogger takes a set of fields defined here and sets up the file on the Android device
-     * to save them to.  We then log data later throughout the class.
-     */
-    private void createDl() {
-
-        Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("Range Sensor Front");
-        Dl.addField("Lift Down touchSensor");
-        Dl.addField("Lift Up touchSensor");
-        Dl.addField("Lift Forward touchSensor");
-        Dl.addField("Lift Back touchSensor");
-        Dl.addField("ODS");
-        Dl.addField("Left Front Motor Encoder Value");
-        Dl.newLine();
-    }
-
-    /**
-     * Log data to the file on the phone.
-     */
-    private void logData() {
-
-        Dl.addField(String.valueOf(runtime.time()));
-        Dl.addField(String.valueOf(alliance));
-        Dl.addField(String.valueOf(state));
-        Dl.addField(String.valueOf(courseCorrect));
-        Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf(x));
-        Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf(robot.rangeSensorFront));
-        Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(ods));
-        Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
-        Dl.newLine();
-    }
-
-    /**
-     * Stop the DataLogger
-     */
-    private void dlStop() {
-        Dl.closeDataLogger();
-
-    }
-
-    /**
+    /*
      * Enumerate the States of the machine.
      */
     enum State {

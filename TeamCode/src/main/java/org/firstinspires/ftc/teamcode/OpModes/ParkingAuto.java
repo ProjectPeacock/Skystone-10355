@@ -32,23 +32,21 @@
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
-/**
+/*
  * Import the classes we need to have local access to.
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 
-/**
+/*
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Parking Auto", group = "COMP")
@@ -62,27 +60,19 @@ public class ParkingAuto extends LinearOpMode {
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
-    private ElapsedTime runtime = new ElapsedTime();
-    private double heading = 90;        //Heading for all methods
-    private double y = -200;            //Vuforia y stop coordinate
-    private double x = -200;            //Vuforia x stop coordinate
-    private double currentZint;         //Current integrated Z value
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private DataLogger Dl;                          //Datalogger object
-    private String alliance = "nuetral";                //Your current alliance
-    private String courseCorrect = "";
     private State state = State.SECOND_STATE;    //Machine State
 
 
     public void runOpMode() {
-        /**
+        /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
          */
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Set the initial servo positions
          */
         robot.servoFoundation1.setPower(0.6);
@@ -90,20 +80,15 @@ public class ParkingAuto extends LinearOpMode {
         robot.servoGrab.setPower(-1);
         sleep(1000);
 
-        /**
+        /*
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
-        /**
-         *  Create the DataLogger object.
-         */
-        createDl();
-
         telemetry.addData(">", "System initialized and Ready");
         telemetry.update();
 
-        /**
+        /*
          * Start the opMode
          */
         waitForStart();
@@ -116,27 +101,19 @@ public class ParkingAuto extends LinearOpMode {
                     break;
 
                 case SECOND_STATE:
-                    /**
+                    /*
                      * This state is for testing the MR Gyro Sensor
                      * Leave the red bar facing the line
                      */
                     sleep(20000);
 
                     drive.translateTime(0.3, 0, 1.3);
-                    currentZint = robot.mrGyro.getIntegratedZValue();
-                    telemetry.addData("Heading = ", currentZint);
-                    telemetry.update();
 
-
-//                    drive.translateTime(0.3, 210, 2);
                     state = State.HALT;
                     break;
 
                 case HALT:
 //                    drive.motorsHalt();               //Stop the motors
-
-                    //Stop the DataLogger
-                    dlStop();
 
                     //Exit the OpMode
                     requestOpModeStop();
@@ -146,64 +123,10 @@ public class ParkingAuto extends LinearOpMode {
     }
 
     /**
-     * Setup the dataLogger
-     * The dataLogger takes a set of fields defined here and sets up the file on the Android device
-     * to save them to.  We then log data later throughout the class.
-     */
-    private void createDl() {
-
-        Dl = new DataLogger("AutoMecanumSimpleTest" + runtime.time());
-        Dl.addField("runTime");
-        Dl.addField("Alliance");
-        Dl.addField("State");
-        Dl.addField("courseCorrect");
-        Dl.addField("heading");
-        Dl.addField("X");
-        Dl.addField("Y");
-        Dl.addField("Range Sensor Front");
-        Dl.addField("Lift Down touchSensor");
-        Dl.addField("Lift Up touchSensor");
-        Dl.addField("Lift Forward touchSensor");
-        Dl.addField("Lift Back touchSensor");
-        Dl.addField("Left Front Motor Encoder Value");
-        Dl.newLine();
-    }
-
-    /**
-     * Log data to the file on the phone.
-     */
-    private void logData() {
-
-        Dl.addField(String.valueOf(runtime.time()));
-        Dl.addField(String.valueOf(alliance));
-        Dl.addField(String.valueOf(state));
-        Dl.addField(String.valueOf(courseCorrect));
-        Dl.addField(String.valueOf(heading));
-        Dl.addField(String.valueOf(x));
-        Dl.addField(String.valueOf(y));
-        Dl.addField(String.valueOf(robot.rangeSensorFront));
-        Dl.addField(String.valueOf(robot.touchLiftDown.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftUp.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftForward.getValue()));
-        Dl.addField(String.valueOf(robot.touchLiftBack.getValue()));
-        Dl.addField(String.valueOf(robot.motorLF.getCurrentPosition()));
-        Dl.newLine();
-    }
-
-    /**
-     * Stop the DataLogger
-     */
-    private void dlStop() {
-        Dl.closeDataLogger();
-
-    }
-
-    /**
      * Enumerate the States of the machine.
      */
     enum State {
-        FIRST_STATE, SECOND_STATE, THIRD_STATE, FOURTH_STATE,
-        FIFTH_STATE, HALT, END_STATE
+        FIRST_STATE, SECOND_STATE, HALT
     }
 
 }

@@ -31,56 +31,51 @@
  */
 package org.firstinspires.ftc.teamcode.OpModes;
 
-/**
+/*
  * Import the classes we need to have local access to.
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaSkyStone;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
 
-/**
+/*
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Red-Foundation, Park", group = "COMP")
 
 public class RedBuildAuto extends LinearOpMode {
 
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
 
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
-    private ElapsedTime runtime = new ElapsedTime();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private DataLogger Dl;                          //Datalogger object
     private State state = State.FIRST_STATE;    //Machine State
 
     public void runOpMode() {
-        /**
+        /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
          */
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
-        /**
+        /*
          * Set the initial servo positions
          */
         robot.servoFoundation1.setPower(0.6);
@@ -88,10 +83,9 @@ public class RedBuildAuto extends LinearOpMode {
         robot.servoGrab.setPower(-1);
         sleep(1000);
 
-        /**
+        /*
          * Calibrate the gyro
-         *
-         **/
+         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -101,7 +95,7 @@ public class RedBuildAuto extends LinearOpMode {
         telemetry.addData(">", "System initialized and Ready");
         telemetry.update();
 
-        /**
+        /*
          * Start the opMode
          */
         waitForStart();
@@ -109,55 +103,60 @@ public class RedBuildAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
                 case FIRST_STATE:
-
-                    /**
-                     * Strafe to the Foundation
-                     */
-                    /**
+                    /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateTime(.3, 205, 2.0);
-                    drive.translateTime(.1, 180, 0.25);
+//                    drive.translateTime(.3, 205, 2.0);
+                    drive.translateFromWall(0.3, 205, 70, 2);
+                    drive.translateFromWall(0.1, 180, 80, 0.5);
+//                    drive.translateTime(.1, 180, 0.25);
 
-                    /**
+                    /*
                      * Grab the foundation
                      */
                     robot.servoFoundation1.setPower(1);
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
-                    /**
+                    /*
                      * drive towards the wall
                      */
-                    drive.translateTime(.3,20,2.5);
+                    drive.translateToWall(.3, 0, 20, 30);
+//                    drive.translateTime(.3,20,2.5);
 
-                    /**
+                    /*
                      * rotate the foundation towards the wall
                      */
+                    drive.rotateGyro(0.3, 90, "right", 2000);
+/*
+            Note: this is the old code - remove after rotateGyro Function is validated
+
                     robot.motorLF.setPower(0.3);
                     robot.motorLR.setPower(0.3);
                     robot.motorRF.setPower(-0.3);
                     robot.motorRR.setPower(-0.3);
                     sleep (1700);
 
-                    /**
+ */
+
+                    /*
                      * drive the robot into the wall
                      */
                     drive.translateTime(0.3,180,1);
 
-                    /**
+                    /*
                      * Let go of the Foundation and the stone
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    /**
+                    /*
                      * strafe to parking position
                      */
                     drive.translateTime(.3, 330, 2.2);
 
-                    /**
+                    /*
                      * strafe out of the way
                      */
                     drive.translateTime(.2, 270, .5);
@@ -176,12 +175,11 @@ public class RedBuildAuto extends LinearOpMode {
         }
     }
 
-    /**
+    /*
      * Enumerate the States of the machine.
      */
     enum State {
-        FIRST_STATE, SECOND_STATE, THIRD_STATE, FOURTH_STATE,
-        FIFTH_STATE, HALT, END_STATE
+        FIRST_STATE, HALT,
     }
 
 }

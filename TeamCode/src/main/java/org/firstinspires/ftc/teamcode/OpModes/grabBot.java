@@ -33,12 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
-
-
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "grabBot", group = "Comp")
 
 public class grabBot extends LinearOpMode {
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
     private final static HardwareProfile robot = new HardwareProfile();
@@ -51,7 +49,6 @@ public class grabBot extends LinearOpMode {
     private double v3s = 0;
     private double v4s = 0;
     private double r = 0;
-    private double fwdControl =0;
     private double strafeControl = 0;
     private double robotAngle =0;
     private double rightX = 0;
@@ -81,7 +78,7 @@ public class grabBot extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            /**
+            /*
              * Change to Slow Mode
              * Chassis Control
              */
@@ -90,7 +87,7 @@ public class grabBot extends LinearOpMode {
                 fastMode = false;
             }
 
-            /**
+            /*
              * Change to Fast Mode
              * Chassis Control
              */
@@ -99,14 +96,13 @@ public class grabBot extends LinearOpMode {
                 fastMode = true;
             }
 
-            /**
-             *
+            /*
              * Driving algorithm
              * Note: this algorithm assumes that all values are zero when controls are not touched
              * Chassis Control
              * Fast Mode
-             **/
-                if (fastMode == true) {
+             */
+                if (fastMode) {
 
                     //Calculate the power needed for each motor
                     //            fwdControl = -1 * gamepad1.left_stick_y;
@@ -126,18 +122,17 @@ public class grabBot extends LinearOpMode {
                     robot.motorLR.setPower(v3);
                     robot.motorRR.setPower(v4);
                 }
-            /** Chassis control is for jameson meaning it should all be the way jameson wants it **/
-            /** Mechanism control is for Julian therefore controls should be to his preference **/
+            /* Chassis control is for jameson meaning it should all be the way jameson wants it */
+            /* Mechanism control is for Julian therefore controls should be to his preference */
 
 
-            /**
-             *
+            /*
              * Driving algorithm
              * Note: this algorithm assumes that all values are zero when controls are not touched
              * Chassis Control
              * Slow Mode
              **/
-            if (fastMode == false){
+            if (!fastMode ){
                 //Calculate the power needed for each motor
                 //            fwdControl = -1 * gamepad1.left_stick_y;
                 strafeControl = gamepad1.left_stick_x;
@@ -150,20 +145,16 @@ public class grabBot extends LinearOpMode {
                 v3s = (r * Math.sin(robotAngle) + rightX + rightY) * powerLevel;
                 v4s = (r * Math.cos(robotAngle) - rightX + rightY) * powerLevel;
 
-
                 robot.motorLF.setPower(v1s * 0.5);
                 robot.motorRF.setPower(v2s * 0.5);
                 robot.motorLR.setPower(v3s * 0.5);
                 robot.motorRR.setPower(v4s * 0.5);
             }
 
-
-
-            /**
-             *
+            /*
              * Code for controlling the foundation grabber
              * Chassis Control
-             * **/
+             */
 
             if (gamepad2.dpad_down || gamepad1.dpad_down){
                 robot.servoFoundation1.setPower(1);
@@ -173,25 +164,24 @@ public class grabBot extends LinearOpMode {
                 robot.servoFoundation2.setPower(1);
             }
 
-            /**
+            /*
              *
              * Code to manually control linear leaning mechanism
              * Mechanism Control
-             **/
+             */
 
-            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){
-                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.200);
+            if (gamepad2.right_stick_y < -0.3 && !robot.touchLiftForward.isPressed()){
+                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.500);
             }
-            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){
-                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.200);
+            else if  (gamepad2.right_stick_y > 0.3 && !robot.touchLiftBack.isPressed()){
+                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.300);
             }
             else robot.motorLinear.setPower(0);
 
-            /**
-             *
+            /*
              * Code to manually control lift mechanism lifting
              * Mechanism Control
-             **/
+             */
             if (gamepad2.right_trigger > 0){
                 robot.motorLift.setPower(0.5);
             }
@@ -202,11 +192,10 @@ public class grabBot extends LinearOpMode {
                 robot.motorLift.setPower(0);
             }
 
-            /**
-             *
+            /*
              *  Code to control the 4-bar mechanism
              *  Mechanism Control
-             **/
+             */
             if (gamepad2.left_stick_y < -0.2){
                 robot.motor4Bar.setPower(-gamepad2.left_stick_y);
             }
@@ -217,22 +206,22 @@ public class grabBot extends LinearOpMode {
                 robot.motor4Bar.setPower(0);
             }
 
-            /**
+            /*
              * Code to control grab mechanism
              * Mechanism Control
-             **/
-            if (gamepad2.b == true){
+             */
+            if (gamepad2.b){
                 robot.servoGrab.setPower(-0.5); // opens the grabber only when required
             } else {
                 robot.servoGrab.setPower(0.2);  // automatically closes grabber
             }
 
-            /**
+            /*
              * Code to control Intake
              * Mechanism Control
-             **/
+             */
 
-            /**
+            /*
              * Code is Disabled for now. Will add in the future
              *
              *
@@ -242,17 +231,14 @@ public class grabBot extends LinearOpMode {
              else if (gamepad1.left_bumper == true){
              robot.motorIntake.setPower(-0.5);
              }
-             **/
+             */
 
-
-
-
-            /**
+            /*
              * Intake Flip Mechanism
              *  Mechanism Control
-             **/
+             */
 
-            /**
+            /*
              * Code is disabled for now.  Will add back in the future.
              *
              *
@@ -265,7 +251,7 @@ public class grabBot extends LinearOpMode {
              else{
              robot.motorIntakeFlip.setPower(0);
              }
-             **/
+             */
 
             idle();
          }
@@ -275,8 +261,8 @@ public class grabBot extends LinearOpMode {
 
     private void begin() {
 
-        /**
-         * Inititialize the robot's hardware.  The hardware configuration can be found in the
+        /*
+         * Initialize the robot's hardware.  The hardware configuration can be found in the
          * HardwareTestPlatform.java class.
          */
         robot.init(hardwareMap);

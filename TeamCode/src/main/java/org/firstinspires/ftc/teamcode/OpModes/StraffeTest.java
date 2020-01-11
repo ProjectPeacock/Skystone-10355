@@ -33,26 +33,23 @@
 
 package org.firstinspires.ftc.teamcode.OpModes;
 
-/**
+/*
  * Import the classes we need to have local access to.
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-import org.firstinspires.ftc.teamcode.Libs.DataLogger;
 import org.firstinspires.ftc.teamcode.Libs.DriveMecanum;
 import org.firstinspires.ftc.teamcode.Libs.skystoneVuforia;
 
 import java.util.List;
-import java.util.Locale;
 
-/**
+/*
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "STRAFE TEST", group = "EXPERIMENT")
@@ -60,7 +57,7 @@ import java.util.Locale;
 
 public class StraffeTest extends LinearOpMode {
 
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
     private final static HardwareProfile robot = new HardwareProfile();
@@ -68,22 +65,21 @@ public class StraffeTest extends LinearOpMode {
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private DataLogger Dl;                          //Datalogger object
     private State state = State.LOCATESKYSTONE;    //Machine State
 
     public void runOpMode() {
-        /**
+        /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
          */
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Instantiate the drive class
          */
         DriveMecanum drive = new DriveMecanum(robot, opMode, myVuforia, myTrackables);
 
-        /**
+        /*
          * Set the initial servo positions
          */
         robot.servoFoundation1.setPower(0.6);
@@ -93,9 +89,9 @@ public class StraffeTest extends LinearOpMode {
 
         robot.sensorProximity.getDistance(DistanceUnit.CM);
 
-        /**
+        /*
          * Calibrate the gyro
-         **/
+         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
@@ -106,7 +102,7 @@ public class StraffeTest extends LinearOpMode {
         telemetry.addData("CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.update();
 
-        /**
+        /*
          * Start the opMode
          */
         waitForStart();
@@ -119,7 +115,6 @@ public class StraffeTest extends LinearOpMode {
                     state = State.HALT;
                     break;
 
-
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
 
@@ -130,12 +125,10 @@ public class StraffeTest extends LinearOpMode {
         }
     }
 
-    /**
+    /*
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATESKYSTONE, PLACE_FIRST_STONE, GRAB_2ND_STONE,
-        FIFTH_STATE, HALT, END_STATE
+        LOCATESKYSTONE, HALT
     }
-
 }

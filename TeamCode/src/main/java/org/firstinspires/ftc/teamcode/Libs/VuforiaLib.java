@@ -62,7 +62,7 @@ public class VuforiaLib {
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia;
 
-    /**
+    /*
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
@@ -130,7 +130,7 @@ public class VuforiaLib {
                         AngleUnit.DEGREES, 90, 90, 0));
 
 
-        /**
+        /*
          * In order for localization to work, we need to tell the system where each target is on the field, and
          * where the phone resides on the robot.  These specifications are in the form of <em>transformation matrices.</em>
          * Transformation matrices are a central, important concept in the math here involved in localization.
@@ -261,7 +261,7 @@ public class VuforiaLib {
         ((VuforiaTrackableDefaultListener) blue2.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) rear1.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) rear2.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
-        /** Start tracking the data sets we care about. */
+        /* Start tracking the data sets we care about. */
 //        skystoneTrackables.activate();
         return allTrackables;
     }
@@ -270,8 +270,7 @@ public class VuforiaLib {
         double robotX = 0;          // The robot's X position from VuforiaLib
         double robotY = -2000;      // The robot's Y position from VuforiaLib
         double robotBearing = 0;    // Bearing to, i.e. the bearing you need to steer toward
-        double robotRoll = 0;       // Indicates the robots roll position with respect to the image
-        String targetName = "";
+        String targetName;
         double visibleTarget = 99;       // identifies which target is the visible target
 
         // check all the trackable targets to see which one (if any) is visible.
