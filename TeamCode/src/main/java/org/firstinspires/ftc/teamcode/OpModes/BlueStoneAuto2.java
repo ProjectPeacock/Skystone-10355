@@ -148,7 +148,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.translateFromWall(0.1, 180, 55, 1.5);
+                    drive.translateFromWall(0.1, 180, 65, 1.5);
 
                     /*
                      * Strafe across the row of stones to locate the skystone. For this function,
@@ -168,7 +168,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .4);
+                    drive.translateTime(.2, 180, .3);
 
                     /*
                      * Grab the block with the grabber.
@@ -181,7 +181,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateTime(.2,0,.6);
+                    drive.translateTime(.3,0,.5);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -240,7 +240,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                         sleep(500);
                     }
 
-                    state = State.PARK_BRIDGE;      //Exit the state
+                    state = State.PARK_WALL;      //Exit the state
                     break;
 
                 case PARK_BRIDGE:
@@ -261,17 +261,17 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.3, 90, 0.5);
+                    drive.translateTime(.4, 90, 0.5);
 
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateTime(.3, 0, 2);
+                    drive.translateTime(.5, 0, 1.2);
 
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.3, 90, 0.5);
+                    drive.translateTime(.4, 90, 0.5);
 
                     state = State.HALT;         //Exit the state
                     break;

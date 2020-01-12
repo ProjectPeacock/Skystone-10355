@@ -149,7 +149,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.translateFromWall(-0.1, 180, 65, 1.5);
+                    drive.translateFromWall(0.1, 180, 65, 1.5);
 
                     /*
                      * Because the color sensor is on the left side of the robot, it may detect
@@ -166,7 +166,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                      */
                     strafeTimeInit = runtime.time();    // track the starting time
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,270, 27, 1.5);
+                    drive.translateSkystone(0.2,270, 38, 1.5);
                     drive.translateTime(0.2,90, 0.25);
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
@@ -263,7 +263,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                         sleep(500);
                     }
 
-                    state = State.PARK_BRIDGE;
+                    state = State.PARK_WALL;
                     //Exit the state
                     break;
 
@@ -285,17 +285,17 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.3, 270, 0.5);
+                    drive.translateTime(.4, 270, 0.6);
 
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateTime(.3, 0, 2);
+                    drive.translateTime(.5, 0, 1.2);
 
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.3, 270, 0.5);
+                    drive.translateTime(.4, 270, 0.3);
 
                     state = State.HALT;         //Exit the state
                     break;

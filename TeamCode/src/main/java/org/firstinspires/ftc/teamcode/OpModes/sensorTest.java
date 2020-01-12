@@ -55,6 +55,19 @@ public class sensorTest extends LinearOpMode {
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
+        /*
+         * Calibrate the gyro
+         */
+        robot.mrGyro.calibrate();
+        while (robot.mrGyro.isCalibrating()) {
+            telemetry.addData("Waiting on Gyro Calibration", "");
+            telemetry.update();
+        }
+
+        telemetry.addData(">", "System initialized and Ready");
+        telemetry.addData("Color Red", robot.colorSensorRevStone.red());
+        telemetry.update();
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         telemetry.addData("COMP OpModeMecanum Active", "");    //
