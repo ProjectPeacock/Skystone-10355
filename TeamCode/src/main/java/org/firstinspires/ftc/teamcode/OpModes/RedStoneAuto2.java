@@ -1,8 +1,8 @@
 /*
     Team:       10355 - Project Peacock
-    Autonomous Program - Blue Strategy #2 - Grab Skystone, Place Foundation, Place Skystone and park
-    Alliance Color: Blue
-    Robot Starting Position: Blue Quarry zone, wall next to depot
+    Autonomous Program - Red Strategy #2 - Grab Skystone, Place Foundation, Place Skystone and park
+    Alliance Color: Red
+    Robot Starting Position: Red Quarry zone, wall next to depot
     Strategy Description:
         - Grab Skystone and strafe the Foundation
         - Grab Foundation and place in build site
@@ -60,12 +60,12 @@ import java.util.Locale;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Skystones, Foundation, Park", group = "EXPERIMENT")
+@Autonomous(name = "Red-Skystones, Foundation, Park2", group = "EXPERIMENT")
 //@Disabled
 
-public class BlueStoneAuto2 extends LinearOpMode {
+public class RedStoneAuto2 extends LinearOpMode {
 
-    /**
+    /*
      * Instantiate all variables needed in this class
      */
     private final static HardwareProfile robot = new HardwareProfile();
@@ -74,11 +74,10 @@ public class BlueStoneAuto2 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private State state = State.LOCATESKYSTONE;    //Machine State
+    private State state = State.LOCATE_SKYSTONE;    //Machine State
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
     private double timeToSkystone = 4;
-
 
     public void runOpMode() {
         /*
@@ -99,6 +98,8 @@ public class BlueStoneAuto2 extends LinearOpMode {
         robot.servoFoundation2.setPower(1);
         robot.servoGrab.setPower(-1);
         sleep(1000);
+
+        robot.sensorProximity.getDistance(DistanceUnit.CM);
 
         /*
          * Calibrate the gyro
@@ -128,7 +129,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
 
-                case LOCATESKYSTONE:
+                case LOCATE_SKYSTONE:
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
@@ -137,7 +138,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive to the front wall (stafe diagonally)
                      */
-                    drive.translateTime(.3, 240, 1.6);
+                    drive.translateTime(.3, 115, 1.5);
 
                     /*
                      * Raise the lift into position to be able to grab skystone
@@ -151,40 +152,47 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     drive.translateFromWall(0.1, 180, 65, 1.5);
 
                     /*
+                     * Because the color sensor is on the left side of the robot, it may detect
+                     * the first stone as being a Skystone.  We are unable to grab the first
+                     * stone due to the positioning of the grabber so we will strafe to the
+                     * right past the first stone and look at the second stone.
+                     */
+                    drive.translateTime(.3, 270, .6);
+
+                    /*
                      * Strafe across the row of stones to locate the skystone. For this function,
                      * we track the time it takes to locate the Skystone so that we can make
                      * necessary adjustments to the time required to strafe to the foundation.
                      */
-                    strafeTimeInit = runtime.time();
+                    strafeTimeInit = runtime.time();    // track the starting time
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, 27, 1.5);
-                    strafeTime = runtime.time() - strafeTimeInit;
+                    drive.translateSkystone(0.2,270, 38, 1.5);
+                    drive.translateTime(0.2,90, 0.25);
+                    strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
                     /*
-                     * Stafe more to center on the Skystone.
+                     * Stafe into position to pick up the Skystone. For this side, we need to
+                     * backtrack because the color sensor is on the left side of the robot.
                      */
-                    drive.translateTime(.2, 90, .75);
+                    drive.translateTime(.2, 90, 0.45);
 
                     /*
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .2);
+                    drive.translateTime(.2, 180, .4);
 
-                    /*
-                     * Grab the block with the grabber.
-                     */
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
                         robot.servoGrab.setPower(0.2);
                         sleep(1000);
                     }
 
                     /*
-                     * Back away from the Skystone to clear the Skybridge.
+                     * Back away from the stones into a position so that we can clear the skybridge
                      */
-                    drive.translateTime(.3,0,.6);
+                    drive.translateTime(.2,0,.5);
 
                     /*
-                     * Lower the lifting mechanism so that we can clear the skybridge.
+                     * Lower the lift mechanism so that we can clear the skybridge
                      */
                     drive.lowerLift(2);
 
@@ -195,7 +203,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * the Skystone with the translateSkystone algorithm.
                      */
                     timeToSkystone = 4 - (strafeTime * 0.3);
-                    drive.translateTime(.4, 90, timeToSkystone);
+                    drive.translateTime(.4, 270, timeToSkystone);
 
                     state = State.PLACE_FOUNDATION;
                     break;
@@ -205,6 +213,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * drive forward to the foundation
                      */
                     drive.translateFromWall(0.3, 180, 90, 1);
+//                    drive.translateTime(.3, 180, 1);
 
                     /*
                      * Grab the foundation
@@ -216,43 +225,55 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     }
 
                     /*
-                     * Pull the foundation towards the wall.
+                     * Pull the Foundation towards the wall
                      */
                     drive.translateToWall(.3, 0, 20, 30);
+//                    drive.translateTime(.3,0,2.5);
 
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 80, "left", 1.5);
+                    drive.rotateGyro(0.3, 85, "right", 2);
+/*
+            Note: this is the old code - remove after rotateGyro Function is validated
+
+                    robot.motorLF.setPower(0.3);
+                    robot.motorLR.setPower(0.3);
+                    robot.motorRF.setPower(-0.3);
+                    robot.motorRR.setPower(-0.3);
+                    sleep (1800);
+ */
 
                     /*
-                     * drive the robot into the wall
+                     * drive the robot into the back wall; will help to align the robot
                      */
-                    drive.translateTime(0.2,180,2.0);
+                    drive.translateTime(0.2,180,1.7);
 
                     /*
-                     * Let go of the Foundation and the stone
+                     * Let go of the Foundation and the skystone (should fall onto the foundation)
                      */
-                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+
+                    if (opMode.opModeIsActive()){   // check to make sure time has not expired
                         robot.servoFoundation1.setPower(0.6);
                         robot.servoFoundation2.setPower(1);
                         robot.servoGrab.setPower(-1);
                         sleep(500);
                     }
 
-                    state = State.PARK_WALL;      //Exit the state
+                    state = State.PARK_WALL;
+                    //Exit the state
                     break;
 
                 case PARK_BRIDGE:
                     /*
                      * strafe to parking position near the bridge
                      */
-                    drive.translateTime(.3, 330, 2);
+                    drive.translateTime(.4, 20, 1.8);
 
                     /*
                      * strafe closer to the bridge
                      */
-                    drive.translateTime(.4, 270, 1);
+                    drive.translateTime(.3, 90, 1);
 
                     state = State.HALT;         //Exit the state
                     break;
@@ -261,7 +282,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.4, 90, 0.5);
+                    drive.translateTime(.4, 270, 0.6);
 
                     /*
                      * Drive to parking position under the bridge
@@ -271,10 +292,11 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.4, 90, 0.5);
+                    drive.translateTime(.4, 270, 0.3);
 
                     state = State.HALT;         //Exit the state
                     break;
+
 
                 case HALT:
                     drive.motorsHalt();               //Stop the motors
@@ -290,6 +312,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATESKYSTONE, PARK_BRIDGE, PARK_WALL, HALT,
+        LOCATE_SKYSTONE, PLACE_FOUNDATION, PARK_WALL, PARK_BRIDGE, HALT
     }
+
 }

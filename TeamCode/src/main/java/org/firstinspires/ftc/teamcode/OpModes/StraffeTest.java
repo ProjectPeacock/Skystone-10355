@@ -2,7 +2,7 @@
     Team:       10355 - Project Peacock
     Autonomous Program - Blue Strategy #1 - Place Foundation and park
     Alliance Color: Blue
-    Robot Starting Position: Blue build zone, wall next to build site
+    Robot Starting Position: Blue buidl zone, wall next to build site
     Strategy Description:
         - Grab Foundation and place in build site
         - Park robot in under the skybridge
@@ -38,6 +38,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -51,21 +52,20 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Foundation, Park", group = "COMP")
+@Autonomous(name = "STRAFE TEST", group = "EXPERIMENT")
+@Disabled
 
-public class BlueBuildAuto extends LinearOpMode {
+public class StraffeTest extends LinearOpMode {
 
     /*
      * Instantiate all objects needed in this class
      */
-
     private final static HardwareProfile robot = new HardwareProfile();
     private LinearOpMode opMode = this;                     //Opmode
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private State state = State.PLACE_FOUNDATION;    //Machine State
-
+    private State state = State.LOCATESKYSTONE;    //Machine State
 
     public void runOpMode() {
         /*
@@ -87,9 +87,10 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servoGrab.setPower(-1);
         sleep(1000);
 
+        robot.sensorProximity.getDistance(DistanceUnit.CM);
+
         /*
          * Calibrate the gyro
-         *
          */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
@@ -98,15 +99,9 @@ public class BlueBuildAuto extends LinearOpMode {
         }
 
         telemetry.addData(">", "System initialized and Ready");
-        telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
-        telemetry.addData("Color Red", robot.colorSensorRevStone.red());
-        telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
-        if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
-            telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
-            telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
-        }
-
+        telemetry.addData("CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.update();
+
         /*
          * Start the opMode
          */
@@ -115,59 +110,9 @@ public class BlueBuildAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
 
-                case PLACE_FOUNDATION:
-                    /*
-                     * strafe diagonally to the foundation
-                     */
-                    drive.translateFromWall(.3, 155, 70, 2);
-                    drive.translateFromWall(.1, 180, 90, 0.5);
-
-                    /*
-                     * Grab the foundation
-                     */
-                    robot.servoFoundation1.setPower(1);
-                    robot.servoFoundation2.setPower(.6);
-                    sleep(500);
-
-                    /*
-                     * drive towards the wall
-                     */
-                    drive.translateToWall(.3, 0, 20, 30);
-
-                    /*
-                     * rotate the foundation towards the wall
-                     */
-                    drive.rotateGyro(0.3, 80, "left", 2);
-
-                    /*
-                     * drive the robot into the wall
-                     */
-                    drive.translateTime(0.3,180,1);
-
-                    /*
-                     * Let go of the Foundation and the stone
-                     */
-                    robot.servoFoundation1.setPower(0.6);
-                    robot.servoFoundation2.setPower(1);
-                    sleep(500);
-
-                    /**
-                     * Make sure that the Lift is all the way down so it doesn't bump the skybridge
-                     */
-                    drive.lowerLift(0.3);
-
-                    /*
-                     * strafe to parking position
-                     */
-                    drive.translateTime(.3, 25, 2.2);
-
-                    /*
-                     * strafe out of the way
-                     */
-                    drive.translateTime(.2, 90, .5);
-
+                case LOCATESKYSTONE:
+                    drive.translateTime(.3,90, 5);
                     state = State.HALT;
-                    //Exit the state
                     break;
 
                 case HALT:
@@ -184,7 +129,6 @@ public class BlueBuildAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, HALT,
+        LOCATESKYSTONE, HALT
     }
-
 }

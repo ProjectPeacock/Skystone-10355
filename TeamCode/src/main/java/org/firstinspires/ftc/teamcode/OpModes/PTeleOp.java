@@ -65,16 +65,14 @@ public class PTeleOp extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            /**
-             *
+            /*
              * Driving algorithm
              * All driving algorithm items have been removed from this program.
-             *
-             **/
+             */
 
-            /**
+            /*
              * Code for controlling the foundation grabber
-             **/
+             */
 
             if (gamepad2.dpad_down){
                 robot.servoFoundation1.setPower(1);
@@ -84,23 +82,23 @@ public class PTeleOp extends LinearOpMode {
                 robot.servoFoundation2.setPower(1);
             }
 
-            /**
+            /*
              * Code to manually control linear leaning mechanism
-             **/
+             */
 
-            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
+            if (gamepad2.right_stick_y < -0.3 && !robot.touchLiftForward.isPressed()){ // Analog stick pointing up for going up (Mechanism Control)
                 robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.125);
             }
-            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
+            else if  (gamepad2.right_stick_y > 0.3 && !robot.touchLiftBack.isPressed()){ // analog stick down for going down (Mechanism Control)
                 robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.125);
             }
             else robot.motorLinear.setPower(0);
 
-            /**
+            /*
              *
              * Code to manually control lift mechanism lifting
              *
-             **/
+             */
             if (gamepad2.right_trigger > 0){ // Change To Right-Trigger (Mechanism Control)
                 robot.motorLift.setPower(0.5);
             }
@@ -111,7 +109,7 @@ public class PTeleOp extends LinearOpMode {
                 robot.motorLift.setPower(0);
             }
 
-            /**
+            /*
              *  Code to control the 4-bar mechanism
              */
 
@@ -125,10 +123,10 @@ public class PTeleOp extends LinearOpMode {
                 robot.motor4Bar.setPower(0);
             }
 
-            /**
+            /*
              * Code to control grab mechanism
-             **/
-            if (gamepad2.b == true){
+             */
+            if (gamepad2.b){
                 robot.servoGrab.setPower(-0.5);
             }
             else {
@@ -136,14 +134,12 @@ public class PTeleOp extends LinearOpMode {
             }
 
             idle();
-
         }
-
     }
 
     private void begin() {
 
-        /**
+        /*
          * Initialize the robot's hardware.  The hardware configuration can be found in the
          * Hardware/HardwareProfile.java class.
          */

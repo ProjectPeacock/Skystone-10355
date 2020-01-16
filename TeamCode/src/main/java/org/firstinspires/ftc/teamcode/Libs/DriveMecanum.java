@@ -10,19 +10,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 
 import java.util.List;
 
-/**
+/*
  * FTC Team 10355 driveMecanum Class for 2019-2020 Skystone season.
  */
 
 public class DriveMecanum {
     private double myCurrentMotorPosition;
-    private double myTargetPosition;
     private double LF, RF, LR, RR;
     private List<VuforiaTrackable> myTrackables;
-    private HardwareProfile robot = null;
-    private LinearOpMode opMode = null;
+    private HardwareProfile robot;
+    private LinearOpMode opMode;
     private ElapsedTime runtime = new ElapsedTime();
-    private skystoneVuforia myVuforia = null;
+    private skystoneVuforia myVuforia;
     private List<Double> vuforiaTracking;
     private double robotX;          // The robot's X position from VuforiaLib
     private double robotY;  // The robot's Y position from VuforiaLib
@@ -96,15 +95,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -154,7 +153,7 @@ public class DriveMecanum {
             robotY = vuforiaTracking.get(1);
             robotBearing = vuforiaTracking.get(2);
 
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("Target Y", String.valueOf(y));
             opMode.telemetry.addData("robotX", String.valueOf(robotX));
             opMode.telemetry.addData("robotY", String.valueOf(robotY));
@@ -293,7 +292,7 @@ public class DriveMecanum {
             robotY = vuforiaTracking.get(1);
             robotBearing = vuforiaTracking.get(2);
 
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("robotX", String.valueOf(robotX));
             opMode.telemetry.addData("robotY", String.valueOf(robotY));
             opMode.telemetry.addData("robotBearing", String.valueOf(robotBearing));
@@ -307,7 +306,6 @@ public class DriveMecanum {
         }
 
         motorsHalt();
-
     }
 
     public void translateTime(double power, double heading, double timeOut) {
@@ -351,6 +349,7 @@ public class DriveMecanum {
 
                 if (heading > 180 && heading < 359.99999) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -358,6 +357,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -367,22 +367,25 @@ public class DriveMecanum {
 
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
 
                 if (heading == 0) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -390,6 +393,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -399,6 +403,7 @@ public class DriveMecanum {
 
                 if (heading == 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
+                        opMode.telemetry.addData("Robot has drifted ", "LEFT");
                         LF = LF - (zCorrection / 100);
                         RF = RF + (zCorrection / 100);
                         LR = LR - (zCorrection / 100);
@@ -406,6 +411,7 @@ public class DriveMecanum {
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
+                        opMode.telemetry.addData("Robot has drifted ", "RIGHT");
                         LF = LF + (zCorrection / 100);
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
@@ -421,8 +427,11 @@ public class DriveMecanum {
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
             timeElapsed = runtime.time() - runtimeValue;
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
-            opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
+            opMode.telemetry.addData("Status", "Elapsed Time: " + timeElapsed);
+            opMode.telemetry.addData("Gyro Value", String.valueOf(currentZint));
+            opMode.telemetry.addData("intZ", String.valueOf(initZ));
+
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -432,21 +441,26 @@ public class DriveMecanum {
             opMode.idle();
         }
         motorsHalt();
-
     }
 
-    public void translateSkystone(double power, double heading) {
+    public void translateSkystone(double power, double heading, double alphaColor, double maxTime) {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double timeElapsed;
         double runtimeValue;
 
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effrt and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
         runtimeValue = runtime.time();
-        timeElapsed = runtimeValue - runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
         heading = heading * (Math.PI / 180);
 
-        while (robot.colorSensorRevStone.alpha() > 50) {
+        while (opMode.opModeIsActive() && (robot.colorSensorRevStone.red() > alphaColor) && (timeElapsed < maxTime)) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
@@ -493,15 +507,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -546,8 +560,11 @@ public class DriveMecanum {
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
             timeElapsed = runtime.time() - runtimeValue;
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
-            opMode.telemetry.addData("Status", "Elapsed Time: " + String.valueOf(timeElapsed));
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
+            opMode.telemetry.addData("Status", "Elapsed Time: " + timeElapsed);
+            opMode.telemetry.addData("Color sensor Value", String.valueOf(robot.colorSensorRevStone.red()));
+            opMode.telemetry.addData("Gyro Value", String.valueOf(currentZint));
+            opMode.telemetry.addData("intZ", String.valueOf(initZ));
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -561,35 +578,36 @@ public class DriveMecanum {
     }
 
     /**
-     * Robot will drive in the heading provided by the function call.  The sensor identified should
-     * be the sensor on the side of the robot that the robot is heading to.  The robot will stop
-     * when the robot is within the distance provided in the parameters.
-     * @param sensor
-     * @param power
-     * @param heading
-     * @param distance
+     * translateFromWall will use the range sensor to measure distance from the wall and will drive
+     * to the specified distance.
+     * @param power     // controls speed at which the robot should move
+     * @param heading   // direction to head (will strafe to the location
+     * @param distance  // distance to the wall that the robot is trying to acheive
+     * @param maxTime   // maximum time that the function should run - exits at maxTime
      */
-
-    public void translateRange(String sensor, double power, double heading, double distance) {
+    public void translateFromWall(double power, double heading, double distance, double maxTime) {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double currentRange = 0;
         boolean active = true;
+        double timeElapsed;
+        double runtimeValue;
 
-        if (sensor == "front"){
-            currentRange = robot.rangeSensorFront.rawUltrasonic();
-        } else if(sensor == "rear"){
-            currentRange = robot.rangeSensorRear.rawUltrasonic();
-        } else if(sensor == "left") {
-            currentRange = robot.rangeSensorLeft.rawUltrasonic();
-        } else if (sensor == "right"){
-            currentRange = robot.rangeSensorRight.rawUltrasonic();
-        } else active = false;      // a proper range sensor was not identified. Exit routine.
-
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effrt and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
         heading = heading * (Math.PI / 180);
 
-        while (opMode.opModeIsActive() && active) {
+        currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+        if (currentRange > distance) active = false;
+
+        while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
@@ -636,15 +654,15 @@ public class DriveMecanum {
                 if (heading > 0 && heading < 180) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
-                        RF = RF + (zCorrection / 100);
-                        LR = LR - (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
                         LF = LF - (zCorrection / 100);
-                        RF = RF - (zCorrection / 100);
-                        LR = LR + (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
                 }
@@ -688,21 +706,11 @@ public class DriveMecanum {
 
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
-            if (sensor == "front"){
-                currentRange = robot.rangeSensorFront.rawUltrasonic();
-            } else if(sensor == "rear"){
-                currentRange = robot.rangeSensorRear.rawUltrasonic();
-            } else if(sensor == "left") {
-                currentRange = robot.rangeSensorLeft.rawUltrasonic();
-            } else if (sensor == "right"){
-                currentRange = robot.rangeSensorRight.rawUltrasonic();
-            } else active = false;      // a proper range sensor was not identified. Exit routine.
-
             // check to see if the distance traveled is less than the range specification
-            if (currentRange < distance){
-                active = false;
-            }
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+            if (currentRange > distance) active = false;
+
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -715,48 +723,205 @@ public class DriveMecanum {
     }
 
     /**
-     * locate and center on the Skystone
+     * translateToWall will use the range sensor to measure distance to the wall and will drive
+     * to the specified distance.
+     * @param power     // controls speed at which the robot should move
+     * @param heading   // direction to head (will strafe to the location
+     * @param distance  // distance to the wall that the robot is trying to acheive
+     * @param maxTime   // maximum time that the function should run - exits at maxTime
      */
-    public void driveToSkystone(){
+    public void translateToWall(double power, double heading, double distance, double maxTime) {
+        double changeSpeed = 0;
+        double initZ = robot.mrGyro.getIntegratedZValue();
+        double currentZint;
+        double currentRange = 0;
+        boolean active = true;
+        double timeElapsed;
+        double runtimeValue;
 
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effrt and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+        heading = heading * (Math.PI / 180);
 
-        while (robot.wallRangeSensor.getDistance(DistanceUnit.CM) < 59) {
-            robot.motorRR.setPower(-0.1);
-            robot.motorLR.setPower(-0.1);
-            robot.motorLF.setPower(-0.1);
-            robot.motorRF.setPower(-0.1);
+        currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+        if (currentRange < distance) active = false;
+
+        while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
+
+            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
+            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
+            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
+            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+
+            if (LF > 1 || LF < -1) {
+                LF = 0;
+            }
+
+            if (RF > 1 || RF < -1) {
+                RF = 0;
+            }
+
+            if (LR > 1 || LR < -1) {
+                LR = 0;
+            }
+
+            if (RR > 1 || RR < -1) {
+                RR = 0;
+            }
+
+            currentZint = robot.mrGyro.getIntegratedZValue();
+
+            if (currentZint != initZ) {  //Robot has drifted off course
+                double zCorrection = Math.abs(initZ - currentZint);
+
+                if (heading > 180 && heading < 359.99999) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading > 0 && heading < 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 0) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+                }
+
+                if (heading == 180) {
+                    if (currentZint > initZ) {  //Robot has drifted left
+                        LF = LF - (zCorrection / 100);
+                        RF = RF + (zCorrection / 100);
+                        LR = LR - (zCorrection / 100);
+                        RR = RR + (zCorrection / 100);
+                    }
+
+                    if (currentZint < initZ) {  //Robot has drifted right
+                        LF = LF + (zCorrection / 100);
+                        RF = RF - (zCorrection / 100);
+                        LR = LR + (zCorrection / 100);
+                        RR = RR - (zCorrection / 100);
+                    }
+                }
+            }
+            robot.motorLF.setPower(LF);
+            robot.motorRF.setPower(RF);
+            robot.motorLR.setPower(LR);
+            robot.motorRR.setPower(RR);
+
+            myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
+
+            // check to see if the distance traveled is less than the range specification
+            currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+            if (currentRange < distance) active = false;
+
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
+            opMode.telemetry.addData("LF", String.valueOf(LF));
+            opMode.telemetry.addData("RF", String.valueOf(RF));
+            opMode.telemetry.addData("LR", String.valueOf(LR));
+            opMode.telemetry.addData("RR", String.valueOf(RR));
+            opMode.telemetry.update();
+
+            opMode.idle();
         }
-
-
-        while (robot.sensorProximity.getDistance(DistanceUnit.CM) > 10) {
-        }
-
-            robot.motorRR.setPower(0);
-            robot.motorLR.setPower(0);
-            robot.motorLF.setPower(0);
-            robot.motorRF.setPower(0);
-
+        motorsHalt();
     }
 
-
-    /**
+    /*
      * Raise the lift up
      */
-    public void raiseLift(){
+    public void raiseLift(double maxTime){
+        double timeElapsed;
+        double runtimeValue;
+
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effort and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+
+        // turn the linear motor on to begin raising the lift
         robot.motorLinear.setPower(0.3);
-        while (robot.touchLiftForward.isPressed()== false){
+
+
+        while (opMode.opModeIsActive() && (!robot.touchLiftForward.isPressed()) && (timeElapsed < maxTime)){
+            timeElapsed = runtime.time() - runtimeValue;
+            // wait for the lift to lean all the way forward
+            opMode.telemetry.addData("Status", "Run Time: " + timeElapsed);
+            opMode.telemetry.update();
         }
-        robot.motorLinear.setPower(0);
+        robot.motorLinear.setPower(0);  // shut the motor off
     }
 
-    /**
+    /*
      * Raise the lift up
      */
-    public void lowerLift(){
+    public void lowerLift(double maxTime){
+        double timeElapsed;
+        double runtimeValue;
+
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effort and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+
+        // turn the linear motor on to begin lowering the lift
         robot.motorLinear.setPower(-0.200);
-        while (robot.touchLiftBack.isPressed()== false){
+
+        while (opMode.opModeIsActive() && (!robot.touchLiftBack.isPressed()) && (timeElapsed < maxTime)){
+            timeElapsed = runtime.time() - runtimeValue;
+            // wait for the lift to lean all the way backward
+            opMode.telemetry.addData("Status", "Run Time: " + timeElapsed);
+            opMode.telemetry.update();
         }
-        robot.motorLinear.setPower(0);
+        robot.motorLinear.setPower(0);  // shut the motor off
     }
 
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,
@@ -802,7 +967,7 @@ public class DriveMecanum {
 
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
-            opMode.telemetry.addData("Status", "Run Time: " + String.valueOf(runtime.time()));
+            opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("robotX", String.valueOf(robotX));
             opMode.telemetry.addData("robotY", String.valueOf(robotY));
             opMode.telemetry.addData("robotBearing", String.valueOf(robotBearing));
@@ -817,6 +982,65 @@ public class DriveMecanum {
         }
         motorsHalt();
         opMode.requestOpModeStop();
+    }
+
+    /**
+     * rotateGyro uses the Gyro sensor to control rotation of the robot.  Robot will rotate in place.
+     * Note: this function does not use PID control.
+     * @param power         // controls how fast to rotate
+     * @param angle         // identifies what angle to rotate to
+     * @param direction     // which direction to rotate - "right" or "left"
+     * @param maxTime       // maximum amount of time to attempt operation
+     */
+    public void rotateGyro(double power, double angle, String direction, double maxTime){
+        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double targetZ;
+        double timeElapsed;
+        double runtimeValue;
+
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effort and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+
+        switch(direction){
+            case "right" :
+                targetZ = currentZinit - angle;
+                robot.motorLF.setPower(power);
+                robot.motorLR.setPower(power);
+                robot.motorRF.setPower(-power);
+                robot.motorRR.setPower(-power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ){
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                break;
+
+            case "left" :
+                targetZ = currentZinit + angle;
+                robot.motorLF.setPower(-power);
+                robot.motorLR.setPower(-power);
+                robot.motorRF.setPower(power);
+                robot.motorRR.setPower(power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit < targetZ){
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                break;
+
+        }
 
     }
 
