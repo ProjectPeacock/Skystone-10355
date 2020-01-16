@@ -180,10 +180,10 @@ public class grabBot extends LinearOpMode {
              **/
 
             if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){
-                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y* 0.200);
+                robot.motorLinear.setPower(-1 * gamepad2.right_stick_y);
             }
             else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){
-                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y* 0.200);
+                robot.motorLinear.setPower(-1 *gamepad2.right_stick_y);
             }
             else robot.motorLinear.setPower(0);
 
