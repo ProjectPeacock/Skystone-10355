@@ -174,16 +174,13 @@ public class RedStoneAuto2 extends LinearOpMode {
                      * Stafe into position to pick up the Skystone. For this side, we need to
                      * backtrack because the color sensor is on the left side of the robot.
                      */
-                    drive.translateTime(.2, 90, 0.3);
+                    drive.translateTime(.2, 90, 0.45);
 
                     /*
                      * Drive forward to grab the Skystone
                      */
                     drive.translateTime(.2, 180, .4);
 
-                    /*
-                     * Grab the Skystone with the grabber.
-                     */
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
                         robot.servoGrab.setPower(0.2);
                         sleep(1000);
@@ -290,7 +287,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateTime(.5, 0, 1.2);
+                    drive.translateTime(.5, 0, 1.3);
 
                     /*
                      * strafe closer to the wall

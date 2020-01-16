@@ -163,12 +163,12 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Stafe more to center on the Skystone.
                      */
-                    drive.translateTime(.2, 90, .65);
+                    drive.translateTime(.2, 90, .75);
 
                     /*
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .3);
+                    drive.translateTime(.2, 180, .2);
 
                     /*
                      * Grab the block with the grabber.
@@ -181,7 +181,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateTime(.3,0,.5);
+                    drive.translateTime(.3,0,.6);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -266,7 +266,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateTime(.5, 0, 1.2);
+                    drive.translateTime(.5, 0, 1.3);
 
                     /*
                      * strafe closer to the wall
