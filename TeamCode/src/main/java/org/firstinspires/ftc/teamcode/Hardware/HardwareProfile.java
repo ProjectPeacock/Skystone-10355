@@ -7,10 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
@@ -47,6 +44,7 @@ public class HardwareProfile {
     public CRServo servoFoundation1;
     public CRServo servoFoundation2;
     public CRServo servoGrab;
+    public CRServo servoStone;
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
     public DistanceSensor wallRangeSensor;
@@ -142,5 +140,6 @@ public class HardwareProfile {
         servoFoundation1 = hwMap.crservo.get("servoFoundation1");
         servoFoundation2 = hwMap.crservo.get("servoFoundation2");
         servoGrab = hwMap.crservo.get("servoGrab");
+        servoStone = hwMap.crservo.get("servoStone");
     }
 }

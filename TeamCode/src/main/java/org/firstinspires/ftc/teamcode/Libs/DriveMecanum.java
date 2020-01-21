@@ -25,7 +25,7 @@ public class DriveMecanum {
     private List<Double> vuforiaTracking;
     private double robotX;          // The robot's X position from VuforiaLib
     private double robotY;  // The robot's Y position from VuforiaLib
-    private double robotBearing;    //Bearing to, i.e. the bearing you need to stear toward
+    private double robotBearing;    //Bearing to, i.e. the bearing you need to steer toward
 
 
     public DriveMecanum(HardwareProfile myRobot, LinearOpMode myOpMode, skystoneVuforia thisVuforia,

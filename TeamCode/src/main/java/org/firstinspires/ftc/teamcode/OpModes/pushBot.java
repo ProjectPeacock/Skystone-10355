@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-
 /*
     Team:       10355 - Project Peacock
     grabBot Program
@@ -28,19 +27,15 @@ package org.firstinspires.ftc.teamcode.OpModes;
              autonomous mode operation.
         - 2 x Touch sensors - limits lift mechanism when leaning forward and backward.
         - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
- **/
-
+ */
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
-
-
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "pushBot", group = "Comp")
 
 public class pushBot extends LinearOpMode {
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
     private final static HardwareProfile robot = new HardwareProfile();
@@ -77,14 +72,12 @@ public class pushBot extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            /**
-             *
+            /*
              * Driving algorithm
              * Note: this algorithm assumes that all values are zero when controls are not touched
-             *
-             **/
+             */
             //Calculate the power needed for each motor
-            /**
+            /*
              * Drive control for Caleb
              */
 
@@ -103,8 +96,7 @@ public class pushBot extends LinearOpMode {
             robot.motorLR.setPower(v3);
             robot.motorRR.setPower(v4);
 
-
-             /** Drive control for Jameson
+             /* Drive control for Jameson
 
             //Calculate the power needed for each motor
             //            fwdControl = -1 * gamepad1.left_stick_y; //Jameson's Settings
@@ -122,16 +114,13 @@ public class pushBot extends LinearOpMode {
             robot.motorRF.setPower(v2);
             robot.motorLR.setPower(v3);
             robot.motorRR.setPower(v4);
-            **/
-            /** Chassis control is for jameson meaning it should all be the way jameson wants it **/
-            /** Mechanism control is for Julian therefore controls should be to his preference **/
+            */
+            /* Chassis control is for jameson meaning it should all be the way jameson wants it */
+            /* Mechanism control is for Julian therefore controls should be to his preference */
 
-
-            /**
-             *
+            /*
              * Code for controlling the foundation grabber
-             *
-             * **/
+             */
 
             if (gamepad2.dpad_down || gamepad1.dpad_down){
                 robot.servoFoundation1.setPower(1);
@@ -141,25 +130,28 @@ public class pushBot extends LinearOpMode {
                 robot.servoFoundation2.setPower(1);
             }
 
-            /**
-             *
-             * Code to manually control linear leaning mechanism
-             *
-             **/
+            /*
+             *  Code to control the captone release
+             */
+            if (gamepad2.left_bumper || gamepad2.right_bumper || gamepad1.left_bumper || gamepad1.right_bumper) {
+                robot.servoStone.setPower(0);
+            }
 
-            if (gamepad2.right_stick_y < -0.3 && robot.touchLiftForward.isPressed()== false){ // Analog stick pointing up for going up (Mechanism Control)
+            /*
+             * Code to manually control linear leaning mechanism
+             */
+
+            if (gamepad2.right_stick_y < -0.3 && !robot.touchLiftForward.isPressed()){ // Analog stick pointing up for going up (Mechanism Control)
                 robot.motorLinear.setPower(-1 * gamepad2.right_stick_y);
             }
-            else if  (gamepad2.right_stick_y > 0.3 && robot.touchLiftBack.isPressed()== false){ // analog stick down for going down (Mechanism Control)
+            else if  (gamepad2.right_stick_y > 0.3 && !robot.touchLiftBack.isPressed()){ // analog stick down for going down (Mechanism Control)
                 robot.motorLinear.setPower(-1 *gamepad2.right_stick_y);
             }
             else robot.motorLinear.setPower(0);
 
-            /**
-             *
+            /*
              * Code to manually control lift mechanism lifting
-             *
-             **/
+             */
             if (gamepad2.right_trigger > 0){ // Change To Right-Trigger (Mechanism Control)
                 robot.motorLift.setPower(0.5);
             }
@@ -170,10 +162,9 @@ public class pushBot extends LinearOpMode {
                 robot.motorLift.setPower(0);
             }
 
-            /**
-             *
+            /*
              *  Code to control the 4-bar mechanism
-             **/
+             */
             if (gamepad2.left_stick_y < -0.2){
                 robot.motor4Bar.setPower(-gamepad2.left_stick_y);
             }
@@ -184,10 +175,10 @@ public class pushBot extends LinearOpMode {
                 robot.motor4Bar.setPower(0);
             }
 
-            /**
+            /*
              * Code to control grab mechanism
-             **/
-            if (gamepad2.b == true){
+             */
+            if (gamepad2.b){
                 robot.servoGrab.setPower(-0.5);
             }
 
@@ -195,43 +186,9 @@ public class pushBot extends LinearOpMode {
                 robot.servoGrab.setPower(0.2);
             }
 
-            /**
+            /*
              * Code to control Intake
-             **/
-
-            /**
-             * Code is Disabled for now. Will add in the future
-             *
-             *
-             if (gamepad1.right_bumper == true){
-             robot.motorIntake.setPower(0.5);
-             }
-             else if (gamepad1.left_bumper == true){
-             robot.motorIntake.setPower(-0.5);
-             }
-             **/
-
-
-
-
-            /**
-             * Intake Flip Mechanism
-             **/
-
-            /**
-             * Code is disabled for now.  Will add back in the future.
-             *
-             *
-             if (gamepad1.dpad_left == true){
-             robot.motorIntakeFlip.setPower(0.5);
-             }
-             else if (gamepad1.dpad_right == true){
-             robot.motorIntakeFlip.setPower(-0.5);
-             }
-             else{
-             robot.motorIntakeFlip.setPower(0);
-             }
-             **/
+             */
 
             idle();
         }
@@ -240,8 +197,8 @@ public class pushBot extends LinearOpMode {
 
     private void begin() {
 
-        /**
-         * Inititialize the robot's hardware.  The hardware configuration can be found in the
+        /*
+         * Initialize the robot's hardware.  The hardware configuration can be found in the
          * HardwareTestPlatform.java class.
          */
         robot.init(hardwareMap);
