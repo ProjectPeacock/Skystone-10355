@@ -78,6 +78,7 @@ public class RedStoneAuto2 extends LinearOpMode {
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
     private double timeToSkystone = 4;
+    private double redColorValue = 20;
 
     public void runOpMode() {
         /*
@@ -167,8 +168,8 @@ public class RedStoneAuto2 extends LinearOpMode {
                      */
                     strafeTimeInit = runtime.time();    // track the starting time
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,270, 38, 1.5);
-                    drive.translateTime(0.2,90, 0.25);
+                    drive.translateSkystone(0.2,270, redColorValue, 1.5);
+                    drive.translateTime(0.1,90, 0.25);
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
                     /*
@@ -288,7 +289,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateTime(.5, 0, 1.3);
+                    drive.translateTime(.5, 0, 1.1);
 
                     /*
                      * strafe closer to the wall

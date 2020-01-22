@@ -160,7 +160,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 25, 2.2);
+                    drive.translateTime(.3, 25, 2.4);
 
                     /*
                      * strafe out of the way

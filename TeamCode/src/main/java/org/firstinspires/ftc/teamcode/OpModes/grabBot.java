@@ -64,6 +64,9 @@ public class grabBot extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
+
+        robot.servoStone.setPower(-1);
+        sleep(300);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Project Peacock");    //
         telemetry.update();
@@ -193,7 +196,7 @@ public class grabBot extends LinearOpMode {
              *  Code to control the captone release
              */
             if (gamepad2.left_bumper || gamepad2.right_bumper || gamepad1.left_bumper || gamepad1.right_bumper) {
-                robot.servoStone.setPower(0);
+                robot.servoStone.setPower(-0.5);
             }
 
             /*

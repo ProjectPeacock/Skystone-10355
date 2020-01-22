@@ -78,7 +78,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
     private double timeToSkystone = 4;
-
+    private double redColorValue = 20;
 
     public void runOpMode() {
         /*
@@ -149,7 +149,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.translateFromWall(0.1, 180, 65, 1.5);
+                    drive.translateFromWall(0.1, 180, 62, 1.5);
 
                     /*
                      * Strafe across the row of stones to locate the skystone. For this function,
@@ -158,7 +158,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                      */
                     strafeTimeInit = runtime.time();
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, 27, 1.5);
+                    drive.translateSkystone(0.2,90, redColorValue, 1.5);
                     strafeTime = runtime.time() - strafeTimeInit;
 
                     /*
@@ -182,7 +182,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateTime(.3,0,.6);
+                    drive.translateTime(.3,0,.4);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -224,7 +224,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 80, "left", 1.5);
+                    drive.rotateGyro(0.3, 90, "left", 1.5);
 
                     /*
                      * drive the robot into the wall

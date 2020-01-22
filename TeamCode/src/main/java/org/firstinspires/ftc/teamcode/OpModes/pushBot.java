@@ -61,6 +61,8 @@ public class pushBot extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
+        robot.servoStone.setPower(-1);
+        sleep(300);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Project Peacock");    //
         telemetry.update();

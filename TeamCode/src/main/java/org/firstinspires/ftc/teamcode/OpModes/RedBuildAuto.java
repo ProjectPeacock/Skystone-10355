@@ -155,7 +155,7 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 330, 2.2);
+                    drive.translateTime(.3, 330, 2.4);
 
                     /*
                      * strafe out of the way
