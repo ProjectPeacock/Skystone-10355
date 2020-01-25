@@ -196,7 +196,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * Lower the lift mechanism so that we can clear the skybridge
                      */
-                    drive.lowerLift(2);
+                    drive.lowerLift(1.25);
 
                     /*
                      * Strafe to the Foundation.  In the middle position, the robot takes about
@@ -214,7 +214,10 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * drive forward to the foundation
                      */
-                    drive.translateFromWall(0.3, 180, 90, 1);
+//                    drive.translateFromWall(0.3, 180, 90, 1);
+                    drive.translateFromWall(0.3, 180, 70, 2);
+                    drive.translateFromWall(0.1, 180, 90, 0.5);
+
 //                    drive.translateTime(.3, 180, 1);
 
                     /*
@@ -262,6 +265,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                         sleep(500);
                     }
 
+                    sleep(4000);
                     state = State.PARK_WALL;
                     //Exit the state
                     break;

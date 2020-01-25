@@ -187,7 +187,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
                      */
-                    drive.lowerLift(2);
+                    drive.lowerLift(1.25);
 
                     /*
                      * Strafe to the Foundation.  In the middle position, the robot takes about
@@ -205,7 +205,9 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * drive forward to the foundation
                      */
-                    drive.translateFromWall(0.3, 180, 90, 1);
+//                    drive.translateFromWall(0.3, 180, 90, 1);
+                    drive.translateFromWall(0.3, 180, 70, 2);
+                    drive.translateFromWall(0.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation
@@ -224,7 +226,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 90, "left", 1.5);
+                    drive.rotateGyro(0.3, 90, "left", 3);
 
                     /*
                      * drive the robot into the wall
@@ -240,6 +242,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                         robot.servoGrab.setPower(-1);
                         sleep(500);
                     }
+                    sleep(4000);
 
                     state = State.PARK_WALL;      //Exit the state
                     break;

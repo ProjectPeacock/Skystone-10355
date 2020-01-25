@@ -11,15 +11,11 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
 /*
- * This is the hardware definition for the Hardware test/reference platform.  This class should be
+ * This is the hardware definition for the Project Peacock Robot.  This class should be
  * instantiated in the opmode to allow access to the hardware.
- * <p>
- * Example:
- * <p>
- * private HardwareProfile robot = new HardwareProfile();
+ *
+ * Example:   private HardwareProfile robot = new HardwareProfile();
  */
 
 public class HardwareProfile {

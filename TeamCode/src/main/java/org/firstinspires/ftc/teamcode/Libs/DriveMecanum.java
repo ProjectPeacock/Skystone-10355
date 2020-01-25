@@ -589,7 +589,7 @@ public class DriveMecanum {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
-        double currentRange = 0;
+        double currentRange;
         boolean active = true;
         double timeElapsed;
         double runtimeValue;
@@ -734,7 +734,7 @@ public class DriveMecanum {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
-        double currentRange = 0;
+        double currentRange;
         boolean active = true;
         double timeElapsed;
         double runtimeValue;
@@ -855,7 +855,9 @@ public class DriveMecanum {
             currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
             if (currentRange < distance) active = false;
 
+            timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
+            opMode.telemetry.addData("Time Elapsed", timeElapsed);
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
@@ -913,7 +915,7 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
 
         // turn the linear motor on to begin lowering the lift
-        robot.motorLinear.setPower(-0.200);
+        robot.motorLinear.setPower(-0.300);
 
         while (opMode.opModeIsActive() && (!robot.touchLiftBack.isPressed()) && (timeElapsed < maxTime)){
             timeElapsed = runtime.time() - runtimeValue;
