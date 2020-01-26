@@ -78,7 +78,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
     private double timeToSkystone = 4;
-    private double redColorValue = 20;
+    private double redColorValue = 18;
 
     public void runOpMode() {
         /*
@@ -133,6 +133,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
+                    telemetry.addData("Color Red", robot.colorSensorRevStone.red());
                     telemetry.update();
 
                     /*
@@ -169,7 +170,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * Drive forward to grab the Skystone
                      */
-                    drive.translateTime(.2, 180, .2);
+                    drive.translateTime(.2, 180, .3);
 
                     /*
                      * Grab the block with the grabber.
@@ -244,14 +245,14 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     }
                     sleep(4000);
 
-                    state = State.PARK_WALL;      //Exit the state
+                    state = State.PARK_BRIDGE;      //Exit the state
                     break;
 
                 case PARK_BRIDGE:
                     /*
                      * strafe to parking position near the bridge
                      */
-                    drive.translateTime(.3, 330, 2);
+                    drive.translateTime(.3, 350, 2);
 
                     /*
                      * strafe closer to the bridge
@@ -265,7 +266,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.4, 90, 0.5);
+                    drive.translateTime(.4, 90, 0.7);
 
                     /*
                      * Drive to parking position under the bridge

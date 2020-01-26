@@ -78,7 +78,7 @@ public class RedStoneAuto2 extends LinearOpMode {
     private double strafeTime = 0;
     private double strafeTimeInit = 0;
     private double timeToSkystone = 4;
-    private double redColorValue = 20;
+    private double redColorValue = 18;
 
     public void runOpMode() {
         /*
@@ -266,7 +266,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     }
 
                     sleep(4000);
-                    state = State.PARK_WALL;
+                    state = State.PARK_BRIDGE;
                     //Exit the state
                     break;
 
