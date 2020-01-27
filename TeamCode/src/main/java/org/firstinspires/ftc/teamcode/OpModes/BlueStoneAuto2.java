@@ -137,7 +137,7 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     telemetry.update();
 
                     /*
-                     * Drive to the front wall (stafe diagonally)
+                     * Drive to the front wall (strafe diagonally)
                      */
                     drive.translateTime(.3, 240, 1.6);
 
