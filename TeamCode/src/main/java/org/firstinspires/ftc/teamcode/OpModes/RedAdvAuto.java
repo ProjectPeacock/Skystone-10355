@@ -295,7 +295,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      *Reverse to the loading zone
                      */
-                    drive.translateTime(0.5, 0,3);
+                    drive.translateTime(0.5, 0,2.8);
 
                     /*
                      *Strafe and rotate left
