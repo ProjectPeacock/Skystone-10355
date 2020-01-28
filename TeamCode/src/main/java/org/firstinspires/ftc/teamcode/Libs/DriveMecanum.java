@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 
 import java.util.List;
 
+
 /*
  * FTC Team 10355 driveMecanum Class for 2019-2020 Skystone season.
  */
@@ -82,6 +83,7 @@ public class DriveMecanum {
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
+
                     }
 
                     if (currentZint < initZ) {  //Robot has drifted right
@@ -576,6 +578,56 @@ public class DriveMecanum {
         motorsHalt();
 
     }
+    /**
+     * translateFromWall will use the range sensor to measure distance from the wall and will drive
+     * to the specified distance.
+     * @param power     // controls speed at which the robot should move
+     * @param heading   // direction to head (will strafe to the location
+     * @param distance  // distance to the wall that the robot is trying to acheive
+     * @param maxTime   // maximum time that the function should run - exits at maxTime
+     */
+    public void robotCorrect(double power, double heading, double distance, double maxTime){
+        double initZ = robot.mrGyro.getIntegratedZValue();
+        double currentZint;
+        boolean active = true;
+        double timeElapsed;
+        double runtimeValue;
+        double currentRangeB;
+        double currentRangeF;
+        double currentRangeL;
+        double currentRangeR;
+
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+        heading = heading * (Math.PI / 180);
+
+        currentRangeR = robot.rangeSensorRight.getDistance(DistanceUnit.CM);
+        currentRangeB = robot.rangeSensorRear.getDistance(DistanceUnit.CM);
+        currentRangeF = robot.rangeSensorFront.getDistance(DistanceUnit.CM);
+        currentRangeL = robot.rangeSensorLeft.getDistance(DistanceUnit.CM);
+
+        if (currentRangeB > 60) {
+            active = false;
+        }
+
+        if (currentRangeB < 60 && currentRangeF < 18) {
+            active = true;
+        }
+        while (opMode.opModeIsActive() && active ){
+            if (currentRangeB < 60 && currentRangeF < 18){
+                translateTime(0.6, 270, 1);
+
+                while (currentRangeR < 5){
+                    opMode.sleep(250);
+                }
+                translateTime(0.6, 90, 0.6);
+                active = false;
+            }
+
+
+        }
+    }
+
 
     /**
      * translateFromWall will use the range sensor to measure distance from the wall and will drive
