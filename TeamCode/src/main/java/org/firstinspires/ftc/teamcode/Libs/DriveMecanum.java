@@ -579,7 +579,7 @@ public class DriveMecanum {
 
     }
     /**
-     * translateFromWall will use the range sensor to measure distance from the wall and will drive
+     * robotCorrect will use the range sensor to measure distance from the wall and will drive
      * to the specified distance.
      * @param power     // controls speed at which the robot should move
      * @param heading   // direction to head (will strafe to the location
@@ -623,8 +623,6 @@ public class DriveMecanum {
                 translateTime(0.6, 90, 0.6);
                 active = false;
             }
-
-
         }
     }
 
