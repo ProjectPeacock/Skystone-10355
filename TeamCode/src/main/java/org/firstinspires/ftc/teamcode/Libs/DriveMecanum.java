@@ -585,6 +585,7 @@ public class DriveMecanum {
      * @param distance  // distance to the wall that the robot is trying to acheive
      * @param maxTime   // maximum time that the function should run - exits at maxTime
      */
+
     public void translateFromWall(double power, double heading, double distance, double maxTime) {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
