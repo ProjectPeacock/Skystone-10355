@@ -80,6 +80,13 @@ public class sensorTest extends LinearOpMode {
                     (int) (robot.colorSensorRevStone.blue() * SCALE_FACTOR),
                     hsvValues);
 
+            if (hsvValues[0] > 1000) {
+                telemetry.addData("Color Sensor Sees : ", "Yellow");
+            } if(hsvValues[0] < 250) {
+                telemetry.addData("Color Sensor Sees : ", "Black");
+            } else {
+                telemetry.addData("Color Sensor Sees : ", "Space");
+            }
             telemetry.addData("Rear Range Sensor (CM): ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Gyro Sensor: ", robot.mrGyro.getIntegratedZValue());
             telemetry.addData("Rev Proximity Distance (cm) : ",
@@ -100,9 +107,7 @@ public class sensorTest extends LinearOpMode {
             });
             idle();
          }
-
     }
-
 
     private void begin() {
 

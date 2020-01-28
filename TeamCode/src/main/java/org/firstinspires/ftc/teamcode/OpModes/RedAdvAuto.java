@@ -410,6 +410,120 @@ public class RedAdvAuto extends LinearOpMode {
                     drive.lowerLift(1.5);
                     drive.lower4Bar();
 
+                    /*
+                     * Check to see if we have time to get another stone.  If not, just Park.
+                     */
+                    timeElapsed = getRuntime() - startTime;
+                    if (timeElapsed > 24) {
+                        state = State.PARK;
+                    } else {
+                        state = State.LOCATE_SKYSTONE2;
+                    }
+                    //Exit the state
+                    break;
+
+                case LOCATE_SKYSTONE3:
+
+                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("Distance (cm)",
+                            String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
+                    telemetry.update();
+                    /*
+                     * Drive to the closest skystone
+                     */
+                    drive.translateToWall(0.5, 0, 160, 1);
+                    drive.translateTime(0.1, 180, 0.1); // brake
+
+                    /*
+                     * Rotate 90 degrees towards the stones
+                     */
+                    drive.rotateGyro(0.3, 90, "left", 0.75);
+
+                    /*
+                     * Raise the lift into position to be able to grab skystone
+                     */
+                    drive.raiseLift(1.5);
+
+                    /*
+                     * Drive close enough to the Skystone for the color sensor to detect the stones.
+                     * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
+                     */
+                    drive.translateFromWall(0.4, 180, 50, 1.5);
+                    drive.translateFromWall(0.05, 180, 70, 1.5);
+
+                    /*
+                     * Strafe across the row of stones to locate the skystone.
+                     */
+                    //alphaColor should be set to the desired upper threshold for the red value
+                    drive.translateSkystone(0.2,90, redColorValue, 1);
+
+                    /*
+                     * Strafe more to center on the Skystone.
+                     */
+                    drive.translateTime(.2, 90, .75);
+
+                    /*
+                     * Drive forward to grab the Skystone
+                     */
+                    drive.translateTime(.2, 180, .2);
+
+                    /*
+                     * Grab the block with the grabber.
+                     */
+                    if (opMode.opModeIsActive()) {   // check to make sure time has not expired
+                        robot.servoGrab.setPower(0.2);
+                        sleep(500);
+                    }
+
+                    /*
+                     * Back away from the Skystone to clear the Skybridge.
+                     */
+                    drive.translateToWall(0.4, 0, 20, 0.4);
+
+                    /*
+                     * Lower the lifting mechanism so that we can clear the skybridge.
+                     */
+                    drive.lowerLift(1.25);
+
+                    /*
+                     * Get closer to the wall before turning.
+                     */
+                    drive.translateToWall(0.1, 0, 20, 0.1);
+
+                    /*
+                     * rotate 90 degrees to face the Founation and place the skystone
+                     */
+                    drive.rotateGyro(0.3, 90, "right", 0.75);
+
+                    /*
+                     * Drive to build zone quickly - not too close to the foundation
+                     */
+                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateTime(0.1, 0, 0.1); // brake
+
+                    /*
+                     * Raise the lift and the 4-bar
+                     */
+                    drive.raiseLift(1.5);
+                    drive.raise4Bar(0.5);
+
+                    /*
+                     * Approach the foundation slowly
+                     */
+                    drive.translateFromWall(0.1, 180, 240, 2);
+
+                    /*
+                     * Place the stone
+                     */
+                    drive.lower4Bar();
+                    robot.servoGrab.setPower(-1);
+
+                    /*
+                     * Lower the lift & 4Bar
+                     */
+                    drive.lowerLift(1.5);
+                    drive.lower4Bar();
+
                     state = State.PARK;
                     //Exit the state
                     break;
@@ -443,7 +557,7 @@ public class RedAdvAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, PARK, HALT
+        PLACE_FOUNDATION, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, LOCATE_SKYSTONE3, PARK, HALT
     }
 
 }
