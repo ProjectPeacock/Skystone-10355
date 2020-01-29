@@ -626,7 +626,6 @@ public class DriveMecanum {
         }
     }
 
-
     /**
      * translateFromWall will use the range sensor to measure distance from the wall and will drive
      * to the specified distance.
@@ -1014,6 +1013,21 @@ public class DriveMecanum {
 
         opMode.sleep(200);
         robot.motorLinear.setPower(0);  // apply enough power to keep it up
+    }
+
+    /*
+     * stonePostion determines the location of the position of the skystone (1st, 2nd, or 3rd postion).
+     * It does this by using the strafe time passed to the function to determine how far the robot
+     * had to strafe to locate the skystone.
+     */
+    public int stonePosition(double time){
+        int position;
+        if (time < 0.5){    // less than 1/2 second indicates first stone
+            position = 2;
+        } else if(time >1){ // greater than 1 second indicates 3rd stone Note: had to strafe to next section
+            position =1;
+        } else position = 3;    // else select 2nd stone
+        return position;
     }
 
     public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,

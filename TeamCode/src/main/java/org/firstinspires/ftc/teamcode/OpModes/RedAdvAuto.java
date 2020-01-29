@@ -1,6 +1,6 @@
 /*
     Team:       10355 - Project Peacock
-    Autonomous Program - Red Strategy #2 - Grab Skystone, Place Foundation, Place Skystone and park
+    Autonomous Program - Red Strategy #3 - Place Foundation, Place 2xSkystones + 1 stone and park
     Alliance Color: Red
     Robot Starting Position: Red Quarry zone, wall next to depot
     Strategy Description:
@@ -32,9 +32,12 @@
             from the wall
 
     State Order:
-        - LOCATE_SKYSTONE       // Locates the Skystone and then strafes to the Foundation
         - PLACE_FOUNDATION      // Places the Foundation in the build site, drops the Skystone
                                 // and parks
+        - LOCATE_SKYSTONE1      // Locates the Skystone and places it on the Foundation
+        - LOCATE_SKYSTONE2      // Locates the 2nd Skystone and places it on the Foundation
+        - LOCATE_STONE3         // Locates a 3rd stone and places it on the Foundation
+        - PARK                  // Parks the robot under the bridge
         - HALT                  // Shutdown sequence for autonomous mode
  */
 
@@ -80,6 +83,11 @@ public class RedAdvAuto extends LinearOpMode {
         double startTime;
         double timeElapsed;
         double redColorValue = 24;
+        double strafeTime;
+        double strafeTimeInit;
+        int stonePosition=2;
+        double driveDistance;
+
         /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
@@ -180,7 +188,7 @@ public class RedAdvAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    /**
+                    /*
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
                     drive.lowerLift(0.3);
@@ -200,12 +208,11 @@ public class RedAdvAuto extends LinearOpMode {
                     break;
 
                 case LOCATE_SKYSTONE1:
-
                     /*
                      * Drive to the front wall
                      */
                     drive.translateToWall(0.5, 0, 40, 2);
-                    drive.translateTime(0.1, 180, 0.1); // brake
+                    drive.translateFromWall(0.1, 180, 40, 0.5);
 
                     /*
                      * Rotate 90 degrees to face the stones
@@ -227,12 +234,18 @@ public class RedAdvAuto extends LinearOpMode {
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
                     drive.translateFromWall(0.4, 180, 50, 1.5);
-                    drive.translateFromWall(0.05, 180, 62, 1.5);
+                    drive.translateFromWall(0.05, 180, 70, 1.5);
 
                     /*
                      * Strafe across the row of stones to locate the skystone.
                      */
+                    strafeTimeInit = getRuntime();
+                    //alphaColor should be set to the desired upper threshold for the red value
                     drive.translateSkystone(0.2,270, redColorValue, 1.5);
+                    strafeTime = getRuntime() - strafeTimeInit;
+                    stonePosition = drive.stonePosition(strafeTime);
+                    telemetry.addData("Position of Skystone : ", stonePosition);
+                    telemetry.update();
 
                     /*
                      * Strafe more to center on the Skystone.
@@ -270,7 +283,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateFromWall(0.5, 180, 180, 2);
                     drive.translateTime(0.1, 0, 0.1); // brake
 
                     /*
@@ -282,7 +295,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 300, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -317,8 +330,26 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Drive to the closest skystone
                      */
-                    drive.translateToWall(0.5, 0, 160, 1);
-                    drive.translateTime(0.1, 180, 0.1); // brake
+
+                    /*
+                     * Drive to the closest skystone. Use the skystone position determined in the
+                     * last state to decide how far to drive to get to the
+                     */
+                    if (stonePosition == 1) {
+                        driveDistance = 160;
+                        stonePosition = 2;      // increment the position so that we get the next stone over next time
+                    } else if(stonePosition == 2) {
+                        driveDistance = 170;
+                        stonePosition = 3;      // increment the position so that we get the next stone over next time
+                    } else {
+                        driveDistance = 180;
+                        stonePosition = 1;      // cycle to the 1st position so that we get the next stone over next time
+                    }
+                    // drive fast to the desired position
+                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    sleep(100);
+                    // drive back to the distance in case we overshot it
+                    drive.translateFromWall(0.1, 180, driveDistance, 0.5);
 
                     /*
                      * Rotate 90 degrees towards the stones
@@ -384,7 +415,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateFromWall(0.5, 180, 180, 2);
                     drive.translateTime(0.1, 0, 0.1); // brake
 
                     /*
@@ -396,7 +427,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 240, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -417,22 +448,37 @@ public class RedAdvAuto extends LinearOpMode {
                     if (timeElapsed > 24) {
                         state = State.PARK;
                     } else {
-                        state = State.LOCATE_SKYSTONE2;
+                        state = State.LOCATE_STONE3;
                     }
                     //Exit the state
                     break;
 
-                case LOCATE_SKYSTONE3:
+                case LOCATE_STONE3:
 
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
                     /*
-                     * Drive to the closest skystone
+                     * Drive to the closest skystone. Use the skystone position determined in the
+                     * last state to decide how far to drive to get to the
                      */
-                    drive.translateToWall(0.5, 0, 160, 1);
-                    drive.translateTime(0.1, 180, 0.1); // brake
+                    if (stonePosition == 1) {
+                        driveDistance = 160;
+                        stonePosition = 2;      // increment the position so that we get the next stone over next time
+                    } else if(stonePosition == 2) {
+                        driveDistance = 170;
+                        stonePosition = 3;      // increment the position so that we get the next stone over next time
+                    } else {
+                        driveDistance = 180;
+                        stonePosition = 1;      // cycle to the 1st position so that we get the next stone over next time
+                    }
+
+                    // drive fast to the desired position
+                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    sleep(100);
+                    // drive back to the distance in case we overshot it
+                    drive.translateFromWall(0.1, 180, driveDistance, 0.5);
 
                     /*
                      * Rotate 90 degrees towards the stones
@@ -498,7 +544,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateFromWall(0.5, 180, 180, 2);
                     drive.translateTime(0.1, 0, 0.1); // brake
 
                     /*
@@ -510,7 +556,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 240, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -557,7 +603,7 @@ public class RedAdvAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, LOCATE_SKYSTONE3, PARK, HALT
+        PLACE_FOUNDATION, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, LOCATE_STONE3, PARK, HALT
     }
 
 }

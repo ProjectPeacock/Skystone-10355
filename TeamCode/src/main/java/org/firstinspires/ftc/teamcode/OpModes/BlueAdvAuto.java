@@ -37,6 +37,7 @@
         - PLACE_FOUNDATION      // Places the Foundation in the build site
         - LOCATE_SKYSTONE1      // Locates the first Skystone and places it on the Foundation
         - LOCATE_SKYSTONE2      // Locates the second Skystone and places it on the Foundation
+        - LOCATE_STONE2         // Locates a third stone and places it on the Foundation
         - PARK                  // Parks in under the bridge
         - HALT                  // Shutdown sequence for autonomous mode
 */
@@ -46,7 +47,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 /*
  * Import the classes we need to have local access to.
  */
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -76,12 +76,16 @@ public class BlueAdvAuto extends LinearOpMode {
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private State state = State.LOCATESKYSTONE;    //Machine State
+    private State state = State.PLACE_FOUNDATION;    //Machine State
 
     public void runOpMode() {
         double startTime;
         double timeElapsed;
         double redColorValue = 24;
+        double strafeTime;
+        double strafeTimeInit;
+        int stonePosition=2;
+        double driveDistance;
 
         /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
@@ -176,7 +180,7 @@ public class BlueAdvAuto extends LinearOpMode {
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
-                    sleep(500);
+                    sleep(200);
 
                     /**
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
@@ -202,7 +206,7 @@ public class BlueAdvAuto extends LinearOpMode {
                      * Drive to the front wall
                      */
                     drive.translateToWall(0.5, 0, 40, 2);
-                    drive.translateTime(0.1, 180, 0.1); // brake
+                    drive.translateFromWall(0.1, 180, 40, 0.5);
 
                     /*
                      * Rotate 90 degrees to face the stones
@@ -229,7 +233,13 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Strafe across the row of stones to locate the skystone.
                      */
+                    strafeTimeInit = getRuntime();
+                    //alphaColor should be set to the desired upper threshold for the red value
                     drive.translateSkystone(0.2,90, redColorValue, 1.5);
+                    strafeTime = getRuntime() - strafeTimeInit;
+                    stonePosition = drive.stonePosition(strafeTime);
+                    telemetry.addData("Position of Skystone : ", stonePosition);
+                    telemetry.update();
 
                     /*
                      * Strafe more to center on the Skystone.
@@ -267,8 +277,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 220, 2);
-                    drive.translateTime(0.1, 0, 0.1); // brake
+                    drive.translateFromWall(0.5, 180, 180, 2);
 
                     /*
                      * Raise the lift and the 4-bar
@@ -279,7 +288,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 300, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -311,9 +320,25 @@ public class BlueAdvAuto extends LinearOpMode {
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
                     /*
-                     * Drive to the closest skystone
+                     * Drive to the closest skystone. Use the skystone position determined in the
+                     * last state to decide how far to drive to get to the
                      */
-                    drive.translateToWall(1, 0, 160, 1);
+                    if (stonePosition == 1) {
+                        driveDistance = 160;
+                        stonePosition = 2;      // increment the position so that we get the next stone over next time
+                    } else if(stonePosition == 2) {
+                        driveDistance = 170;
+                        stonePosition = 3;      // increment the position so that we get the next stone over next time
+                    } else {
+                        driveDistance = 180;
+                        stonePosition = 1;      // cycle to the 1st position so that we get the next stone over next time
+                    }
+
+                    // drive fast to the desired position
+                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    sleep(100);
+                    // drive back to the distance in case we overshot it
+                    drive.translateFromWall(0.1, 180, driveDistance, 0.5);
 
                     /*
                      * Rotate 90 degrees towards the stones
@@ -379,7 +404,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateFromWall(0.5, 180, 180, 2);
                     drive.translateTime(0.1, 0, 0.1); // brake
 
                     /*
@@ -391,7 +416,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 300, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -412,20 +437,36 @@ public class BlueAdvAuto extends LinearOpMode {
                     if (timeElapsed > 24) {
                         state = State.PARK;
                     } else {
-                        state = State.LOCATE_SKYSTONE3;
+                        state = State.LOCATE_STONE3;
                     }
                     //Exit the state
                     break;
 
-                case LOCATE_SKYSTONE3:
+                case LOCATE_STONE3:
                     telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
                     /*
-                     * Drive to the closest skystone
+                     * Drive to the closest skystone. Use the skystone position determined in the
+                     * last state to decide how far to drive to get to the
                      */
-                    drive.translateToWall(1, 0, 160, 1);
+                    if (stonePosition == 1) {
+                        driveDistance = 160;
+                        stonePosition = 2;      // increment the position so that we get the next stone over next time
+                    } else if(stonePosition == 2) {
+                        driveDistance = 170;
+                        stonePosition = 3;      // increment the position so that we get the next stone over next time
+                    } else {
+                        driveDistance = 180;
+                        stonePosition = 1;      // cycle to the 1st position so that we get the next stone over next time
+                    }
+
+                    // drive fast to the desired position
+                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    sleep(100);
+                    // drive back to the distance in case we overshot it
+                    drive.translateFromWall(0.1, 180, driveDistance, 0.5);
 
                     /*
                      * Rotate 90 degrees towards the stones
@@ -491,7 +532,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Drive to build zone quickly - not too close to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 240, 2);
+                    drive.translateFromWall(0.5, 180, 180, 2);
                     drive.translateTime(0.1, 0, 0.1); // brake
 
                     /*
@@ -503,7 +544,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     /*
                      * Approach the foundation slowly
                      */
-                    drive.translateFromWall(0.1, 180, 300, 2);
+                    drive.translateFromWall(0.1, 180, 205, 2);
 
                     /*
                      * Place the stone
@@ -549,6 +590,6 @@ public class BlueAdvAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        PLACE_FOUNDATION, LOCATESKYSTONE, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, LOCATE_SKYSTONE3, PARK, HALT,
+        PLACE_FOUNDATION, LOCATE_SKYSTONE1, LOCATE_SKYSTONE2, LOCATE_STONE3, PARK, HALT,
     }
 }
