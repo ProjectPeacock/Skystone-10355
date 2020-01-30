@@ -29,6 +29,8 @@ public class sensorTest extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        int stoneColor;
+
         begin();                    // initialize the robot's hardware
 
         /* Initialize the hardware variables.
@@ -80,9 +82,10 @@ public class sensorTest extends LinearOpMode {
                     (int) (robot.colorSensorRevStone.blue() * SCALE_FACTOR),
                     hsvValues);
 
-            if (hsvValues[0] > 1000) {
+            stoneColor = Color.HSVToColor(0xff, values);
+            if (stoneColor > 1000) {
                 telemetry.addData("Color Sensor Sees : ", "Yellow");
-            } if(hsvValues[0] < 250) {
+            } if(hsvValues[0] <= 100) {
                 telemetry.addData("Color Sensor Sees : ", "Black");
             } else {
                 telemetry.addData("Color Sensor Sees : ", "Space");
@@ -95,7 +98,7 @@ public class sensorTest extends LinearOpMode {
             telemetry.addData("Rev Color - Red : ", robot.colorSensorRevStone.red());
             telemetry.addData("Rev Color - Green : ", robot.colorSensorRevStone.green());
             telemetry.addData("Rev Color - Blue : ", robot.colorSensorRevStone.blue());
-            telemetry.addData("Rev Color - Hue : ", hsvValues[0]);
+            telemetry.addData("Rev Color - HSV : ", stoneColor);
             telemetry.addData("Lift Back Touch : ", robot.touchLiftBack.isPressed());
             telemetry.addData("Lift Forward Touch : ", robot.touchLiftForward.isPressed());
             telemetry.update();
@@ -105,6 +108,7 @@ public class sensorTest extends LinearOpMode {
                     relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
                 }
             });
+
             idle();
          }
     }
