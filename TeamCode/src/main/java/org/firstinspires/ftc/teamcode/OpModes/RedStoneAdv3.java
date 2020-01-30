@@ -142,21 +142,15 @@ public class RedStoneAdv3 extends LinearOpMode {
                     telemetry.update();
 
                     /*
-                     * Drive to the front wall (strafe diagonally)
-                     */
-                    drive.translateTime(.6, 115, .75);
-
-                    /*
                      * Raise the lift into position to be able to grab skystone
                      */
-                    drive.raiseLift(1);
+                    drive.raiseLift(0.5);
 
                     /*
-                     * Drive close enough to the Skystone for the color sensor to detect the stones.
-                     * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
+                     * Drive to the stones
                      */
-                    drive.translateFromWall(0.5, 180, 50, 0.5);
-                    drive.translateFromWall(0.1, 180, 65, 0.5);
+                    drive.translateFromWall(0.6, 170, 50, 0.75);
+                    drive.translateFromWall(0.1, 180, 70, 0.5);
 
                     /*
                      * Strafe across the row of stones to locate the skystone. For this function,
@@ -165,8 +159,8 @@ public class RedStoneAdv3 extends LinearOpMode {
                      */
                     strafeTimeInit = runtime.time();    // track the starting time
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,270, redColorValue, 1.5);
-                    drive.translateTime(0.1,90, 0.25);
+                    drive.translateSkystone(0.4,90, redColorValue, 0.75);
+//                    drive.translateTime(0.1,270, 0.25);
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
                     stonePosition = drive.redStonePosition(strafeTime);
 
@@ -176,7 +170,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                          * special approach to collecting the stone.  We will drive into it and
                          * rotate slightly so that we can grab it.
                          */
-                        drive.translateTime(0.5, 180, .2);
+                        drive.translateTime(0.5, 180, 0.1);
                         drive.rotateGyro(0.2, 30, "right", 0.5);
                         robot.servoGrab.setPower(0.2);
                         drive.rotateGyro(0.2, 30, "left", 0.5);

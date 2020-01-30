@@ -1027,10 +1027,10 @@ public class DriveMecanum {
     public int blueStonePosition(double time){
         int position;
         if (time < 0.5){    // less than 1/2 second indicates first stone
-            position = 2;
-        } else if(time >1){ // greater than 1 second indicates 3rd stone Note: had to strafe to next section
+            position = 3;
+        } else if(time >= 0.8){ // greater than 1 second indicates 3rd stone Note: had to strafe to next section
             position =1;
-        } else position = 3;    // else select 2nd stone
+        } else position = 2;    // else select 2nd stone
         return position;
     }
 
