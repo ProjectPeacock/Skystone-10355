@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -615,12 +616,12 @@ public class DriveMecanum {
         }
         while (opMode.opModeIsActive() && active ){
             if (currentRangeB < 60 && currentRangeF < 18){
-                translateTime(0.6, 270, 1);
+                translateTime(0.6, 90, 1);
 
                 while (currentRangeR < 5){
                     opMode.sleep(250);
                 }
-                translateTime(0.6, 90, 0.6);
+                translateTime(0.6, 270, 0.6);
                 active = false;
             }
         }
@@ -829,7 +830,8 @@ public class DriveMecanum {
 
             if (currentZint != initZ) {  //Robot has drifted off course
                 double zCorrection = Math.abs(initZ - currentZint);
-
+                    opMode.telemetry.addData("currentInt", currentZint);
+                    opMode.telemetry.addData("Zint", initZ);
                 if (heading > 180 && heading < 359.99999) {
                     if (currentZint > initZ) {  //Robot has drifted left
                         LF = LF + (zCorrection / 100);
@@ -844,6 +846,7 @@ public class DriveMecanum {
                         LR = LR - (zCorrection / 100);
                         RR = RR + (zCorrection / 100);
                     }
+
                 }
 
                 if (heading > 0 && heading < 180) {
@@ -891,8 +894,7 @@ public class DriveMecanum {
                         RF = RF - (zCorrection / 100);
                         LR = LR + (zCorrection / 100);
                         RR = RR - (zCorrection / 100);
-                    }
-                }
+                    } }
             }
             robot.motorLF.setPower(LF);
             robot.motorRF.setPower(RF);
@@ -912,6 +914,7 @@ public class DriveMecanum {
             opMode.telemetry.addData("RF", String.valueOf(RF));
             opMode.telemetry.addData("LR", String.valueOf(LR));
             opMode.telemetry.addData("RR", String.valueOf(RR));
+
             opMode.telemetry.update();
 
             opMode.idle();
@@ -1134,11 +1137,11 @@ public class DriveMecanum {
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
-                robot.motorLF.setPower(-0.05);
-                robot.motorLR.setPower(-0.05);
-                robot.motorRF.setPower(0.05);
-                robot.motorRR.setPower(0.05);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit < targetZ) {
+                robot.motorLF.setPower(-0.1);
+                robot.motorLR.setPower(-0.1);
+                robot.motorRF.setPower(0.1);
+                robot.motorRR.setPower(0.1);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ) {
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
@@ -1155,7 +1158,7 @@ public class DriveMecanum {
                 robot.motorLR.setPower(-power);
                 robot.motorRF.setPower(power);
                 robot.motorRR.setPower(power);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit < targetZ){
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ){
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
@@ -1170,10 +1173,10 @@ public class DriveMecanum {
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
-                robot.motorLF.setPower(0.05);
-                robot.motorLR.setPower(0.05);
-                robot.motorRF.setPower(-0.05);
-                robot.motorRR.setPower(-0.05);
+                robot.motorLF.setPower(0.1);
+                robot.motorLR.setPower(0.1);
+                robot.motorRF.setPower(-0.1);
+                robot.motorRR.setPower(-0.1);
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ) {
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;

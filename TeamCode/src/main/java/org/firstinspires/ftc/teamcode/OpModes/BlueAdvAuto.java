@@ -63,7 +63,7 @@ import java.util.Locale;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Skystones, Foundation, Park", group = "STATE")
+@Autonomous(name = "Blue- Foundation, Skystones, Park", group = "STATE")
 //@Disabled
 
 public class BlueAdvAuto extends LinearOpMode {
@@ -81,7 +81,7 @@ public class BlueAdvAuto extends LinearOpMode {
     public void runOpMode() {
         double startTime;
         double timeElapsed;
-        double redColorValue = 24;
+        double redColorValue = 20;
         double strafeTime;
         double strafeTimeInit;
         int stonePosition=2;
