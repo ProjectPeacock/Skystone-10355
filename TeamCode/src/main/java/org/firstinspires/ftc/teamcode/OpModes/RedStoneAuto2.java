@@ -138,7 +138,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     telemetry.update();
 
                     /*
-                     * Drive to the front wall (stafe diagonally)
+                     * Drive to the front wall (strafe diagonally)
                      */
                     drive.translateTime(.3, 115, 1.5);
 
@@ -173,7 +173,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
 
                     /*
-                     * Stafe into position to pick up the Skystone. For this side, we need to
+                     * Strafe into position to pick up the Skystone. For this side, we need to
                      * backtrack because the color sensor is on the left side of the robot.
                      */
                     drive.translateTime(.2, 90, 0.45);
@@ -182,7 +182,6 @@ public class RedStoneAuto2 extends LinearOpMode {
                      * Drive forward to grab the Skystone
                      */
                     drive.translateTime(.2, 180, .4);
-
                     if (opMode.opModeIsActive()) {   // check to make sure time has not expired
                         robot.servoGrab.setPower(0.2);
                         sleep(1000);
@@ -201,7 +200,7 @@ public class RedStoneAuto2 extends LinearOpMode {
                     /*
                      * Strafe to the Foundation.  In the middle position, the robot takes about
                      * 4 seconds to strafe to the skystone at 40% power. In general, we need to
-                     * reduce the total stafe time by about 1/3 of the time it takes to locate
+                     * reduce the total strafe time by about 1/3 of the time it takes to locate
                      * the Skystone with the translateSkystone algorithm.
                      */
                     timeToSkystone = 4 - (strafeTime * 0.3);

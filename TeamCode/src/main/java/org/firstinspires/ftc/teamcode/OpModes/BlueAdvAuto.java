@@ -48,6 +48,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  * Import the classes we need to have local access to.
  */
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -64,7 +65,7 @@ import java.util.Locale;
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Blue- Foundation, Skystones, Park", group = "STATE")
-//@Disabled
+@Disabled
 
 public class BlueAdvAuto extends LinearOpMode {
 
@@ -237,7 +238,7 @@ public class BlueAdvAuto extends LinearOpMode {
                     //alphaColor should be set to the desired upper threshold for the red value
                     drive.translateSkystone(0.2,90, redColorValue, 1.5);
                     strafeTime = getRuntime() - strafeTimeInit;
-                    stonePosition = drive.stonePosition(strafeTime);
+                    stonePosition = drive.blueStonePosition(strafeTime);
                     telemetry.addData("Position of Skystone : ", stonePosition);
                     telemetry.update();
 

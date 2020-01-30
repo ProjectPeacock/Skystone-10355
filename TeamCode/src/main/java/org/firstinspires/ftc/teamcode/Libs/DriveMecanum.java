@@ -939,7 +939,7 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
 
         // turn the linear motor on to begin raising the lift
-        robot.motorLinear.setPower(0.3);
+        robot.motorLinear.setPower(0.4);
 
 
         while (opMode.opModeIsActive() && (!robot.touchLiftForward.isPressed()) && (timeElapsed < maxTime)){
@@ -968,7 +968,7 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
 
         // turn the linear motor on to begin lowering the lift
-        robot.motorLinear.setPower(-0.300);
+        robot.motorLinear.setPower(-0.400);
 
         while (opMode.opModeIsActive() && (!robot.touchLiftBack.isPressed()) && (timeElapsed < maxTime)){
             timeElapsed = runtime.time() - runtimeValue;
@@ -1019,17 +1019,34 @@ public class DriveMecanum {
     }
 
     /*
-     * stonePostion determines the location of the position of the skystone (1st, 2nd, or 3rd postion).
+     * blueStonePosition determines the location of the position of the skystone (1st, 2nd, or
+     * 3rd postion) on the blue side of the field.
      * It does this by using the strafe time passed to the function to determine how far the robot
      * had to strafe to locate the skystone.
      */
-    public int stonePosition(double time){
+    public int blueStonePosition(double time){
         int position;
         if (time < 0.5){    // less than 1/2 second indicates first stone
             position = 2;
         } else if(time >1){ // greater than 1 second indicates 3rd stone Note: had to strafe to next section
             position =1;
         } else position = 3;    // else select 2nd stone
+        return position;
+    }
+
+    /*
+     * redStonePosition determines the location of the position of the skystone (1st, 2nd, or
+     * 3rd postion) on the red side of the field.
+     * It does this by using the strafe time passed to the function to determine how far the robot
+     * had to strafe to locate the skystone.
+     */
+    public int redStonePosition(double time){
+        int position;
+        if (time < 0.5){    // less than 1/2 second indicates first stone
+            position = 1;
+        } else if(time >1){ // greater than 1 second indicates 3rd stone Note: had to strafe to next section
+            position =3;
+        } else position = 2;    // else select 2nd stone
         return position;
     }
 
@@ -1133,7 +1150,7 @@ public class DriveMecanum {
                 }
                 motorsHalt();
                 opMode.sleep(100);
-                /**
+                /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
@@ -1141,7 +1158,7 @@ public class DriveMecanum {
                 robot.motorLR.setPower(-0.1);
                 robot.motorRF.setPower(0.1);
                 robot.motorRR.setPower(0.1);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ) {
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
@@ -1169,7 +1186,7 @@ public class DriveMecanum {
 
                 motorsHalt();
                 opMode.sleep(100);
-                /**
+                /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
@@ -1177,7 +1194,7 @@ public class DriveMecanum {
                 robot.motorLR.setPower(0.1);
                 robot.motorRF.setPower(-0.1);
                 robot.motorRR.setPower(-0.1);
-                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ) {
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ-2)) {
                     currentZinit = robot.mrGyro.getIntegratedZValue();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
@@ -1186,6 +1203,234 @@ public class DriveMecanum {
                     opMode.telemetry.update();
                 }
                 motorsHalt();
+                break;
+        }
+    }
+
+    /**
+     * rotateAndLowerLift uses the Gyro sensor to control rotation of the robot.  Robot will rotate in place.
+     * Note: this function does not use PID control.
+     * @param power         // controls how fast to rotate
+     * @param angle         // identifies what angle to rotate to
+     * @param direction     // which direction to rotate - "right" or "left"
+     * @param maxTime       // maximum amount of time to attempt operation
+     */
+    public void rotateAndLowerLift(double power, double angle, String direction, double maxTime){
+        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double targetZ;
+        double timeElapsed;
+        double runtimeValue;
+
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effort and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+
+        // turn the linear motor on to begin lowering the lift
+        robot.motorLinear.setPower(-0.400);
+
+        switch(direction){
+            case "right" :
+                targetZ = currentZinit - angle;
+                robot.motorLF.setPower(power);
+                robot.motorLR.setPower(power);
+                robot.motorRF.setPower(-power);
+                robot.motorRR.setPower(-power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ){
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                robot.motorLinear.setPower(0);      // shut the linear motor off
+                /*
+                 * Correct for overshooting the desired angle. Start by rotating opposite direction.
+                 */
+                currentZinit = robot.mrGyro.getIntegratedZValue();
+                robot.motorLF.setPower(-0.1);
+                robot.motorLR.setPower(-0.1);
+                robot.motorRF.setPower(0.1);
+                robot.motorRR.setPower(0.1);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                break;
+
+            case "left" :
+                targetZ = currentZinit + angle;
+                robot.motorLF.setPower(-power);
+                robot.motorLR.setPower(-power);
+                robot.motorRF.setPower(power);
+                robot.motorRR.setPower(power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ){
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+
+                motorsHalt();
+                robot.motorLinear.setPower(0);      // shut the linear motor off
+
+                /*
+                 * Correct for overshooting the desired angle. Start by rotating opposite direction.
+                 */
+                currentZinit = robot.mrGyro.getIntegratedZValue();
+                robot.motorLF.setPower(0.1);
+                robot.motorLR.setPower(0.1);
+                robot.motorRF.setPower(-0.1);
+                robot.motorRR.setPower(-0.1);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ-2)) {
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                robot.motorLinear.setPower(0);
+                break;
+        }
+    }
+
+    /**
+     * rotateAndRaiseLift uses the Gyro sensor to control rotation of the robot.  Robot will rotate in place.
+     * Note: this function does not use PID control.
+     * @param power         // controls how fast to rotate
+     * @param angle         // identifies what angle to rotate to
+     * @param direction     // which direction to rotate - "right" or "left"
+     * @param maxTime       // maximum amount of time to attempt operation
+     */
+    public void rotateAndRaiseLift(double power, double angle, String direction, double maxTime){
+        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double targetZ;
+        double timeElapsed;
+        double runtimeValue;
+
+        /*
+         * In the case where the sensor fails or the sensor is too far away from the stones to
+         * detect the skystone, we want the function to abort the effort and go to grab the closest
+         * stone and finish the autonomous mode.  To do this, we track the time the algorithm runs
+         * and tell it to cancel if the maxTime is exceeded.
+         */
+        runtimeValue = runtime.time();
+        timeElapsed = runtime.time() - runtimeValue;
+
+        // turn the linear motor on to begin lowering the lift
+        robot.motorLinear.setPower(0.400);
+
+        while (opMode.opModeIsActive() && (!robot.touchLiftForward.isPressed()) && (timeElapsed < maxTime)){
+            timeElapsed = runtime.time() - runtimeValue;
+            // wait for the lift to lean all the way backward
+            opMode.telemetry.addData("Status", "Run Time: " + timeElapsed);
+            opMode.telemetry.update();
+        }
+        robot.motorLinear.setPower(0);  // shut the motor off
+
+
+        switch(direction){
+            case "right" :
+                targetZ = currentZinit - angle;
+                robot.motorLF.setPower(power);
+                robot.motorLR.setPower(power);
+                robot.motorRF.setPower(-power);
+                robot.motorRR.setPower(-power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ){
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                opMode.sleep(100);
+                /**
+                 * Correct for overshooting the desired angle. Start by rotating opposite direction.
+                 */
+                currentZinit = robot.mrGyro.getIntegratedZValue();
+                robot.motorLF.setPower(-0.1);
+                robot.motorLR.setPower(-0.1);
+                robot.motorRF.setPower(0.1);
+                robot.motorRR.setPower(0.1);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                break;
+
+            case "left" :
+                targetZ = currentZinit + angle;
+                robot.motorLF.setPower(-power);
+                robot.motorLR.setPower(-power);
+                robot.motorRF.setPower(power);
+                robot.motorRR.setPower(power);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ){
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+
+                motorsHalt();
+                opMode.sleep(100);
+                /**
+                 * Correct for overshooting the desired angle. Start by rotating opposite direction.
+                 */
+                currentZinit = robot.mrGyro.getIntegratedZValue();
+                robot.motorLF.setPower(0.1);
+                robot.motorLR.setPower(0.1);
+                robot.motorRF.setPower(-0.1);
+                robot.motorRR.setPower(-0.1);
+                while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ-2)) {
+                    // Shut the linear slide off if the lift has been lowered
+                    if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
+                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    timeElapsed = runtime.time() - runtimeValue;
+                    opMode.telemetry.addData("Max Time : ", maxTime);
+                    opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
+                    opMode.telemetry.addData("Gyro Value : ", currentZinit);
+                    opMode.telemetry.update();
+                }
+                motorsHalt();
+                robot.motorLinear.setPower(0);
                 break;
         }
     }
