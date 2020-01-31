@@ -47,6 +47,10 @@ package org.firstinspires.ftc.teamcode.OpModes;
  * Import the classes we need to have local access to.
  */
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -88,6 +92,22 @@ public class RedAdvAuto extends LinearOpMode {
         double strafeTimeInit;
         int stonePosition=2;
         double driveDistance;
+        int stoneColor;
+
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
@@ -146,6 +166,7 @@ public class RedAdvAuto extends LinearOpMode {
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
+
 
                     /*
                      * strafe diagonally to the foundation
@@ -244,7 +265,7 @@ public class RedAdvAuto extends LinearOpMode {
                      */
                     strafeTimeInit = getRuntime();
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,270, redColorValue, 1.5);
+                  //  drive.translateSkystone(0.2,270, redColorValue, 1.5);
                     strafeTime = getRuntime() - strafeTimeInit;
                     stonePosition = drive.redStonePosition(strafeTime);
                     telemetry.addData("Position of Skystone : ", stonePosition);
@@ -371,7 +392,7 @@ public class RedAdvAuto extends LinearOpMode {
                      * Strafe across the row of stones to locate the skystone.
                      */
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, redColorValue, 1);
+                   // drive.translateSkystone(0.2,90, redColorValue, 1);
 
                     /*
                      * Strafe more to center on the Skystone.
@@ -491,7 +512,7 @@ public class RedAdvAuto extends LinearOpMode {
                      * Strafe across the row of stones to locate the skystone.
                      */
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, redColorValue, 1);
+                   // drive.translateSkystone(0.2,90, redColorValue, 1);
 
                     /*
                      * Strafe more to center on the Skystone.

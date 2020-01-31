@@ -83,9 +83,9 @@ public class sensorTest extends LinearOpMode {
                     hsvValues);
 
             stoneColor = Color.HSVToColor(0xff, values);
-            if (stoneColor < -20000) {
+            if (stoneColor <= -20000) {
                 telemetry.addData("Color Sensor Sees : ", "Yellow");
-            } if(stoneColor >= -10000) {
+            } else if(stoneColor >= -10000) {
                 telemetry.addData("Color Sensor Sees : ", "Black");
             } else {
                 telemetry.addData("Color Sensor Sees : ", "Space");

@@ -236,7 +236,7 @@ public class BlueAdvAuto extends LinearOpMode {
                      */
                     strafeTimeInit = getRuntime();
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, redColorValue, 1.5);
+                    drive.translateSkystone(0.2,90, 1.5);
                     strafeTime = getRuntime() - strafeTimeInit;
                     stonePosition = drive.blueStonePosition(strafeTime);
                     telemetry.addData("Position of Skystone : ", stonePosition);
@@ -362,7 +362,7 @@ public class BlueAdvAuto extends LinearOpMode {
                      * Strafe across the row of stones to locate the skystone.
                      */
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, redColorValue, 1);
+                    drive.translateSkystone(0.2,90, 1);
 
                     /*
                      * Strafe more to center on the Skystone.
@@ -490,7 +490,7 @@ public class BlueAdvAuto extends LinearOpMode {
                      * Strafe across the row of stones to locate the skystone.
                      */
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.2,90, redColorValue, 1);
+                    drive.translateSkystone(0.2,90, 1);
 
                     /*
                      * Strafe more to center on the Skystone.

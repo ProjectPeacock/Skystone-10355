@@ -159,7 +159,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                      */
                     strafeTimeInit = runtime.time();    // track the starting time
                     //alphaColor should be set to the desired upper threshold for the red value
-                    drive.translateSkystone(0.4,90, redColorValue, 0.75);
+                    drive.translateSkystone(0.4,90, 0.75);
 //                    drive.translateTime(0.1,270, 0.25);
                     strafeTime = runtime.time() - strafeTimeInit;   // tracks the total time
                     stonePosition = drive.redStonePosition(strafeTime);

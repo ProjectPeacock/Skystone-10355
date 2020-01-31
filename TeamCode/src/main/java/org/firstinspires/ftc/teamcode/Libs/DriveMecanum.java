@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Libs;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -446,12 +450,28 @@ public class DriveMecanum {
         motorsHalt();
     }
 
-    public void translateSkystone(double power, double heading, double alphaColor, double maxTime) {
+    public void translateSkystone(double power, double heading, double maxTime) {
         double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double timeElapsed;
         double runtimeValue;
+        int stoneColor;
+        boolean color = false;
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+     //   int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+     //   final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
         /*
          * In the case where the sensor fails or the sensor is too far away from the stones to
@@ -463,12 +483,29 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
         heading = heading * (Math.PI / 180);
 
-        while (opMode.opModeIsActive() && (robot.colorSensorRevStone.red() > alphaColor) && (timeElapsed < maxTime)) {
+        while (opMode.opModeIsActive() && (!color) && (timeElapsed < maxTime)) {
 
             LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
             RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
             LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
             RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+
+            Color.RGBToHSV((int) (robot.colorSensorRevStone.red() * SCALE_FACTOR),
+                    (int) (robot.colorSensorRevStone.green() * SCALE_FACTOR),
+                    (int) (robot.colorSensorRevStone.blue() * SCALE_FACTOR),
+                    hsvValues);
+
+            stoneColor = Color.HSVToColor(0xff, values);
+            if (stoneColor <= -20000) {
+                opMode.telemetry.addData("Color Sensor Sees : ", "Yellow");
+            }
+            else if(stoneColor >= -10000) {
+                opMode.telemetry.addData("Color Sensor Sees : ", "Black");
+                color = true;
+            }
+            else {
+                opMode.telemetry.addData("Color Sensor Sees : ", "Space");
+            }
 
             if (LF > 1 || LF < -1) {
                 LF = 0;
