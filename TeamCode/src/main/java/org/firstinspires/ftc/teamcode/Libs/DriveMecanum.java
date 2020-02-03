@@ -179,7 +179,6 @@ public class DriveMecanum {
     }
 
     public void translateVuforiaNavX(double power, double heading, double timeOut, double x) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double startingX;
@@ -196,10 +195,10 @@ public class DriveMecanum {
         if (x < startingX) {
             while (opMode.opModeIsActive() && runtime.time() < timeOut && robotX > x) {
 
-                LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-                RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-                LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-                RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+                LF = power * Math.sin(heading + (Math.PI / 4));
+                RF = power * Math.cos(heading + (Math.PI / 4));
+                LR = power * Math.cos(heading + (Math.PI / 4));
+                RR = power * Math.sin(heading + (Math.PI / 4));
 
                 if (LF > 1 || LF < -1) {
                     LF = 0;
@@ -316,7 +315,6 @@ public class DriveMecanum {
     }
 
     public void translateTime(double power, double heading, double timeOut) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double timeElapsed;
@@ -328,10 +326,10 @@ public class DriveMecanum {
 
         while (opMode.opModeIsActive() && timeElapsed < timeOut) {
 
-            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+            LF = power * Math.sin(heading + (Math.PI / 4));
+            RF = power * Math.cos(heading + (Math.PI / 4));
+            LR = power * Math.cos(heading + (Math.PI / 4));
+            RR = power * Math.sin(heading + (Math.PI / 4));
 
             if (LF > 1 || LF < -1) {
                 LF = 0;
@@ -451,7 +449,6 @@ public class DriveMecanum {
     }
 
     public void translateSkystone(double power, double heading, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double timeElapsed;
@@ -485,10 +482,10 @@ public class DriveMecanum {
 
         while (opMode.opModeIsActive() && (!color) && (timeElapsed < maxTime)) {
 
-            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+            LF = power * Math.sin(heading + (Math.PI / 4));
+            RF = power * Math.cos(heading + (Math.PI / 4));
+            LR = power * Math.cos(heading + (Math.PI / 4));
+            RR = power * Math.sin(heading + (Math.PI / 4));
 
             Color.RGBToHSV((int) (robot.colorSensorRevStone.red() * SCALE_FACTOR),
                     (int) (robot.colorSensorRevStone.green() * SCALE_FACTOR),
@@ -674,7 +671,6 @@ public class DriveMecanum {
      */
 
     public void translateFromWall(double power, double heading, double distance, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double currentRange;
@@ -697,10 +693,10 @@ public class DriveMecanum {
 
         while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
 
-            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+            LF = power * Math.sin(heading + (Math.PI / 4));
+            RF = power * Math.cos(heading + (Math.PI / 4));
+            LR = power * Math.cos(heading + (Math.PI / 4));
+            RR = power * Math.sin(heading + (Math.PI / 4));
 
             if (LF > 1 || LF < -1) {
                 LF = 0;
@@ -819,7 +815,6 @@ public class DriveMecanum {
      * @param maxTime   // maximum time that the function should run - exits at maxTime
      */
     public void translateToWall(double power, double heading, double distance, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double currentRange;
@@ -842,10 +837,10 @@ public class DriveMecanum {
 
         while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
 
-            LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-            RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-            LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-            RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+            LF = power * Math.sin(heading + (Math.PI / 4));
+            RF = power * Math.cos(heading + (Math.PI / 4));
+            LR = power * Math.cos(heading + (Math.PI / 4));
+            RR = power * Math.sin(heading + (Math.PI / 4));
 
             if (LF > 1 || LF < -1) {
                 LF = 0;
@@ -1087,15 +1082,14 @@ public class DriveMecanum {
         return position;
     }
 
-    public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,
-                                 double timeOut, double y) {
+    public void driveOmniVuforia(double mm, double power, double heading, double timeOut, double y) {
 
         heading = heading * (Math.PI / 180);
 
-        LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-        RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-        LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-        RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+        LF = power * Math.sin(heading + (Math.PI / 4));
+        RF = power * Math.cos(heading + (Math.PI / 4));
+        LR = power * Math.cos(heading + (Math.PI / 4));
+        RR = power * Math.sin(heading + (Math.PI / 4));
 
         if (LF > 1 || LF < -1) {
             LF = 0;

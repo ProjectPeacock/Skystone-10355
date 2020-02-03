@@ -39,7 +39,6 @@ public class DriveMecanumV2 {
     }
 
     public void translateVuforiaNavY(double power, double heading, double timeOut, double y) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
 
         vuforiaTracking = myVuforia.getLocation(myTrackables);
@@ -49,7 +48,7 @@ public class DriveMecanumV2 {
 
         while (opMode.opModeIsActive() && runtime.time() < timeOut && robotY < y) {
             opMode.telemetry.addData("if (y > startingY)", "");
-            moveRobot(power, heading, initZ, changeSpeed);
+            moveRobot(power, heading, initZ);
 
             vuforiaTracking = myVuforia.getLocation(myTrackables);
             robotX = vuforiaTracking.get(0);
@@ -75,7 +74,6 @@ public class DriveMecanumV2 {
     }
 
     public void translateVuforiaNavX(double power, double heading, double timeOut, double x) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double startingX;
 
@@ -90,7 +88,7 @@ public class DriveMecanumV2 {
 
         if (x < startingX) {
             while (opMode.opModeIsActive() && runtime.time() < timeOut && robotX > x) {
-                moveRobot(power, heading, initZ, changeSpeed);
+                moveRobot(power, heading, initZ);
 
                 vuforiaTracking = myVuforia.getLocation(myTrackables);
                 robotX = vuforiaTracking.get(0);
@@ -115,7 +113,6 @@ public class DriveMecanumV2 {
     }
 
     public void translateTime(double power, double heading, double timeOut) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double timeElapsed;
         double runtimeValue;
@@ -124,7 +121,7 @@ public class DriveMecanumV2 {
         timeElapsed = runtimeValue - runtime.time();
 
         while (opMode.opModeIsActive() && timeElapsed < timeOut) {
-            moveRobot(power, heading, initZ, changeSpeed);
+            moveRobot(power, heading, initZ);
 
             timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
@@ -144,7 +141,6 @@ public class DriveMecanumV2 {
     }
 
     public void translateSkystone(double power, double heading, double alphaColor, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double timeElapsed;
         double runtimeValue;
@@ -159,7 +155,7 @@ public class DriveMecanumV2 {
         timeElapsed = runtime.time() - runtimeValue;
 
         while (opMode.opModeIsActive() && (robot.colorSensorRevStone.red() > alphaColor) && (timeElapsed < maxTime)) {
-            moveRobot(power, heading, initZ, changeSpeed);
+            moveRobot(power, heading, initZ);
 
             timeElapsed = runtime.time() - runtimeValue;
             opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
@@ -238,7 +234,6 @@ public class DriveMecanumV2 {
      */
 
     public void translateFromWall(double power, double heading, double distance, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentRange;
         boolean active = true;
@@ -258,7 +253,7 @@ public class DriveMecanumV2 {
         if (currentRange > distance) active = false;
 
         while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
-            moveRobot(power, heading, initZ, changeSpeed);
+            moveRobot(power, heading, initZ);
 
             // check to see if the distance traveled is less than the range specification
             currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
@@ -287,7 +282,6 @@ public class DriveMecanumV2 {
      * @param maxTime  // maximum time that the function should run - exits at maxTime
      */
     public void translateToWall(double power, double heading, double distance, double maxTime) {
-        double changeSpeed = 0;
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentRange;
         boolean active = true;
@@ -307,7 +301,7 @@ public class DriveMecanumV2 {
         if (currentRange < distance) active = false;
 
         while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
-            moveRobot(power, heading, initZ, changeSpeed);
+            moveRobot(power, heading, initZ);
 
             // check to see if the distance traveled is less than the range specification
             currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
@@ -455,15 +449,15 @@ public class DriveMecanumV2 {
         return position;
     }
 
-    public void driveOmniVuforia(double mm, double power, double heading, double changeSpeed,
+    public void driveOmniVuforia(double mm, double power, double heading,
                                  double timeOut, double y) {
 
         heading = heading * (Math.PI / 180);
 
-        LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-        RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-        LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-        RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+        LF = power * Math.sin(heading + (Math.PI / 4));
+        RF = power * Math.cos(heading + (Math.PI / 4));
+        LR = power * Math.cos(heading + (Math.PI / 4));
+        RR = power * Math.sin(heading + (Math.PI / 4));
 
         // smooth power settings to -1 to 1 range limit
         double max = Math.max(Math.max(Math.max(Math.abs(LF), Math.abs(RF)), Math.abs(LR)), Math.abs(RR));
@@ -754,7 +748,6 @@ public class DriveMecanumV2 {
         }
         robot.motorLinear.setPower(0);  // shut the motor off
 
-
         switch (direction) {
             case "right":
                 targetZ = currentZinit - angle;
@@ -774,7 +767,7 @@ public class DriveMecanumV2 {
                 }
                 motorsHalt();
                 opMode.sleep(100);
-                /**
+                /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
@@ -814,7 +807,7 @@ public class DriveMecanumV2 {
 
                 motorsHalt();
                 opMode.sleep(100);
-                /**
+                /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
                 currentZinit = robot.mrGyro.getIntegratedZValue();
@@ -951,15 +944,15 @@ public class DriveMecanumV2 {
      * gyro is used to determine if robot is drifting off course
      */
 
-    public void moveRobot(double power, double heading, double initZ, double changeSpeed) {
+    public void moveRobot(double power, double heading, double initZ) {
         double currentZint;
 
         heading = heading * (Math.PI / 180);
 
-        LF = power * Math.sin(heading + (Math.PI / 4)) + changeSpeed;
-        RF = power * Math.cos(heading + (Math.PI / 4)) - changeSpeed;
-        LR = power * Math.cos(heading + (Math.PI / 4)) + changeSpeed;
-        RR = power * Math.sin(heading + (Math.PI / 4)) - changeSpeed;
+        LF = power * Math.sin(heading + (Math.PI / 4));
+        RF = power * Math.cos(heading + (Math.PI / 4));
+        LR = power * Math.cos(heading + (Math.PI / 4));
+        RR = power * Math.sin(heading + (Math.PI / 4));
 
         currentZint = robot.mrGyro.getIntegratedZValue();
 
