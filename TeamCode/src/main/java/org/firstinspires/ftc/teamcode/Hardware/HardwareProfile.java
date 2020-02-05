@@ -44,6 +44,8 @@ public class HardwareProfile {
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
     public DistanceSensor wallRangeSensor;
+    public DistanceSensor leftRange;
+    public DistanceSensor rightRange;
 
     /* Constructor */
     public HardwareProfile() {
@@ -64,6 +66,8 @@ public class HardwareProfile {
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
         wallRangeSensor = hwMap.get(DistanceSensor.class, "wallRangeSensor");
+        leftRange = hwMap.get(DistanceSensor.class, "leftRange");
+        rightRange = hwMap.get(DistanceSensor.class, "rightRange");
 
         colorSensorRevStone = hwMap.get(ColorSensor.class, "sensorProximity");
         sensorProximity = hwMap.get(DistanceSensor.class, "sensorProximity");

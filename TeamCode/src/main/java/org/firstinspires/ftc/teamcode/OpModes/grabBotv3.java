@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "grabBot", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "grabBot3", group = "Comp")
 
 public class grabBotv3 extends LinearOpMode {
     /*

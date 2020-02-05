@@ -91,6 +91,8 @@ public class sensorTest extends LinearOpMode {
                 telemetry.addData("Color Sensor Sees : ", "Space");
             }
             telemetry.addData("Rear Range Sensor (CM): ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Right Range Sensor (CM): ", robot.leftRange.getDistance(DistanceUnit.CM));
+            telemetry.addData("Left Range Sensor (CM): ", robot.rightRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Gyro Sensor: ", robot.mrGyro.getIntegratedZValue());
             telemetry.addData("Rev Proximity Distance (cm) : ",
                     String.format(Locale.US, "%.02f", robot.sensorProximity.getDistance(DistanceUnit.CM)));
