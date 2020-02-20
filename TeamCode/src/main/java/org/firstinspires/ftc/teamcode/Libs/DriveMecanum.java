@@ -794,6 +794,7 @@ public class DriveMecanum {
             currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
             if (currentRange > distance) active = false;
 
+            opMode.telemetry.addData("Proceedure = ", "TranslateFromWall");
             opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("LF", String.valueOf(LF));
             opMode.telemetry.addData("RF", String.valueOf(RF));
@@ -814,7 +815,7 @@ public class DriveMecanum {
      * @param distance  // distance to the wall that the robot is trying to acheive
      * @param maxTime   // maximum time that the function should run - exits at maxTime
      */
-    public void translateToWall(double power, double heading, double distance, double maxTime) {
+    public void translateToWall(double power, double heading, double distance, String sensor, double maxTime) {
         double initZ = robot.mrGyro.getIntegratedZValue();
         double currentZint;
         double currentRange;
@@ -832,7 +833,19 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
         heading = heading * (Math.PI / 180);
 
-        currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+        if (sensor == "left") {
+            currentRange = robot.rightRange.getDistance(DistanceUnit.CM);
+        } else if (sensor == "right") {
+            currentRange = robot.leftRange.getDistance(DistanceUnit.CM);
+
+        } else if (sensor == "front") {
+            currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+
+        } else if (sensor == "rear"){
+            currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+        } else {
+            currentRange = 0;
+        }
         if (currentRange < distance) active = false;
 
         while (opMode.opModeIsActive() && active & (timeElapsed < maxTime)) {
@@ -936,10 +949,23 @@ public class DriveMecanum {
             myCurrentMotorPosition = robot.motorLR.getCurrentPosition();
 
             // check to see if the distance traveled is less than the range specification
-            currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+            if (sensor == "left") {
+                currentRange = robot.rightRange.getDistance(DistanceUnit.CM);
+            } else if (sensor == "right") {
+                currentRange = robot.leftRange.getDistance(DistanceUnit.CM);
+
+            } else if (sensor == "front") {
+                currentRange = robot.rearRange.getDistance(DistanceUnit.CM);
+
+            } else if (sensor == "rear"){
+                currentRange = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+            } else {
+                currentRange = 0;
+            }
             if (currentRange < distance) active = false;
 
             timeElapsed = runtime.time() - runtimeValue;
+            opMode.telemetry.addData("Proceedure = ", "TranslateToWall");
             opMode.telemetry.addData("Status", "Run Time: " + runtime.time());
             opMode.telemetry.addData("Time Elapsed", timeElapsed);
             opMode.telemetry.addData("LF", String.valueOf(LF));
@@ -1025,7 +1051,7 @@ public class DriveMecanum {
         timeElapsed = runtime.time() - runtimeValue;
 
         // turn the linear motor on to begin lowering the lift
-        robot.motor4Bar.setPower(0.300);
+//        robot.motor4Bar.setPower(0.300);
 
         while (opMode.opModeIsActive() && (!robot.touchLiftBack.isPressed()) && (timeElapsed < maxTime)){
             timeElapsed = runtime.time() - runtimeValue;
@@ -1044,7 +1070,7 @@ public class DriveMecanum {
          *
          */
         // turn the linear motor on to begin lowering the lift
-        robot.motor4Bar.setPower(-0.1);
+//        robot.motor4Bar.setPower(-0.1);
 
         opMode.sleep(200);
         robot.motorLinear.setPower(0);  // apply enough power to keep it up

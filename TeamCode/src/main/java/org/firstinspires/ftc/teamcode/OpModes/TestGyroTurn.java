@@ -121,7 +121,7 @@ public class TestGyroTurn extends LinearOpMode {
                     /*
                      * Drive to the front wall
                      */
-                    drive.translateToWall(1, 0, 40, 2);
+                    drive.translateToWall(1, 0, 40, "front",2);
 
                     /*
                      * Rotate 90 degrees to face the stones

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -26,9 +27,10 @@ public class HardwareProfile {
     public DcMotor motorLR = null;              //Left Rear drive motor
     public DcMotor motorRR = null;              //Right Rear drive motor
     public DcMotor motorLift = null;            //Lift motor
-    public DcMotor motorIntake = null;          //Intake motor
+    public DcMotor motorIntake1 = null;          //Intake motor
+    public DcMotor motorIntake2 = null;          //Intake motor
     public DcMotor motorLinear = null;          //Linear Actuator motor - controls angle of lifting system
-    public DcMotorEx motor4Bar = null;            //motor to control 4-bar system
+//    public DcMotorEx motor4Bar = null;            //motor to control 4-bar system
     public TouchSensor touchLiftForward;        //Declare the Lift Forward Touch Sensor - indicates when lift is all the way forward
     public TouchSensor touchLiftBack;           //Declare the Lift Back Touch Sensor - indicates when lift is all the way back
     public GyroSensor sensorGyro;               //Declare the GyroNew sensor
@@ -41,11 +43,16 @@ public class HardwareProfile {
     public CRServo servoFoundation2;
     public CRServo servoGrab;
     public CRServo servoStone;
+    public CRServo servoDelivery;
+    public CRServo servoSwivel;
+    public CRServo servo4Bar1;
+    public CRServo servo4Bar2;
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
     public DistanceSensor wallRangeSensor;
     public DistanceSensor leftRange;
     public DistanceSensor rightRange;
+    public DistanceSensor rearRange;
 
     /* Constructor */
     public HardwareProfile() {
@@ -68,6 +75,8 @@ public class HardwareProfile {
         wallRangeSensor = hwMap.get(DistanceSensor.class, "wallRangeSensor");
         leftRange = hwMap.get(DistanceSensor.class, "leftRange");
         rightRange = hwMap.get(DistanceSensor.class, "rightRange");
+        rearRange = hwMap.get(DistanceSensor.class, "rearRange");
+
 
         colorSensorRevStone = hwMap.get(ColorSensor.class, "sensorProximity");
         sensorProximity = hwMap.get(DistanceSensor.class, "sensorProximity");
@@ -118,21 +127,28 @@ public class HardwareProfile {
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLift.setPower(0);
 
-        motorIntake = hwMap.dcMotor.get("motorIntake");
-        motorIntake.setDirection(DcMotor.Direction.FORWARD);
-        motorIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorIntake.setPower(0);
+        motorIntake1 = hwMap.dcMotor.get("motorIntake1");
+        motorIntake1.setDirection(DcMotor.Direction.FORWARD);
+        motorIntake1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorIntake1.setPower(0);
+
+        motorIntake2 = hwMap.dcMotor.get("motorIntake2");
+        motorIntake2.setDirection(DcMotor.Direction.FORWARD);
+        motorIntake2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorIntake2.setPower(0);
 
         motorLinear = hwMap.dcMotor.get("motorLinear");
         motorLinear.setDirection(DcMotor.Direction.FORWARD);
         motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLinear.setPower(0);
 
+        /**
         motor4Bar = (DcMotorEx)hwMap.get(DcMotor.class, "motor4Bar");
         motor4Bar.setDirection(DcMotor.Direction.FORWARD);
         motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor4Bar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor4Bar.setPower(0);
+         **/
 
         /*
          * Initialize the servo motors
@@ -141,5 +157,9 @@ public class HardwareProfile {
         servoFoundation2 = hwMap.crservo.get("servoFoundation2");
         servoGrab = hwMap.crservo.get("servoGrab");
         servoStone = hwMap.crservo.get("servoStone");
+        servoDelivery = hwMap.crservo.get("servoDelivery");
+        servoSwivel = hwMap.crservo.get("servoSwivel");
+        servo4Bar1 = hwMap.crservo.get("servo4Bar1");
+        servo4Bar2 = hwMap.crservo.get("servo4Bar2");
     }
 }

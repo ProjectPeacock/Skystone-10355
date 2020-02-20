@@ -114,13 +114,13 @@ public class PTeleOp extends LinearOpMode {
              */
 
             if (gamepad2.left_stick_y < -0.2){
-                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
+//                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
             }
             else if(gamepad2.left_stick_y > 0.2){
-                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
+//                robot.motor4Bar.setPower(-gamepad2.left_stick_y);
             }
             else{
-                robot.motor4Bar.setPower(0);
+//                robot.motor4Bar.setPower(0);
             }
 
             /*

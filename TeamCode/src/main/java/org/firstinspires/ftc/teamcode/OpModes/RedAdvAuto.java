@@ -123,10 +123,16 @@ public class RedAdvAuto extends LinearOpMode {
         /*
          * Set the initial servo positions
          */
+        robot.servo4Bar1.setPower(0.8);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
-        robot.servoGrab.setPower(-1);
-        robot.servoStone.setPower(-1);
+        sleep(1000);
+        robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
+        robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open
+        sleep(1000);
+        robot.servo4Bar1.setPower(0.2);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(-0.2);
         sleep(1000);
 
         robot.sensorProximity.getDistance(DistanceUnit.CM);
@@ -191,7 +197,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(0.3, 0, 25, 3);
+                    drive.translateToWall(0.3, 0, 25, "front",3);
 
                     /*
                      * rotate the foundation towards the wall
@@ -235,7 +241,7 @@ public class RedAdvAuto extends LinearOpMode {
                      */
                     drive.translateTime(1,0,1);
                     sleep(100);
-                    drive.translateToWall(0.5, 27, 20, 1);
+                    drive.translateToWall(0.5, 27, 20, "front",1);
                     drive.translateFromWall(0.1, 180, 10, 0.5);
 
                     /*
@@ -292,7 +298,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateToWall(.3, 300, 10, 0.4);
+                    drive.translateToWall(.3, 300, 10, "front",0.4);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -370,7 +376,7 @@ public class RedAdvAuto extends LinearOpMode {
                         stonePosition = 1;      // cycle to the 1st position so that we get the next stone over next time
                     }
                     // drive fast to the desired position
-                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    drive.translateToWall(.5, 0, driveDistance, "front",1);
                     sleep(100);
                     // drive back to the distance in case we overshot it
                     drive.translateFromWall(0.1, 180, driveDistance, 0.5);
@@ -415,7 +421,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateToWall(0.4, 0, 20, 0.4);
+                    drive.translateToWall(0.4, 0, 20, "front",0.4);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -486,7 +492,7 @@ public class RedAdvAuto extends LinearOpMode {
                     }
 
                     // drive fast to the desired position
-                    drive.translateToWall(.5, 0, driveDistance, 1);
+                    drive.translateToWall(.5, 0, driveDistance, "front",1);
                     sleep(100);
                     // drive back to the distance in case we overshot it
                     drive.translateFromWall(0.1, 180, driveDistance, 0.5);
@@ -535,7 +541,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Back away from the Skystone to clear the Skybridge.
                      */
-                    drive.translateToWall(0.4, 0, 20, 0.4);
+                    drive.translateToWall(0.4, 0, 20, "front",0.4);
 
                     /*
                      * Lower the lifting mechanism so that we can clear the skybridge.
@@ -545,7 +551,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Get closer to the wall before turning.
                      */
-                    drive.translateToWall(0.1, 0, 20, 0.1);
+                    drive.translateToWall(0.1, 0, 20, "front",0.1);
 
                     /*
                      * rotate 90 degrees to face the Founation and place the skystone
@@ -589,7 +595,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * Drive to parking position under the bridge
                      */
-                    drive.translateToWall(0.5, 0, 170, 1.1);
+                    drive.translateToWall(0.5, 0, 170, "front",1.1);
                     drive.translateTime(0.1, 180, 0.1); // brake
 
                     /*

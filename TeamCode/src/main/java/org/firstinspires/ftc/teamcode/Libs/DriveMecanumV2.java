@@ -392,7 +392,7 @@ public class DriveMecanumV2 {
         timeElapsed = runtime.time() - runtimeValue;
 
         // turn the linear motor on to begin lowering the lift
-        robot.motor4Bar.setPower(0.300);
+//        robot.motor4Bar.setPower(0.300);
 
         while (opMode.opModeIsActive() && (!robot.touchLiftBack.isPressed()) && (timeElapsed < maxTime)) {
             timeElapsed = runtime.time() - runtimeValue;
@@ -411,7 +411,7 @@ public class DriveMecanumV2 {
          *
          */
         // turn the linear motor on to begin lowering the lift
-        robot.motor4Bar.setPower(-0.1);
+//        robot.motor4Bar.setPower(-0.1);
 
         opMode.sleep(200);
         robot.motorLinear.setPower(0);  // apply enough power to keep it up

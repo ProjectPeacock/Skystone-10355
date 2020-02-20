@@ -82,10 +82,17 @@ public class BlueBuildAuto extends LinearOpMode {
         /*
          * Set the initial servo positions
          */
+
+        robot.servo4Bar1.setPower(0.8);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
-        robot.servoGrab.setPower(-1);
-        robot.servoStone.setPower(-1);
+        sleep(1000);
+        robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
+        robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open
+        sleep(1000);
+        robot.servo4Bar1.setPower(0.2);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(-0.2);
         sleep(1000);
 
         /*
@@ -133,7 +140,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 20, 30);
+                    drive.translateToWall(.3, 0, 20, "rear",50);
 
                     /*
                      * rotate the foundation towards the wall

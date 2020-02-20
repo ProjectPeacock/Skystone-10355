@@ -49,9 +49,9 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red-Foundation, Park", group = "COMP")
+@Autonomous(name = "Red-State", group = "COMP")
 
-public class RedBuildAuto extends LinearOpMode {
+public class RedStateAuto extends LinearOpMode {
 
     /*
      * Instantiate all objects needed in this class
@@ -62,7 +62,7 @@ public class RedBuildAuto extends LinearOpMode {
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private State state = State.FIRST_STATE;    //Machine State
+    private State state = State.FOUNDATION;    //Machine State
 
     public void runOpMode() {
         /*
@@ -117,11 +117,11 @@ public class RedBuildAuto extends LinearOpMode {
 
         while (opModeIsActive()) {
             switch (state) {
-                case FIRST_STATE:
+                case FOUNDATION:
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall(0.3, 205, 70, 2);
+                    drive.translateFromWall(0.3, 210, 70, 2);
                     drive.translateFromWall(0.1, 180, 90, 0.5);
 
                     /*
@@ -131,6 +131,8 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
+                    drive.rotateGyro(0.3, 10, "right", 4);
+
                     /*
                      * drive towards the wall
                      */
@@ -139,19 +141,21 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * rotate the foundation towards the wall
                      */
-                    drive.rotateGyro(0.3, 90, "right", 4);
+                    drive.rotateGyro(0.3, 75, "right", 4);
 
                     /*
                      * drive the robot into the wall
                      */
-                    drive.translateTime(0.3,180,1);
+//                    drive.translateTime(0.3,180,1);
 
                     /*
-                     * Let go of the Foundation and the stone
+                     * Let go of the Foundation
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
-                    sleep(500);
+                    robot.motorIntake1.setPower(1);
+                    sleep(300);
+                    robot.motorIntake1.setPower(0);
 
                     /**
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
@@ -161,15 +165,36 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 330, 2.4);
+//                    drive.translateTime(.3, 330, 2.4);
 
                     /*
                      * strafe out of the way
                      */
-                    drive.translateTime(0.2, 270, 0.5);
+  //                  drive.translateTime(0.2, 270, 0.5);
+
+                    state = State.STONE1;
+                    //Exit the state
+                    break;
+
+                case STONE1:
+
+                    robot.motorIntake1.setPower(-1);
+                    robot.motorIntake2.setPower(1);
+                    robot.servoDelivery.setPower(-1);
+
+                    drive.translateTime(0.8, 0, 1.0);
+
+                    drive.rotateGyro(0.3, 10, "right", 0.5);
+
+                    drive.translateTime(0.3, 0, .5);
+
+                    drive.translateTime(0.3, 180, .5);
+
+                    drive.rotateGyro(0.3, 10, "left", 0.5);
+
+                    drive.translateTime(0.8, 180, 1.0);
 
                     state = State.HALT;
-                    //Exit the state
                     break;
 
                 case HALT:
@@ -186,7 +211,7 @@ public class RedBuildAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        FIRST_STATE, HALT,
+        FOUNDATION, STONE1, HALT,
     }
 
 }
