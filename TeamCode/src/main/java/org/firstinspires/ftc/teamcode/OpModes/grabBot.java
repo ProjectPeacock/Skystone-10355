@@ -12,19 +12,16 @@
              measuring distance for fwd/rev drive operation
         - Linear actuator with encoder - controls mechanism for leaning lifting mechanism forward
              and backward
-        - Grabbing mechanism - controlled by continuous rotation servo
+        - Grabbing mechanism - controlled by two continuous rotation servos (1 for grabbing, 1 for swiveling)
         - Foundation Grabbing mechanism - controlled by two continuous rotation servos (one for
              each side of the robot)
-        - 4-bar mechanism - Controlled by Rev motor with encoder. Allows for extension and
+        - Virtual 4-bar mechanism - Controlled by two servos. Allows for extension and
              positioning of the stone.
         - Lifting mechanism - Controlled by 1 motor with encoder. Lifts the placement system.
-        - Delivery mechanism - Controlled by 3 continuous rotation servos. Moves stones from intake
+        - Delivery mechanism - Controlled 1 continuous rotation servo. Moves stones from intake
              mechanism to the placement mechanism.
-        - Intake mechanism - Controlled by 1 motor.
-        - Gyro sensor located at the center of the robot - utilized to compensate for drift during
-             autonomous mode operation.
+        - Intake mechanism - Controlled by 2 goBuilda 312 RPM motors.
         - 2 x Touch sensors - limits lift mechanism when leaning forward and backward.
-        - 1 x Motorola Camera - Utilized for Vuforia positioning of the robot on the field
  */
 
 package org.firstinspires.ftc.teamcode.OpModes;
@@ -36,7 +33,7 @@ import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
 import java.util.List;
 import java.util.Locale;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "grabBot", group = "Comp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Stack Bot", group = "Comp")
 
 public class grabBot extends LinearOpMode {
     /*
@@ -243,7 +240,7 @@ public class grabBot extends LinearOpMode {
             }
             else if (gamepad2.left_trigger > 0){
                 robot.motorLift.setPower(-0.3);
-            }else if(dpadUpState != "play"){
+            }else if(!dpadUpState.equals("play")){
 
             } else {
                 robot.motorLift.setPower(0);
@@ -258,8 +255,7 @@ public class grabBot extends LinearOpMode {
 
             if (gamepad1.x){
                 robot.servoStone.setPower(0.8);
-            }
-            if (gamepad1.y) {
+            } else {
                 robot.servoStone.setPower(-1);
             }
 
@@ -273,7 +269,7 @@ public class grabBot extends LinearOpMode {
             }
 
             /*
-             * TEMPORARY CODE TO TEST THE GRAB SERVO
+             * Code to control the grab servo
              */
             if (gamepad2.a) {
                 robot.servoGrab.setPower(0.90);

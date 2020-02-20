@@ -51,7 +51,7 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Foundation, Park", group = "COMP")
+@Autonomous(name = "Blue-Foundation, Park", group = "Blue")
 
 public class BlueBuildAuto extends LinearOpMode {
 
@@ -87,6 +87,7 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
+        robot.servoStone.setPower(-1);
         sleep(1000);
         robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
         robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open
@@ -127,8 +128,8 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall(.3, 155, 70, 2);
-                    drive.translateFromWall(.1, 180, 90, 0.5);
+                    drive.translateFromWall("front",.3, 155, 70, 2);
+                    drive.translateFromWall("front",.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation
@@ -140,7 +141,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 20, "rear",50);
+                    drive.translateToWall(.3, 0, 20, "rear",60);
 
                     /*
                      * rotate the foundation towards the wall
@@ -157,9 +158,10 @@ public class BlueBuildAuto extends LinearOpMode {
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
+                    robot.motorIntake1.setPower(0); // deploy the intake system
                     sleep(500);
 
-                    /**
+                    /*
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
                     drive.lowerLift(0.3);

@@ -35,10 +35,6 @@ public class HardwareProfile {
     public TouchSensor touchLiftBack;           //Declare the Lift Back Touch Sensor - indicates when lift is all the way back
     public GyroSensor sensorGyro;               //Declare the GyroNew sensor
     public ModernRoboticsI2cGyro mrGyro;        //Declare the MR GyroNew
-    public ModernRoboticsI2cRangeSensor rangeSensorLeft;               //Declare the left range sensor
-    public ModernRoboticsI2cRangeSensor rangeSensorRight;              //Declare the right range sensor
-    public ModernRoboticsI2cRangeSensor rangeSensorFront;              //Declare the front range sensor
-    public ModernRoboticsI2cRangeSensor rangeSensorRear;               //Declare the rear range sensor
     public CRServo servoFoundation1;
     public CRServo servoFoundation2;
     public CRServo servoGrab;
@@ -142,13 +138,13 @@ public class HardwareProfile {
         motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLinear.setPower(0);
 
-        /**
+        /*
         motor4Bar = (DcMotorEx)hwMap.get(DcMotor.class, "motor4Bar");
         motor4Bar.setDirection(DcMotor.Direction.FORWARD);
         motor4Bar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor4Bar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor4Bar.setPower(0);
-         **/
+        */
 
         /*
          * Initialize the servo motors

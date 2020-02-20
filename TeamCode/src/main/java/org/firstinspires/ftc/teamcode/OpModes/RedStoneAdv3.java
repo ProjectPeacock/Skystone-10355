@@ -60,7 +60,7 @@ import java.util.Locale;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red-Stones/Found/Park 3 ", group = "STATE")
+@Autonomous(name = "Red-Stones/Found/Park 3 ", group = "Red")
 //@Disabled
 
 public class RedStoneAdv3 extends LinearOpMode {
@@ -166,7 +166,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                     /*
                      * Drive forward to get to the stone
                      */
-                    drive.translateFromWall(0.6, 170, 50, 0.75);
+                    drive.translateFromWall("front",0.6, 170, 50, 0.75);
 //                    drive.translateFromWall(0.1, 180, 70, 0.5);
 
                     /*
@@ -212,8 +212,8 @@ public class RedStoneAdv3 extends LinearOpMode {
                     /*
                      * drive forward to the foundation
                      */
-                    drive.translateFromWall(0.5, 180, 60, 0.5);
-                    drive.translateFromWall(0.1, 180, 90, 0.5);
+                    drive.translateFromWall("front",0.5, 180, 60, 0.5);
+                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation
@@ -270,7 +270,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                     /*
                      * Drive forward to get to the stone
                      */
-                    drive.translateFromWall(0.6, 170, 50, 0.75);
+                    drive.translateFromWall("front",0.6, 170, 50, 0.75);
 //                    drive.translateFromWall(0.1, 180, 70, 0.5);
 
                     /*
@@ -316,7 +316,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                     /*
                      * Drive forward to get to the stone
                      */
-                    drive.translateFromWall(0.6, 170, 50, 0.75);
+                    drive.translateFromWall("front",0.6, 170, 50, 0.75);
 //                    drive.translateFromWall(0.1, 180, 70, 0.5);
 
                     /*
@@ -362,7 +362,7 @@ public class RedStoneAdv3 extends LinearOpMode {
                     /*
                      * Drive forward to get to the stone
                      */
-                    drive.translateFromWall(0.6, 170, 50, 0.75);
+                    drive.translateFromWall("front",0.6, 170, 50, 0.75);
 //                    drive.translateFromWall(0.1, 180, 70, 0.5);
 
                     /*

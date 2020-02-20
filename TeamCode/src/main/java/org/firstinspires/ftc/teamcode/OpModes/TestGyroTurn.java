@@ -38,6 +38,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -51,7 +52,8 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Test - Gyro Turn", group = "TEST")
+@Autonomous(name = "Test - Gyro Turn", group = "Test")
+@Disabled
 
 public class TestGyroTurn extends LinearOpMode {
 
@@ -141,8 +143,8 @@ public class TestGyroTurn extends LinearOpMode {
                     /*
                      * Drive Forward
                      */
-                    drive.translateFromWall(0.4, 180, 60, 2);
-                    drive.translateFromWall(0.05, 180, 70, 2);
+                    drive.translateFromWall("front",0.4, 180, 60, 2);
+                    drive.translateFromWall("front",0.05, 180, 70, 2);
 
                     state = State.HALT;
                     //Exit the state

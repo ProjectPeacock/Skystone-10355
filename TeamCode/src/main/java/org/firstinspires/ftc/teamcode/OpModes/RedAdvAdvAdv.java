@@ -60,7 +60,7 @@ import java.util.Locale;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "CliffordTheBigRedDog", group = "EXPERIMENT")
+@Autonomous(name = "CliffordTheBigRedDog", group = "Red")
 //@Disabled
 
 public class RedAdvAdvAdv extends LinearOpMode {
@@ -157,7 +157,7 @@ public class RedAdvAdvAdv extends LinearOpMode {
                      * Drive close enough to the Skystone for the color sensor to detect the stones.
                      * Uses the Rev 2m Range sensor on the back of the robot to measure distance.
                      */
-                    drive.translateFromWall(0.1, 180, 65, 1.5);
+                    drive.translateFromWall("front",0.1, 180, 65, 1.5);
 
                     /*
                      * Because the color sensor is on the left side of the robot, it may detect
@@ -221,8 +221,8 @@ public class RedAdvAdvAdv extends LinearOpMode {
                      * drive forward to the foundation
                      */
 //                    drive.translateFromWall(0.3, 180, 90, 1);
-                    drive.translateFromWall(0.3, 180, 70, 2);
-                    drive.translateFromWall(0.1, 180, 90, 0.5);
+                    drive.translateFromWall("front",0.3, 180, 70, 2);
+                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
 
 //                    drive.translateTime(.3, 180, 1);
 

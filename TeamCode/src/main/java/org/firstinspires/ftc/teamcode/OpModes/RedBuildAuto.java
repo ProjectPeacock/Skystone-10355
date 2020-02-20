@@ -49,7 +49,7 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red-Foundation, Park", group = "COMP")
+@Autonomous(name = "Red-Foundation, Park", group = "Red")
 
 public class RedBuildAuto extends LinearOpMode {
 
@@ -121,8 +121,8 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall(0.3, 205, 70, 2);
-                    drive.translateFromWall(0.1, 180, 90, 0.5);
+                    drive.translateFromWall("front",0.3, 205, 70, 2);
+                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation

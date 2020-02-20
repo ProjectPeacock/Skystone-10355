@@ -53,7 +53,7 @@ import java.util.List;
 
 public class ParkingAuto extends LinearOpMode {
 
-    /**
+    /*
      * Instantiate all objects needed in this class
      */
 

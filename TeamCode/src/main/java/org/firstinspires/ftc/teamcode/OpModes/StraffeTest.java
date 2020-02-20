@@ -52,7 +52,7 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "STRAFE TEST", group = "EXPERIMENT")
+@Autonomous(name = "STRAFE TEST", group = "Test")
 @Disabled
 
 public class StraffeTest extends LinearOpMode {

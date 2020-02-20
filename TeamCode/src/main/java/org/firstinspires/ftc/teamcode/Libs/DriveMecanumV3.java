@@ -201,10 +201,10 @@ public class DriveMecanumV3 {
         timeElapsed = runtime.time() - runtimeValue;
         heading = heading * (Math.PI / 180);
 
-        currentRangeR = robot.rangeSensorRight.getDistance(DistanceUnit.CM);
-        currentRangeB = robot.rangeSensorRear.getDistance(DistanceUnit.CM);
-        currentRangeF = robot.rangeSensorFront.getDistance(DistanceUnit.CM);
-        currentRangeL = robot.rangeSensorLeft.getDistance(DistanceUnit.CM);
+        currentRangeR = robot.rightRange.getDistance(DistanceUnit.CM);
+        currentRangeB = robot.rearRange.getDistance(DistanceUnit.CM);
+        currentRangeF = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
+        currentRangeL = robot.leftRange.getDistance(DistanceUnit.CM);
 
         if (currentRangeB > 60) {
             active = false;
