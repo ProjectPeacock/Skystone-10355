@@ -811,7 +811,6 @@ public class DriveMecanum {
 
     public double currentRangeValue(String sensor){
         double range;
-        range = 0;
 
         if (sensor.equals("front")){
             range = robot.wallRangeSensor.getDistance(DistanceUnit.CM);
