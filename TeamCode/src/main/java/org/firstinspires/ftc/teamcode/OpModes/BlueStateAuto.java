@@ -58,7 +58,7 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Blue-Foundation, Park", group = "Blue")
+@Autonomous(name = "Blue-State(F, S, P)", group = "Blue")
 
 public class BlueStateAuto extends LinearOpMode {
 

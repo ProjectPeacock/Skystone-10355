@@ -141,7 +141,7 @@ public class BlueBuildAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 20, "rear",60);
+                    drive.translateToWall(.3, 0, 20, "front",60);
 
                     /*
                      * rotate the foundation towards the wall

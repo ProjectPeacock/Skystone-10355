@@ -95,7 +95,7 @@ public class RedStateAuto extends LinearOpMode {
         robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
-        robot.servoStone.setPower(-1);
+        robot.servoStone.setPower(1);
         sleep(1000);
         robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
         robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open
@@ -116,7 +116,7 @@ public class RedStateAuto extends LinearOpMode {
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.addData("Color Red", robot.colorSensorRevStone.red());
-        telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
+        telemetry.addData("Front Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
         if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
             telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
             telemetry.addData("Action: ", "CHECK POSITION OF THE ROBOT");
@@ -135,8 +135,8 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall("front",0.3, 210, 70, 2);
-                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
+                    drive.translateFromWall("front",0.3, 210, 75, 2);
+                    drive.translateFromWall("front",0.1, 180, 94, 0.5);
 
                     /*
                      * Grab the foundation
@@ -150,7 +150,7 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 50, "rear",3);
+                    drive.translateToWall(.3, 0, 50, "front",3);
 
                     /*
                      * rotate the foundation towards the wall
@@ -181,7 +181,7 @@ public class RedStateAuto extends LinearOpMode {
                      */
                     timeElapsed = getRuntime() - startTime;
                     if (timeElapsed > 20) {
-                        state = State.PARK;
+                        state = State.STONE1;
                     } else {
                         state = State.STONE1;
                     }
@@ -196,43 +196,39 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * strafe closer to the bridge
                      */
-                    drive.translateFromWall("left", 0.3, 90, 55, 1);
+//                    drive.translateFromWall("left", 0.3, 90, 55, 1);
 
                     /*
                      * drive towards stones
                      */
-                    drive.translateTime(0.4, 0, 1.0);
+                    drive.translateTime(0.4, 0, 2.1);
 
                     /*
-                     * turn towards the stones to pick them up
+                     * strafe towards the stones to pick them up
                      */
-                    drive.rotateGyro(0.3, 10, "right", 0.5);
+                    drive.translateTime(0.6, 90, 0.8);
 
                     /*
                      * drive forward to pick up the stones
                      */
-                    drive.translateTime(0.3, 0, .5);
+                    drive.translateTime(0.3, 0, 0.5);
 
                     /*
-                     * drive back to drive under the bridge
+                     * strafe back under the bridge
                      */
-                    drive.translateTime(0.3, 180, .5);
-
-                    /*
-                     * rotate towards the foundation
-                     */
-                    drive.rotateGyro(0.3, 10, "left", 0.5);
+                    drive.translateTime(0.6, 270, 0.8);
 
                     /*
                      * drive to the foundation
                      */
-                    drive.translateTime(0.5, 180, 0.8);
+                    drive.translateTime(0.5, 180, 1.2);
 
                     /*
                      * eject the stone
                      */
-                    robot.servoStone.setPower(1);
+                    robot.servoStone.setPower(-1);
                     sleep(300);
+                    robot.servoStone.setPower(1);
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
@@ -285,8 +281,9 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * eject the stone
                      */
-                    robot.servoStone.setPower(1);
+                    robot.servoStone.setPower(-1);
                     sleep(300);
+                    robot.servoStone.setPower(1);
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
@@ -339,8 +336,9 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * eject the stone
                      */
-                    robot.servoStone.setPower(1);
+                    robot.servoStone.setPower(-1);
                     sleep(300);
+                    robot.servoStone.setPower(1);
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
@@ -393,8 +391,9 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * eject the stone
                      */
-                    robot.servoStone.setPower(1);
+                    robot.servoStone.setPower(-1);
                     sleep(300);
+                    robot.servoStone.setPower(1);
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
@@ -447,8 +446,9 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * eject the stone
                      */
-                    robot.servoStone.setPower(1);
+                    robot.servoStone.setPower(-1);
                     sleep(300);
+                    robot.servoStone.setPower(1);
 
                     state = State.PARK;
                     break;

@@ -254,9 +254,9 @@ public class grabBot extends LinearOpMode {
             }
 
             if (gamepad1.x){
-                robot.servoStone.setPower(0.8);
-            } else {
                 robot.servoStone.setPower(-1);
+            } else {
+                robot.servoStone.setPower(1);
             }
 
             /*
