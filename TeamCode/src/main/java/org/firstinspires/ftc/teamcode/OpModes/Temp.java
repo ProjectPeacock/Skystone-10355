@@ -49,9 +49,9 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red-Foundation, Park", group = "Red")
+@Autonomous(name = "Temp Red foundation,Park", group = "Red")
 
-public class RedBuildAuto extends LinearOpMode {
+public class Temp extends LinearOpMode {
 
     /*
      * Instantiate all objects needed in this class
@@ -118,58 +118,26 @@ public class RedBuildAuto extends LinearOpMode {
         while (opModeIsActive()) {
             switch (state) {
                 case FIRST_STATE:
-                    /*
-                     * strafe diagonally to the foundation
-                     */
-                    drive.translateFromWall("front",0.3, 205, 70, 2);
-                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
 
-                    /*
-                     * Grab the foundation
-                     */
-                    robot.servoFoundation1.setPower(1);
-                    robot.servoFoundation2.setPower(.6);
-                    sleep(500);
+                    drive.fullDrive();
 
-                    /*
-                     * drive towards the wall
-                     */
-                    drive.translateToWall(.3, 0, 50, "rear",3);
-
-                    /*
-                     * rotate the foundation towards the wall
-                     */
-                    drive.rotateGyro(0.3, 90, "right", 4);
-
-                    /*
-                     * drive the robot into the wall
-                     */
-                    drive.translateTime(0.3,180,1);
-
-                    /*
-                     * Let go of the Foundation and the stone
-                     */
-                    robot.servoFoundation1.setPower(0.6);
-                    robot.servoFoundation2.setPower(1);
-                    sleep(500);
-
-                    drive.lowerLift(0.4);
-
-
+                    sleep(300);
+                    drive.rightStrafe();
 
                     /**
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
+                   /** drive.lowerLift(0.3);
 
                    /** /*
                      * strafe to parking position
                      */
-                    drive.translateTime(.3, 330, 2.4);
+                  /**  drive.translateTime(.3, 330, 2.4);
 
                     /*
                      * strafe out of the way
                      */
-                    drive.translateTime(0.2, 270, 0.5);
+                  /**  drive.translateTime(0.2, 270, 0.5);**/
 
                     state = State.HALT;
                     //Exit the state

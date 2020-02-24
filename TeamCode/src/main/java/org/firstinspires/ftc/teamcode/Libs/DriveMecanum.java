@@ -7,6 +7,7 @@ import android.view.View;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.HardwareProfile;
@@ -447,6 +448,56 @@ public class DriveMecanum {
         }
         motorsHalt();
     }
+
+    public void swivelGrab(){
+
+        robot.servoSwivel.setPower(-0.4);
+        robot.servoGrab.setPower(0.90);
+        robot.servo4Bar1.setPower(0.8);       // raise arm to reset swivel and grabber
+        robot.servo4Bar2.setPower(-0.8);
+        if (!robot.touchLiftForward.isPressed()){
+            robot.motorLinear.setPower(0.4);}
+        else {
+            robot.motorLinear.setPower(0);}
+        opMode.sleep(200);
+        robot.servo4Bar1.setPower(-0.1);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(0.1);
+        opMode.sleep(300);
+        robot.servoGrab.setPower(0.90);
+    }
+
+    public void fullDrive(){
+        robot.motorLF.setPower(-0.5);
+        robot.motorRF.setPower(-0.5);
+        robot.motorRR.setPower(-0.5);
+        robot.motorLR.setPower(-0.5);
+        opMode.sleep(300);
+    }
+
+    public void rightStrafe(){
+        robot.motorLF.setPower(0.5);
+        robot.motorRF.setPower(-0.5);
+        robot.motorRR.setPower(-0.5);
+        robot.motorLR.setPower(0.5);
+        opMode.sleep(200);
+    }
+
+    public void swivelPlace(){
+        robot.servoGrab.setPower(0.5);
+    }
+
+    public void swivelReady(){
+
+        robot.motorLift.setPower(-1);  // Rotate the stone into position to place
+        robot.servoGrab.setPower(0.90);
+        opMode.sleep(300);
+        robot.servo4Bar1.setPower(0.8);       // lower the arm to grab the stone
+        robot.servo4Bar2.setPower(-0.8);
+        opMode.sleep(100);
+        robot.motorLift.setPower(0);
+        robot.servoSwivel.setPower(1);
+    }
+
 
     public void translateSkystone(double power, double heading, double maxTime) {
         double initZ = robot.mrGyro.getIntegratedZValue();

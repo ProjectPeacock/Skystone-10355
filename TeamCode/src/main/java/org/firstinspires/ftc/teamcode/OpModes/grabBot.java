@@ -250,7 +250,7 @@ public class grabBot extends LinearOpMode {
              *  Code to control the capstone release
              */
             if (gamepad2.left_bumper || gamepad1.right_bumper) {
-                robot.servoStone.setPower(-0.5);
+                robot.servoCapstone.setPosition(-0.5);
             }
 
             if (gamepad1.x){
@@ -290,6 +290,14 @@ public class grabBot extends LinearOpMode {
              */
             if (gamepad2.y){
                 robot.servoSwivel.setPower(0.3);
+            }
+
+            /*
+             * Capstone release
+             */
+
+            if (gamepad2.left_bumper){
+                robot.servoCapstone.setPosition(0.5);
             }
 
             idle();

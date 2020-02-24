@@ -37,6 +37,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -49,9 +50,9 @@ import java.util.List;
 /*
  * Name the opMode and put it in the appropriate group
  */
-@Autonomous(name = "Red-Foundation, Park", group = "Red")
+@Autonomous(name = "Red6Stone", group = "Red")
 
-public class RedBuildAuto extends LinearOpMode {
+public class Red6Stone extends LinearOpMode {
 
     /*
      * Instantiate all objects needed in this class
@@ -62,9 +63,15 @@ public class RedBuildAuto extends LinearOpMode {
     private skystoneVuforia myVuforia = new skystoneVuforia();
     private List<Double> vuforiaTracking;   //List of Vuforia coordinates
     private List<VuforiaTrackable> myTrackables;    //List of Vuforia trackable objects
-    private State state = State.FIRST_STATE;    //Machine State
+    private State state = State.FOUNDATION;    //Machine State
+    private ElapsedTime runtime = new ElapsedTime();
 
     public void runOpMode() {
+
+        double timeElapsed;
+        double startTime;
+
+
         /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
@@ -114,15 +121,18 @@ public class RedBuildAuto extends LinearOpMode {
          * Start the opMode
          */
         waitForStart();
+        startTime = runtime.startTime();
 
         while (opModeIsActive()) {
             switch (state) {
-                case FIRST_STATE:
+
+
+                case FOUNDATION:
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall("front",0.3, 205, 70, 2);
-                    drive.translateFromWall("front",0.1, 180, 90, 0.5);
+                    drive.translateFromWall("front", 0.3, 205, 70, 2);
+                    drive.translateFromWall("front", 0.1, 180, 90, 0.5);
 
                     /*
                      * Grab the foundation
@@ -134,7 +144,7 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 50, "rear",3);
+                    drive.translateToWall(.3, 0, 50, "rear", 3);
 
                     /*
                      * rotate the foundation towards the wall
@@ -144,38 +154,90 @@ public class RedBuildAuto extends LinearOpMode {
                     /*
                      * drive the robot into the wall
                      */
-                    drive.translateTime(0.3,180,1);
+                    drive.translateTime(0.3, 180, 1);
 
                     /*
-                     * Let go of the Foundation and the stone
+                     * Let go of the Foundation
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
-                    drive.lowerLift(0.4);
-
-
-
-                    /**
+                    /*
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
+                    drive.lowerLift(0.3);
 
-                   /** /*
-                     * strafe to parking position
-                     */
-                    drive.translateTime(.3, 330, 2.4);
-
-                    /*
-                     * strafe out of the way
-                     */
-                    drive.translateTime(0.2, 270, 0.5);
-
-                    state = State.HALT;
+                    state = State.STONE1;
                     //Exit the state
                     break;
 
-                case HALT:
+
+                case STONE1:
+
+
+                    robot.motorIntake1.setPower(-1);
+                    robot.motorIntake2.setPower(1);
+                    robot.servoDelivery.setPower(-1);
+
+                    //   drive.rotateGyro(0.2, 200, "right", 0.4);
+
+                    /*
+                     * strafe closer to the bridge
+                     */
+//                    drive.translateFromWall("left", 0.3, 90, 55, 1);
+
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateTime(0.5, 0, 1);
+
+                    drive.rotateGyro(0.4, 35, "right", 2);
+
+                    /*
+                     * strafe towards the stones to pick them up
+                     */
+                    drive.translateTime(0.4, 0, 0.7);
+
+                    drive.rotateGyro(0.2, 25, "left", 2);
+
+                    drive.translateTime(0.2, 0, 0.7);
+
+                    sleep(500);
+
+                    /*
+                     * strafe back under the bridge
+                     */
+                    drive.translateTime(0.6, 180, 0.7);
+
+                    drive.rotateGyro(0.4, 30, "left", 0.5);
+
+                    /*
+                     * drive to the foundation
+                     */
+                    drive.translateTime(0.3, 180, 2.4);
+
+                    /*
+                     * eject the stone
+                     */
+                    robot.servoStone.setPower(-1);
+                    sleep(300);
+                    robot.servoStone.setPower(1);
+
+
+
+                    /*
+                     * Check to see if we have time to get another stone.  If not, just Park.
+                     */
+                    timeElapsed = getRuntime() - startTime;
+                    if (timeElapsed > 25) {
+                        state = State.PARKWALL;
+                    } else {
+                        state = State.STONE2;
+                    }
+                    break;
+
+                    case HALT:
                     drive.motorsHalt();               //Stop the motors
 
                     //Exit the OpMode
@@ -189,7 +251,7 @@ public class RedBuildAuto extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        FIRST_STATE, HALT,
+        FOUNDATION, STONE1, STONE2, PARKWALL, HALT,
     }
 
 }
