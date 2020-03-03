@@ -87,7 +87,7 @@ public class BlueBuildAuto extends LinearOpMode {
         robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
-        robot.servoStone.setPower(-1);
+        robot.servoStone.setPower(1);
         sleep(1000);
         robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
         robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open

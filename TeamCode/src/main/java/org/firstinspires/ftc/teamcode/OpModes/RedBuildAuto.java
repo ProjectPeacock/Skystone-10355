@@ -153,12 +153,15 @@ public class RedBuildAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(1);
                     sleep(500);
 
+                    drive.lowerLift(0.4);
+
+
+
                     /**
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
-                    drive.lowerLift(0.3);
 
-                    /*
+                    /** /*
                      * strafe to parking position
                      */
                     drive.translateTime(.3, 330, 2.4);

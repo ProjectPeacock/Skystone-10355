@@ -8,7 +8,6 @@
         - Grab Foundation and place in build site
         - Place Skystone on the Foundation
         - Park robot in under the skybridge near the center skybridge
-
     Hardware Setup:
         - 4 mecanum wheels with encoders - encoder utilized to control program accuracy and for
              measuring distance for fwd/rev drive operation
@@ -30,7 +29,6 @@
         - 1 x Rev Proximity/Color Sensor - Utilized for detecting the Skystone
         - 1 x Rev 2M Range Sensor - Located on the back of the robot to provide distance measurement
             from the wall
-
     State Order:
         - LOCATE_SKYSTONE       // Locates the Skystone and then strafes to the Foundation
         - PLACE_FOUNDATION      // Places the Foundation in the build site, drops the Skystone
@@ -45,6 +43,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -61,7 +60,7 @@ import java.util.Locale;
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Blue-Skystones, Foundation, Park", group = "Blue")
-//@Disabled
+@Disabled
 
 public class BlueStoneAuto2 extends LinearOpMode {
 
@@ -167,7 +166,6 @@ public class BlueStoneAuto2 extends LinearOpMode {
                     //alphaColor should be set to the desired upper threshold for the red value
                    /* drive.translateSkystone(0.2,90, redColorValue, 1.5);
                     strafeTime = runtime.time() - strafeTimeInit;
-
                     /*
                      * Stafe more to center on the Skystone.
                      */
