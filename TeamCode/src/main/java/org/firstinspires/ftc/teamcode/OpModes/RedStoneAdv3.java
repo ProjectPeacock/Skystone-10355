@@ -45,6 +45,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -61,7 +62,7 @@ import java.util.Locale;
  * Name the opMode and put it in the appropriate group
  */
 @Autonomous(name = "Red-Stones/Found/Park 3 ", group = "Red")
-//@Disabled
+@Disabled
 
 public class RedStoneAdv3 extends LinearOpMode {
 

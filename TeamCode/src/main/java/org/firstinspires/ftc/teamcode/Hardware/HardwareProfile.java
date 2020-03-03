@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
@@ -43,6 +44,7 @@ public class HardwareProfile {
     public CRServo servoSwivel;
     public CRServo servo4Bar1;
     public CRServo servo4Bar2;
+    public Servo servoCapstone;
     public ColorSensor colorSensorRevStone;
     public DistanceSensor sensorProximity;
     public DistanceSensor wallRangeSensor;
@@ -157,5 +159,6 @@ public class HardwareProfile {
         servoSwivel = hwMap.crservo.get("servoSwivel");
         servo4Bar1 = hwMap.crservo.get("servo4Bar1");
         servo4Bar2 = hwMap.crservo.get("servo4Bar2");
+        servoCapstone = hwMap.servo.get("servoCapstone");
     }
 }

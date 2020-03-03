@@ -601,7 +601,7 @@ public class RedAdvAuto extends LinearOpMode {
                     /*
                      * strafe closer to the wall
                      */
-                    drive.translateTime(.4, 270, 0.3);
+                    drive.translateTime(.4, 90, 0.3);
 
                     state = State.HALT;         //Exit the state
                     break;

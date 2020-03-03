@@ -135,8 +135,9 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * strafe diagonally to the foundation
                      */
-                    drive.translateFromWall("front",0.3, 210, 75, 2);
-                    drive.translateFromWall("front",0.1, 180, 94, 0.5);
+                    drive.translateFromWall("front",0.3, 205, 70, 2);
+                    drive.translateFromWall("front",0.2, 180, 90, 0.5);
+
 
                     /*
                      * Grab the foundation
@@ -145,25 +146,24 @@ public class RedStateAuto extends LinearOpMode {
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
-                    drive.rotateGyro(0.3, 10, "right", 4);
 
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 50, "front",3);
+                    drive.translateToWall(.3, 0, 40, "front",3);
 
                     /*
                      * rotate the foundation towards the wall
                      */
                     drive.rotateGyro(0.3, 75, "right", 4);
 
-                    /*
-                     * drive the robot into the wall
-                     */
-//                    drive.translateTime(0.3,180,1);
 
-                    /*
-                     * Let go of the Foundation
+                     //drive the robot into the wall
+
+                    drive.translateTime(0.7,180,0.7);
+
+
+                     /* Let go of the Foundation
                      */
                     robot.servoFoundation1.setPower(0.6);
                     robot.servoFoundation2.setPower(1);
@@ -175,6 +175,11 @@ public class RedStateAuto extends LinearOpMode {
                      * Make sure that the Lift is all the way down so it doesn't bump the skybridge
                      */
                     drive.lowerLift(0.3);
+
+                    /*
+
+                     */
+                    drive.translateTime(0.5, 180, 0.2);
 
                     /*
                      * Check to see if we have time to get a stone.  If not, just Park.
@@ -193,6 +198,8 @@ public class RedStateAuto extends LinearOpMode {
                     robot.motorIntake2.setPower(1);
                     robot.servoDelivery.setPower(-1);
 
+                 //   drive.rotateGyro(0.2, 200, "right", 0.4);
+
                     /*
                      * strafe closer to the bridge
                      */
@@ -201,34 +208,44 @@ public class RedStateAuto extends LinearOpMode {
                     /*
                      * drive towards stones
                      */
-                    drive.translateTime(0.4, 0, 2.1);
+                    drive.translateTime(0.5, 0, 1.5);
+
+                    drive.rotateGyro(0.2, 32, "right", 2);
 
                     /*
                      * strafe towards the stones to pick them up
                      */
-                    drive.translateTime(0.6, 90, 0.8);
+                    drive.translateTime(0.2, 0, 0.9);
 
-                    /*
-                     * drive forward to pick up the stones
-                     */
-                    drive.translateTime(0.3, 0, 0.5);
+                    sleep(500);
 
                     /*
                      * strafe back under the bridge
                      */
-                    drive.translateTime(0.6, 270, 0.8);
+                    drive.translateTime(0.6, 180, 0.5);
+
+                    drive.rotateGyro(0.2, 32, "left", 2);
 
                     /*
                      * drive to the foundation
                      */
-                    drive.translateTime(0.5, 180, 1.2);
+                    drive.translateTime(0.5, 180, 1.3);
+                    sleep(300);
 
                     /*
                      * eject the stone
                      */
+
+                    robot.motorIntake1.setPower(0);
+                    robot.motorIntake2.setPower(0);
+                    robot.servo4Bar1.setPower(0.5);
+                    robot.servo4Bar2.setPower(0.5);
                     robot.servoStone.setPower(-1);
+                    robot.servoDelivery.setPower(1);
                     sleep(300);
                     robot.servoStone.setPower(1);
+
+
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
@@ -243,47 +260,58 @@ public class RedStateAuto extends LinearOpMode {
 
                 case STONE2:
 
+
+                    robot.motorIntake1.setPower(-1);
+                    robot.motorIntake2.setPower(1);
+                    robot.servoDelivery.setPower(-1);
+
+                    //   drive.rotateGyro(0.2, 200, "right", 0.4);
+
                     /*
                      * strafe closer to the bridge
                      */
-                    drive.translateFromWall("left", 0.3, 90, 55, 1);
+//                    drive.translateFromWall("left", 0.3, 90, 55, 1);
 
                     /*
                      * drive towards stones
                      */
-                    drive.translateTime(0.5, 0, 1.0);
+                    drive.translateTime(0.5, 0, 1.8);
+
+                    drive.rotateGyro(0.2, 32, "right", 2);
 
                     /*
-                     * turn towards the stones to pick them up
+                     * strafe towards the stones to pick them up
                      */
-                    drive.rotateGyro(0.3, 10, "right", 0.5);
+                    drive.translateTime(0.2, 0, 0.9);
+
+                    sleep(500);
 
                     /*
-                     * drive forward to pick up the stones
+                     * strafe back under the bridge
                      */
-                    drive.translateTime(0.3, 0, .5);
+                    drive.translateTime(0.6, 180, 0.5);
 
-                    /*
-                     * drive back to drive under the bridge
-                     */
-                    drive.translateTime(0.3, 180, .5);
-
-                    /*
-                     * rotate towards the foundation
-                     */
-                    drive.rotateGyro(0.3, 10, "left", 0.5);
+                    drive.rotateGyro(0.2, 32, "left", 2);
 
                     /*
                      * drive to the foundation
                      */
-                    drive.translateTime(0.5, 180, 1.0);
+                    drive.translateTime(0.5, 180, 2);
 
                     /*
                      * eject the stone
                      */
+
+                    robot.motorIntake1.setPower(0);
+                    robot.motorIntake2.setPower(0);
+                    robot.servo4Bar1.setPower(0.5);
+                    robot.servo4Bar2.setPower(0.5);
                     robot.servoStone.setPower(-1);
+                    robot.servoDelivery.setPower(1);
                     sleep(300);
                     robot.servoStone.setPower(1);
+
+
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
