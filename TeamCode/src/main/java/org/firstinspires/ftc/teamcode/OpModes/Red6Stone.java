@@ -71,7 +71,6 @@ public class Red6Stone extends LinearOpMode {
         double timeElapsed;
         double startTime;
 
-
         /*
          * Setup the init state of the robot.  This configures all the hardware that is defined in
          * the HardwareTestPlatform class.
@@ -90,6 +89,7 @@ public class Red6Stone extends LinearOpMode {
         robot.servo4Bar2.setPower(-0.8);
         robot.servoFoundation1.setPower(0.6);
         robot.servoFoundation2.setPower(1);
+        robot.servoStone.setPower(1);
         sleep(1000);
         robot.servoSwivel.setPower(-0.4);    // Rotate the stone into position to place
         robot.servoGrab.setPower(0.3);      // be sure the stone grabber is open
@@ -110,6 +110,7 @@ public class Red6Stone extends LinearOpMode {
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
         telemetry.addData("Color Red", robot.colorSensorRevStone.red());
+        telemetry.addData("Hello Project Peacock!!!", "");
         telemetry.addData("Rear Facing Range (CM) = ", robot.wallRangeSensor.getDistance(DistanceUnit.CM));
         if (robot.wallRangeSensor.getDistance(DistanceUnit.CM) > 10){
             telemetry.addData("Initialization Problem: ", "RANGE SENSOR VALUE ISSUE");
@@ -125,7 +126,6 @@ public class Red6Stone extends LinearOpMode {
 
         while (opModeIsActive()) {
             switch (state) {
-
 
                 case FOUNDATION:
                     /*
@@ -144,7 +144,7 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * drive towards the wall
                      */
-                    drive.translateToWall(.3, 0, 50, "rear", 3);
+                    drive.translateToWall(.3, 0, 30, "front", 3);
 
                     /*
                      * rotate the foundation towards the wall
@@ -154,7 +154,7 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * drive the robot into the wall
                      */
-                    drive.translateTime(0.3, 180, 1);
+                    drive.translateTime(0.4, 180, .5);
 
                     /*
                      * Let go of the Foundation
@@ -172,9 +172,7 @@ public class Red6Stone extends LinearOpMode {
                     //Exit the state
                     break;
 
-
                 case STONE1:
-
 
                     robot.motorIntake1.setPower(-1);
                     robot.motorIntake2.setPower(1);
@@ -190,54 +188,153 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * drive towards stones
                      */
-                    drive.translateTime(0.5, 0, 1);
+                    drive.translateFromWall("left", .4, 90, 48, 1.4);
 
-                    drive.rotateGyro(0.4, 35, "right", 2);
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateTime(0.7, 0, 1.35);
 
                     /*
                      * strafe towards the stones to pick them up
                      */
-                    drive.translateTime(0.4, 0, 0.7);
 
-                    drive.rotateGyro(0.2, 25, "left", 2);
+                    //drive.translateTime(0.5, 90, 0.9);
+//                    drive.rotateGyro(0.2, 35, "right", 2);
+                     drive.translateFromWall("left", 0.4, 90, 75, 1);
 
-                    drive.translateTime(0.2, 0, 0.7);
+                    /*
+                     * Drive towards the stone to collect one
+                     */
+                    drive.translateTime(0.2, 0, 0.65);
+                    sleep(250);
 
-                    sleep(500);
+                    drive.translateTime(0.2, 180, 0.2);
+
+//                    drive.rotateGyro(0.2, 25, "left", 2);
 
                     /*
                      * strafe back under the bridge
                      */
-                    drive.translateTime(0.6, 180, 0.7);
+                    drive.translateTime(0.5, 270, 0.9);
 
-                    drive.rotateGyro(0.4, 30, "left", 0.5);
+                    sleep(500);
+
+                    drive.translateTime(0.6, 180, 1.3);
+
+//                    drive.rotateGyro(0.4, 30, "left", 0.5);
 
                     /*
                      * drive to the foundation
                      */
-                    drive.translateTime(0.3, 180, 2.4);
+  //                  drive.translateTime(0.3, 180, 2.4);
 
                     /*
                      * eject the stone
                      */
+                    sleep(2000);
                     robot.servoStone.setPower(-1);
-                    sleep(300);
+                    sleep(500);
                     robot.servoStone.setPower(1);
-
-
 
                     /*
                      * Check to see if we have time to get another stone.  If not, just Park.
                      */
                     timeElapsed = getRuntime() - startTime;
                     if (timeElapsed > 25) {
-                        state = State.PARKWALL;
+                        state = State.PARK;
                     } else {
                         state = State.STONE2;
                     }
                     break;
 
-                    case HALT:
+                case STONE2:
+
+                    /*
+                     * strafe closer to the bridge
+                     */
+//                    drive.translateFromWall("left", 0.3, 90, 55, 1);
+
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateFromWall("left", .4, 90, 48, 1.4);
+
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateTime(0.7, 0, 1.4);
+
+                    /*
+                     * strafe towards the stones to pick them up
+                     */
+                    drive.translateTime(0.5, 90, 0.75);
+//                    drive.rotateGyro(0.2, 35, "right", 2);
+
+                    /*
+                     * Drive towards the stone to collect one
+                     */
+                    drive.translateTime(0.2, 0, .9);
+
+//                    drive.rotateGyro(0.2, 25, "left", 2);
+
+                    /*
+                     * strafe back under the bridge
+                     */
+                    drive.translateTime(0.5, 270, 0.85);
+
+//                    sleep(500);
+
+                    drive.translateTime(0.7, 180, 1.1);
+
+//                    drive.rotateGyro(0.4, 30, "left", 0.5);
+
+                    /*
+                     * drive to the foundation
+                     */
+                    //                  drive.translateTime(0.3, 180, 2.4);
+
+                    /*
+                     * eject the stone
+                     */
+                    sleep(2000);
+                    robot.servoStone.setPower(-1);
+                    sleep(500);
+                    robot.servoStone.setPower(1);
+
+                    /*
+                     * Check to see if we have time to get another stone.  If not, just Park.
+                     */
+                    timeElapsed = getRuntime() - startTime;
+                    if (timeElapsed > 25) {
+                        state = State.PARK;
+                    } else {
+                        state = State.STONE3;
+                    }
+                    break;
+
+                case STONE3:
+
+                    drive.translateTime(.3, 0, .5);
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateFromWall("left", .4, 90, 50, 0.75);
+                    drive.translateTime(0.6, 0, 0.6);
+                    state = State.HALT;
+                    break;
+
+                case PARK:
+
+                    drive.translateTime(.3, 0, .5);
+                    /*
+                     * drive towards stones
+                     */
+                    drive.translateFromWall("left", .4, 90, 50, 0.75);
+                    drive.translateTime(0.6, 0, 0.6);
+                    break;
+
+                case HALT:
                     drive.motorsHalt();               //Stop the motors
 
                     //Exit the OpMode
@@ -251,7 +348,7 @@ public class Red6Stone extends LinearOpMode {
      * Enumerate the States of the machine.
      */
     enum State {
-        FOUNDATION, STONE1, STONE2, PARKWALL, HALT,
+        FOUNDATION, STONE1, STONE2, STONE3, PARK, HALT,
     }
 
 }
