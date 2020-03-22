@@ -113,7 +113,7 @@ public class ParkingAuto extends LinearOpMode {
                      * This state is for testing the MR Gyro Sensor
                      * Leave the red bar facing the line
                      */
-                    sleep(20000);
+//                    sleep(20000);
 
                     drive.translateTime(0.3, 0, 1.3);
 

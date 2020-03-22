@@ -141,6 +141,9 @@ public class Red6Stone extends LinearOpMode {
                     robot.servoFoundation2.setPower(.6);
                     sleep(500);
 
+                    //drive forward
+                    drive.translateTime(0.2, 180, 0.3);
+
                     /*
                      * drive towards the wall
                      */
@@ -216,9 +219,9 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * strafe back under the bridge
                      */
-                    drive.translateTime(0.5, 270, 0.9);
+                    drive.translateFromWall("right", 0.4, 270, 48, 1.4);
 
-                    sleep(500);
+                    sleep(400);
 
                     drive.translateTime(0.6, 180, 1.3);
 
@@ -268,7 +271,7 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * strafe towards the stones to pick them up
                      */
-                    drive.translateTime(0.5, 90, 0.75);
+                    drive.translateFromWall("left", 0.4, 90, 75, 1);
 //                    drive.rotateGyro(0.2, 35, "right", 2);
 
                     /*
@@ -281,18 +284,12 @@ public class Red6Stone extends LinearOpMode {
                     /*
                      * strafe back under the bridge
                      */
-                    drive.translateTime(0.5, 270, 0.85);
+                    drive.translateFromWall("right", 0.4, 270, 48, 1.4);
 
 //                    sleep(500);
 
-                    drive.translateTime(0.7, 180, 1.1);
+                    drive.translateTime(0.6, 180, 1.3);
 
-//                    drive.rotateGyro(0.4, 30, "left", 0.5);
-
-                    /*
-                     * drive to the foundation
-                     */
-                    //                  drive.translateTime(0.3, 180, 2.4);
 
                     /*
                      * eject the stone
