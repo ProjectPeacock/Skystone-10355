@@ -111,12 +111,14 @@ public class RedAdvAdvAdv extends LinearOpMode {
 
         /*
          * Calibrate the gyro
-         */
+
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
+
+         */
 
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
@@ -138,7 +140,7 @@ public class RedAdvAdvAdv extends LinearOpMode {
             switch (state) {
 
                 case LOCATE_SKYSTONE:
-                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("gyro value = ", robot.imu.getAngularOrientation().firstAngle);
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();

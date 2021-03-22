@@ -59,12 +59,14 @@ public class sensorTest extends LinearOpMode {
 
         /*
          * Calibrate the gyro
-         */
+
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
+
+         */
 
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Color Red", robot.colorSensorRevStone.red());
@@ -94,7 +96,7 @@ public class sensorTest extends LinearOpMode {
             telemetry.addData("Right Range Sensor (CM): ", robot.rightRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Left Range Sensor (CM): ", robot.leftRange.getDistance(DistanceUnit.CM));
             telemetry.addData("Rear Range Sensor (CM): ", robot.rearRange.getDistance(DistanceUnit.CM));
-            telemetry.addData("Gyro Sensor: ", robot.mrGyro.getIntegratedZValue());
+            telemetry.addData("Gyro Sensor: ", robot.imu.getAngularOrientation().firstAngle);
             telemetry.addData("Rev Proximity Distance (cm) : ",
                     String.format(Locale.US, "%.02f", robot.sensorProximity.getDistance(DistanceUnit.CM)));
             telemetry.addData("Rev Color - Alpha : ", robot.colorSensorRevStone.alpha());

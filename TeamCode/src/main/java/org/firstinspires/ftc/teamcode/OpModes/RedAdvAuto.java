@@ -139,12 +139,14 @@ public class RedAdvAuto extends LinearOpMode {
 
         /*
          * Calibrate the gyro
-         */
+
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
+
+         */
 
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));
@@ -168,7 +170,7 @@ public class RedAdvAuto extends LinearOpMode {
             switch (state) {
 
                 case PLACE_FOUNDATION:
-                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("gyro value = ", robot.imu.getAngularOrientation().firstAngle);
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
@@ -353,7 +355,7 @@ public class RedAdvAuto extends LinearOpMode {
 
                 case LOCATE_SKYSTONE2:
 
-                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("gyro value = ", robot.imu.getAngularOrientation().firstAngle);
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();
@@ -472,7 +474,7 @@ public class RedAdvAuto extends LinearOpMode {
 
                 case LOCATE_STONE3:
 
-                    telemetry.addData("gyro value = ", robot.mrGyro.getIntegratedZValue());
+                    telemetry.addData("gyro value = ", robot.imu.getAngularOrientation().firstAngle);
                     telemetry.addData("Distance (cm)",
                             String.format(Locale.US, "%.02f", robot.wallRangeSensor.getDistance(DistanceUnit.CM)));
                     telemetry.update();

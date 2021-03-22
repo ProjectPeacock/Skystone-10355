@@ -99,12 +99,12 @@ public class BlueBuildAuto extends LinearOpMode {
         /*
          * Calibrate the gyro
          *
-         */
         robot.mrGyro.calibrate();
         while (robot.mrGyro.isCalibrating()) {
             telemetry.addData("Waiting on Gyro Calibration", "");
             telemetry.update();
         }
+         */
 
         telemetry.addData(">", "System initialized and Ready");
         telemetry.addData("Distance Sensor CM", robot.sensorProximity.getDistance(DistanceUnit.CM));

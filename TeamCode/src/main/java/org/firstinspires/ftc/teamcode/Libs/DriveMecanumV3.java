@@ -39,7 +39,7 @@ public class DriveMecanumV3 {
     }
 
     public void translateVuforiaNavY(double power, double heading, double timeOut, double y) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
 
         vuforiaTracking = myVuforia.getLocation(myTrackables);
         robotX = vuforiaTracking.get(0);
@@ -75,8 +75,11 @@ public class DriveMecanumV3 {
 
     }
 
+    public double getZAngle() {
+        return robot.imu.getAngularOrientation().firstAngle;
+    }
     public void translateVuforiaNavX(double power, double heading, double timeOut, double x) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double startingX;
 
         heading = heading * (Math.PI / 180);
@@ -116,7 +119,7 @@ public class DriveMecanumV3 {
     }
 
     public void translateTime(double power, double heading, double timeOut) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double timeElapsed;
         double runtimeValue;
 
@@ -144,7 +147,7 @@ public class DriveMecanumV3 {
     }
 
     public void translateSkystone(double power, double heading, double alphaColor, double maxTime) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double timeElapsed;
         double runtimeValue;
 
@@ -188,7 +191,7 @@ public class DriveMecanumV3 {
      * @param maxTime  // maximum time that the function should run - exits at maxTime
      */
     public void robotCorrect(double power, double heading, double distance, double maxTime) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double currentZint;
         boolean active = true;
         double timeElapsed;
@@ -237,7 +240,7 @@ public class DriveMecanumV3 {
      */
 
     public void translateFromWall(double power, double heading, double distance, double maxTime) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double currentRange;
         boolean active = true;
         double timeElapsed;
@@ -289,7 +292,7 @@ public class DriveMecanumV3 {
      * @param maxTime  // maximum time that the function should run - exits at maxTime
      */
     public void translateToWall(double power, double heading, double distance, double maxTime) {
-        double initZ = robot.mrGyro.getIntegratedZValue();
+        double initZ = getZAngle();
         double currentRange;
         boolean active = true;
         double timeElapsed;
@@ -525,7 +528,7 @@ public class DriveMecanumV3 {
      * @param maxTime   // maximum amount of time to attempt operation
      */
     public void rotateGyro(double power, double angle, String direction, double maxTime) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         double targetZ;
         double timeElapsed;
         double runtimeValue;
@@ -547,7 +550,7 @@ public class DriveMecanumV3 {
                 robot.motorRF.setPower(-power);
                 robot.motorRR.setPower(-power);
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ) {
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -559,13 +562,13 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(-0.1);
                 robot.motorLR.setPower(-0.1);
                 robot.motorRF.setPower(0.1);
                 robot.motorRR.setPower(0.1);
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -582,7 +585,7 @@ public class DriveMecanumV3 {
                 robot.motorRF.setPower(power);
                 robot.motorRR.setPower(power);
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ) {
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -595,13 +598,13 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(0.1);
                 robot.motorLR.setPower(0.1);
                 robot.motorRF.setPower(-0.1);
                 robot.motorRR.setPower(-0.1);
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ - 2)) {
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -623,7 +626,7 @@ public class DriveMecanumV3 {
      * @param maxTime   // maximum amount of time to attempt operation
      */
     public void rotateAndLowerLift(double power, double angle, String direction, double maxTime) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         double targetZ;
         double timeElapsed;
         double runtimeValue;
@@ -650,7 +653,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -662,7 +665,7 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(-0.1);
                 robot.motorLR.setPower(-0.1);
                 robot.motorRF.setPower(0.1);
@@ -670,7 +673,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -689,7 +692,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -703,7 +706,7 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(0.1);
                 robot.motorLR.setPower(0.1);
                 robot.motorRF.setPower(-0.1);
@@ -711,7 +714,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ - 2)) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -734,7 +737,7 @@ public class DriveMecanumV3 {
      * @param maxTime   // maximum amount of time to attempt operation
      */
     public void rotateAndRaiseLift(double power, double angle, String direction, double maxTime) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         double targetZ;
         double timeElapsed;
         double runtimeValue;
@@ -769,7 +772,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > targetZ) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -781,7 +784,7 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(-0.1);
                 robot.motorLR.setPower(-0.1);
                 robot.motorRF.setPower(0.1);
@@ -789,7 +792,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= (targetZ - 2)) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -808,7 +811,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit <= targetZ) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -821,7 +824,7 @@ public class DriveMecanumV3 {
                 /*
                  * Correct for overshooting the desired angle. Start by rotating opposite direction.
                  */
-                currentZinit = robot.mrGyro.getIntegratedZValue();
+                currentZinit = getZAngle();
                 robot.motorLF.setPower(0.1);
                 robot.motorLR.setPower(0.1);
                 robot.motorRF.setPower(-0.1);
@@ -829,7 +832,7 @@ public class DriveMecanumV3 {
                 while (opMode.opModeIsActive() && (timeElapsed < maxTime) && currentZinit > (targetZ - 2)) {
                     // Shut the linear slide off if the lift has been lowered
                     if (robot.touchLiftBack.isPressed()) robot.motorLinear.setPower(0);
-                    currentZinit = robot.mrGyro.getIntegratedZValue();
+                    currentZinit = getZAngle();
                     timeElapsed = runtime.time() - runtimeValue;
                     opMode.telemetry.addData("Max Time : ", maxTime);
                     opMode.telemetry.addData("Elapsed Time : ", timeElapsed);
@@ -843,7 +846,7 @@ public class DriveMecanumV3 {
     }
 
     public boolean rotatingZ(double targetZ, String direction) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         switch (direction) {
             case "right":
                 if (currentZinit >= targetZ) {
@@ -863,7 +866,7 @@ public class DriveMecanumV3 {
     }
 
     public boolean correctingZ(double targetZ, String direction) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         switch (direction) {
             case "right":
                 if (currentZinit <= (targetZ - 2)) {
@@ -883,7 +886,7 @@ public class DriveMecanumV3 {
     }
 
     public void rotateGyroV2(double power, double angle, String direction, double maxTime) {
-        double currentZinit = robot.mrGyro.getIntegratedZValue();
+        double currentZinit = getZAngle();
         double targetZ = 0.0;
         double timeElapsed;
         double runtimeValue;
@@ -981,7 +984,7 @@ public class DriveMecanumV3 {
 
     public void checkZOrientation(double heading, double initZ) {
         double currentZint;
-        currentZint = robot.mrGyro.getIntegratedZValue();
+        currentZint = getZAngle();
 
         if (currentZint != initZ) {  //Robot has drifted off course
             double zCorrection = Math.abs(initZ - currentZint);

@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -35,7 +37,7 @@ public class HardwareProfile {
     public TouchSensor touchLiftForward;        //Declare the Lift Forward Touch Sensor - indicates when lift is all the way forward
     public TouchSensor touchLiftBack;           //Declare the Lift Back Touch Sensor - indicates when lift is all the way back
     public GyroSensor sensorGyro;               //Declare the GyroNew sensor
-    public ModernRoboticsI2cGyro mrGyro;        //Declare the MR GyroNew
+//    public ModernRoboticsI2cGyro mrGyro;        //Declare the MR GyroNew
     public CRServo servoFoundation1;
     public CRServo servoFoundation2;
     public CRServo servoGrab;
@@ -52,6 +54,10 @@ public class HardwareProfile {
     public DistanceSensor rightRange;
     public DistanceSensor rearRange;
 
+    //IMU Sensor
+    public BNO055IMU imu;
+
+
     /* Constructor */
     public HardwareProfile() {
 
@@ -66,7 +72,20 @@ public class HardwareProfile {
         HardwareMap hwMap;
         hwMap = ahwMap;
 
-        //Define the I2C sensors
+        //Initialize IMU hardware map value. PLEASE UPDATE THIS VALUE TO MATCH YOUR CONFIGURATION
+        imu = hwMap.get(BNO055IMU.class, "imu");
+
+        //Initialize IMU parameters
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu.initialize(parameters);
+
+/**        //Define the I2C sensors
         sensorGyro = hwMap.gyroSensor.get("gyro");     //Point to the gyro in the configuration file
         mrGyro = (ModernRoboticsI2cGyro) sensorGyro;         //MR GyroNew
 
@@ -78,14 +97,14 @@ public class HardwareProfile {
 
         colorSensorRevStone = hwMap.get(ColorSensor.class, "sensorProximity");
         sensorProximity = hwMap.get(DistanceSensor.class, "sensorProximity");
-
+**/
         /*
          * Initialize the touch sensors responsible for limiting the motion of the lifting system
          * colorSensorRevStone
          */
-        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
+/**        touchLiftForward = hwMap.touchSensor.get("touchLiftForward");
         touchLiftBack = hwMap.touchSensor.get("touchLiftBack");
-
+**/
         /*
          *    Define and Initialize drive Motors
          *    Set motor direction for each motor placement
@@ -119,7 +138,7 @@ public class HardwareProfile {
          *    Configure the motors to run with encoders as needed
          *    Set the power to the motor to be 0
          */
-
+/**
         motorLift = hwMap.dcMotor.get("motorLift");
         motorLift.setDirection(DcMotor.Direction.FORWARD);
         motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -139,7 +158,7 @@ public class HardwareProfile {
         motorLinear.setDirection(DcMotor.Direction.FORWARD);
         motorLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorLinear.setPower(0);
-
+**/
         /*
         motor4Bar = (DcMotorEx)hwMap.get(DcMotor.class, "motor4Bar");
         motor4Bar.setDirection(DcMotor.Direction.FORWARD);
@@ -151,7 +170,7 @@ public class HardwareProfile {
         /*
          * Initialize the servo motors
          */
-        servoFoundation1 = hwMap.crservo.get("servoFoundation1");
+/**        servoFoundation1 = hwMap.crservo.get("servoFoundation1");
         servoFoundation2 = hwMap.crservo.get("servoFoundation2");
         servoGrab = hwMap.crservo.get("servoGrab");
         servoStone = hwMap.crservo.get("servoStone");
@@ -160,5 +179,6 @@ public class HardwareProfile {
         servo4Bar1 = hwMap.crservo.get("servo4Bar1");
         servo4Bar2 = hwMap.crservo.get("servo4Bar2");
         servoCapstone = hwMap.servo.get("servoCapstone");
+ **/
     }
 }
